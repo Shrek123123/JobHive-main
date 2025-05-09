@@ -168,7 +168,7 @@ body {
  <div class="job-card">
       <div class="job-header">
         <h4>Chuyên viên công nghệ thông tin</h4>
-        <img src="" alt="Logo công ty">
+        <img src="image/chuyenviencongnghethongtinjobhive.png" alt="Logo công ty">
       </div>
       <p class="company">Công Ty Cổ Phần Quản Lý và phát triển BĐS</p>
       <p class="salary">💰 18 - 20 triệu</p>
@@ -178,8 +178,8 @@ body {
 
     <div class="job-card">
       <div class="job-header">
-        <h4>NContent Marketing/Growth</h4>
-        <img src="" alt="Logo công ty">
+        <h4>Content Marketing/Growth</h4>
+        <img src="image/contentmarketinggrowthjobhive.png" alt="Logo công ty">
       </div>
       <p class="company">Công Ty TabTab Việt Nam</p>
       <p class="salary">💰 12 -25 triệu</p>
@@ -190,7 +190,7 @@ body {
  <div class="job-card">
       <div class="job-header">
         <h4>Financial Planning & Analysis</h4>
-        <img src="" alt="Logo công ty">
+        <img src="image/financialplanning&analysisjobhive.png" alt="Logo công ty">
       </div>
       <p class="company">Công Ty Cổ Phần Giáo Dục SAPP</p>
       <p class="salary">💰 12 - 18 triệu</p>
@@ -201,7 +201,7 @@ body {
  <div class="job-card">
       <div class="job-header">
         <h4>Medical Representative (ETC)</h4>
-        <img src="" alt="Logo công ty">
+        <img src="image/medicalrepresentative(etc)jobhive.png" alt="Logo công ty">
       </div>
       <p class="company">Abbott Laboratories</p>
       <p class="salary">💰 10 - 11 triệu</p>
