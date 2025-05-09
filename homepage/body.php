@@ -1,4 +1,4 @@
-<ul>
+<!-- <ul>
         <?php
         // Fetch jobs from the database
         $result = $sql->query("SELECT * FROM jobs");
@@ -11,4 +11,9 @@
         }
 
         ?>
-    </ul>
+    </ul> -->
+
+    <h2>Featured Companiesewrrrwerwerewrewrwefwff
+        fwefewfwefwefwefwefew
+    </h2>
+    
