@@ -1,28 +1,4 @@
-<!-- <ul>
-        <?php
-        $result = $sql->query("SELECT * FROM jobs");
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<li>" . $row['job_title'] . " - " . $row['company_name'] . "</li>";
-            }
-        } else {
-            echo "<li>No jobs available at the moment.</li>";
-        }
 
-        ?>
-    </ul> -->
-
-    <h2>Featured Companiesewrrrwerwerewrewrwefwff
-        fwefewfwefwefwefwefew
-    </h2>
-    
-    </ul>
-
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <title>Trang tìm việc</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <style>
     body {
