@@ -120,11 +120,19 @@
       <div class="login-link">
         Already have an account? <a href="jobseekerlogin.php">Login</a>
       </div>
+      <div style="text-align: center; margin-top: 20px;">
+      <p>Are you an employer? <a href="register.php">Click here to redirect</a></p>
+      </div>
     </div>
     <div class="right">
-      <h1>JobHive</h1>
+    <img src="image/logo.png" alt="JobHive Logo" style="height: 70px; margin-bottom: 20px;">
       <h2>Your Job<br>Is our Hive</h2>
       <p>JobHive - The pionnering job portal destination for foreigners in Vietnam</p>
+      <div class="support">
+                <p>Having trouble registering?</p>
+                <p>Call us at: <strong>012 345 6789</strong></p>
+                <p>Email us at: <a href="mailto:support@jobhive.com">support@jobhive.com</a></p>
+            </div>
     </div>
   </div>
 </body>
