@@ -31,7 +31,3 @@
         <a href="#" style="text-decoration: none; color: #007bff;">Đăng tuyển & tìm hồ sơ</a>
     </div>
 </div>
-<h1>Welcome to JobHive</h1>
-<p>Your one-stop solution for job searching and recruitment.</p>
-
-<h2>Available Jobs</h2>
