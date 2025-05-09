@@ -8,7 +8,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: #f8f9fa;
+        background-color: #white;
         padding: 10px;
         border-bottom: 1px solid #ddd;
         width: 100%;
