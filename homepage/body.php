@@ -122,7 +122,7 @@
         </ul>
       </div>
       <div class="right-banner">
-        <img src="https://i.imgur.com/3xgYcCg.png" alt="Tuyển dụng">
+        <img src="image/jobhive.png" alt="Tuyển dụng">
       </div>
     </div>
   </div>
