@@ -1,25 +1,5 @@
-<ul>
-        <?php
-        $result = $sql->query("SELECT * FROM jobs");
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<li>" . $row['job_title'] . " - " . $row['company_name'] . "</li>";
-            }
-        } else {
-            echo "<li>No jobs available at the moment.</li>";
-        }
-
-        ?>
-    </ul>
-
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <title>Trang tìm việc</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-  <style>
-    body {
+<style>
+body {
       margin: 0;
       font-family: 'Roboto', sans-serif;
       background: linear-gradient(to right, #c31432, #240b36);
@@ -108,10 +88,9 @@
       width: 100%;
       border-radius: 10px;
     }
-  </style>
-</head>
-<body>
-  <div class="container">
+</style>
+
+<div class="container">
     <div class="title">Tìm việc làm nhanh 24h, việc làm mới nhất trên toàn quốc.</div>
     <div class="subtitle">Tiếp cận 40,000+ tin tuyển dụng việc làm mới mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại Việt Nam</div>
 
@@ -140,9 +119,201 @@
         </ul>
       </div>
       <div class="right-banner">
-        <img src="https://i.imgur.com/3xgYcCg.png" alt="Tuyển dụng">
+        <img src="image/jobhive.png" alt="Tuyển dụng">
       </div>
     </div>
   </div>
-</body>
-</html>
+
+  <div class="job-section">
+  <div class="job-header">
+    <h2>🔥 Việc làm tuyển gấp</h2>
+    <div class="sort-dropdown">
+      <button>Sắp xếp theo ▾</button>
+    </div>
+  </div>
+
+  <div class="job-filters">
+    <button class="active">Tất cả</button>
+    <button>IT & Software</button>
+    <button>Marketing</button>
+    <button>Finance</button>
+    <button>Healthcare</button>
+    <button>Government & Public Sector</button>
+  </div>
+
+  <div class="job-listings">
+
+    <div class="job-card">
+      <div class="job-header">
+        <h4>Nhân viên IT (CNTT phần cứng)</h4>
+        <img src="image/nhanvienitjobhive.png" alt="Logo công ty">
+      </div>
+      <p class="company">Công Ty Cổ Phần Đầu Tư Công Nghệ Hacom</p>
+      <p class="salary">💰 10 - 11 triệu</p>
+      <p class="location">📍 Hà Nội</p>
+      <p class="posted">🕒 3 ngày trước</p>
+    </div>
+
+    <div class="job-card">
+      <div class="job-header">
+        <h4>Junior IT Support</h4>
+        <img src="image/junioritsupportjobhive.png" alt="Logo công ty">
+      </div>
+      <p class="company">Công Ty TNHH Leap Strategies Việt Nam</p>
+      <p class="salary">💰 10 - 15 triệu</p>
+      <p class="location">📍 Hà Nội</p>
+      <p class="posted">🕒 5 ngày trước</p>
+    </div>
+
+ <div class="job-card">
+      <div class="job-header">
+        <h4>Chuyên viên công nghệ thông tin</h4>
+        <img src="" alt="Logo công ty">
+      </div>
+      <p class="company">Công Ty Cổ Phần Quản Lý và phát triển BĐS</p>
+      <p class="salary">💰 18 - 20 triệu</p>
+      <p class="location">📍 Hà Nội</p>
+      <p class="posted">🕒 5 ngày trước</p>
+    </div>
+
+    <div class="job-card">
+      <div class="job-header">
+        <h4>NContent Marketing/Growth</h4>
+        <img src="" alt="Logo công ty">
+      </div>
+      <p class="company">Công Ty TabTab Việt Nam</p>
+      <p class="salary">💰 12 -25 triệu</p>
+      <p class="location">📍 Hà Nội</p>
+      <p class="posted">🕒 2 ngày trước</p>
+    </div>
+
+ <div class="job-card">
+      <div class="job-header">
+        <h4>Financial Planning & Analysis</h4>
+        <img src="" alt="Logo công ty">
+      </div>
+      <p class="company">Công Ty Cổ Phần Giáo Dục SAPP</p>
+      <p class="salary">💰 12 - 18 triệu</p>
+      <p class="location">📍 Hà Nội</p>
+      <p class="posted">🕒 8 ngày trước</p>
+    </div>
+
+ <div class="job-card">
+      <div class="job-header">
+        <h4>Medical Representative (ETC)</h4>
+        <img src="" alt="Logo công ty">
+      </div>
+      <p class="company">Abbott Laboratories</p>
+      <p class="salary">💰 10 - 11 triệu</p>
+      <p class="location">📍 Hà Nội</p>
+      <p class="posted">🕒 15 ngày trước</p>
+    </div>
+
+
+  </div>
+
+  <div class="pagination">
+    <span class="dot active"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+</div>
+
+<style>
+.job-section {
+  background-color: #f9f5f5;
+  padding: 40px 20px;
+}
+
+.job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #660000;
+}
+
+.job-filters {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.job-filters button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 20px;
+  background-color: #eee;
+  color: #333;
+  cursor: pointer;
+}
+
+.job-filters button.active {
+  background-color: #d70018;
+  color: white;
+  font-weight: bold;
+}
+
+.sort-dropdown button {
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.job-listings {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.job-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  color: #333;
+}
+
+.job-card .job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.circle-logo {
+  background-color: #888;
+  color: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  line-height: 32px;
+  font-weight: bold;
+}
+
+.job-card p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.pagination {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.pagination .dot {
+  height: 10px;
+  width: 10px;
+  margin: 0 4px;
+  background-color: #ccc;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.pagination .dot.active {
+  background-color: #d70018;
+}
+</style>
