@@ -26,8 +26,10 @@
         <a href="#" style="text-decoration: none; color: #333;">Cẩm nang nghề nghiệp</a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: auto; margin-right: 50px;">
-        <a href="#" style="text-decoration: none; color: #007bff;">Đăng nhập</a>
-        <a href="#" style="text-decoration: none; color: #007bff;">Đăng ký</a>
-        <a href="#" style="text-decoration: none; color: #007bff;">Đăng tuyển & tìm hồ sơ</a>
+        <a href="jobseekerlogin.php" style="text-decoration: none; color: #007bff;">Login/Register for Job Seekers</a>
+        <a href="register.php" style="text-decoration: none; color: #007bff;">
+            Are you an employer? <br><span style="font-size: 12px;">Click here to redirect</span>
+
+        </a>
     </div>
 </div>
