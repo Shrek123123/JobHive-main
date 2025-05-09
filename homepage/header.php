@@ -1,4 +1,3 @@
-
 <style>
     body {
         margin: 0;
@@ -7,7 +6,7 @@
     .header {
         display: flex;
         align-items: center;
-        background-color: #white;
+        background-color: white;
         padding: 10px;
         border-bottom: 1px solid #ddd;
         width: 100%;
@@ -21,7 +20,7 @@
             <img src="image/logo.png" alt="JobHive Logo" style="height: 50px; margin-right: 10px;">
         </a>
     </div>
-    <div style="display: flex; gap: 15px; margin-left: 50px;"></div>
+    <div style="display: flex; gap: 15px; margin-left: 50px;">
         <a href="#" style="text-decoration: none; color: #333;">Tạo CV</a>
         <a href="#" style="text-decoration: none; color: #333;">Công cụ</a>
         <a href="#" style="text-decoration: none; color: #333;">Cẩm nang nghề nghiệp</a>

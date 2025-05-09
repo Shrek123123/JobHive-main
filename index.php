@@ -1,6 +1,4 @@
 <?php
-// require_once 'config.php';
-// Check if the connection was successful
 
 ?>
 <!DOCTYPE html>
