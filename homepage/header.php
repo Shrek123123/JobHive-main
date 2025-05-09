@@ -1,4 +1,3 @@
-
 <style>
     body {
         margin: 0;
@@ -7,7 +6,7 @@
     .header {
         display: flex;
         align-items: center;
-        background-color: #white;
+        background-color: white;
         padding: 10px;
         border-bottom: 1px solid #ddd;
         width: 100%;
