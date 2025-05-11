@@ -120,18 +120,14 @@
     <div class="container">
         <div class="left">
             <h2>We are glad to see our fellow jobseekers back!</h2>
-            <p>Let's kickstart your profile to new heights with JobHive</p>
+            <p>Type in your email and we'll check if there's an email that matches our record</p>
             <form>
                 <div class="form-group">
                     <label>Email</label><br>
                     <input type="email" placeholder="Email" required>
                 </div>
-                <div class="form-group">
-                    <label>Password</label><br>
-                    <input type="password" placeholder="Password" required>
-                    <div class="forgot"><a href="jobseekerforgetpassword.php">Forget password</a></div>
-                </div>
-                <button class="btn-login">Login</button>
+                
+                <button class="btn-login">Submit</button>
             </form>
             <div class="btn-social">
                 <button class="google">Google</button>
@@ -139,7 +135,7 @@
                 <button class="linkedin">LinkedIn</button>
             </div>
             <div class="signup">
-                Don't have an account? <a href="jobseekerregister.php">Register here</a>
+                Haven't had an account yet? <a href="jobseekerregister.php">Register here</a>
             </div>
             <div style="margin-top: 20px; text-align: center;">
                 <p>Are you an employer? <a href="register.php">Click here to redirect</a></p>
@@ -147,17 +143,18 @@
         </div>
         <div class="right">
             <a href="index.php">
-                <img src="image/logo.png" alt="JobHive Logo" style="height: 70px; margin-bottom: 20px;">
+            <img src="image/logo.png" alt="JobHive Logo" style="height: 70px; margin-bottom: 20px;">
             </a>
             <h2>Your Job<br>Is our Hive</h2>
             <p>JobHive - The pionnering job portal destination for foreigners in Vietnam</p>
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #ccc;">
             <div class="support">
                 <p>Having trouble logging in?</p>
                 <p>Call us at: <strong>012 345 6789</strong></p>
                 <p>Email us at: <a href="mailto:support@jobhive.com">support@jobhive.com</a></p>
             </div>
         </div>
-
+        
     </div>
 </body>
 

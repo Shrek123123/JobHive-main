@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,10 +14,12 @@
       display: flex;
       height: 100vh;
     }
+
     .container {
       display: flex;
       flex: 1;
     }
+
     .left {
       flex: 1;
       background: #f3f3f3;
@@ -25,6 +28,7 @@
       flex-direction: column;
       justify-content: center;
     }
+
     .right {
       flex: 1;
       background: white;
@@ -36,12 +40,15 @@
       align-items: center;
       text-align: center;
     }
+
     h2 {
       color: #d90000;
     }
+
     .form-group {
       margin-bottom: 20px;
     }
+
     input {
       width: 100%;
       padding: 10px;
@@ -49,6 +56,7 @@
       border-radius: 5px;
       border: 1px solid #ccc;
     }
+
     .btn-register {
       width: 100%;
       padding: 12px;
@@ -60,11 +68,13 @@
       cursor: pointer;
       margin-top: 10px;
     }
+
     .btn-social {
       display: flex;
       justify-content: space-around;
       margin-top: 20px;
     }
+
     .btn-social button {
       padding: 10px 20px;
       border: none;
@@ -73,14 +83,25 @@
       cursor: pointer;
       color: white;
     }
-    .google { background: #DB4437; }
-    .facebook { background: #3B5998; }
-    .linkedin { background: #0077B5; }
+
+    .google {
+      background: #DB4437;
+    }
+
+    .facebook {
+      background: #3B5998;
+    }
+
+    .linkedin {
+      background: #0077B5;
+    }
+
     .login-link {
       text-align: center;
       margin-top: 30px;
       font-size: 14px;
     }
+
     .login-link a {
       color: #d90000;
       text-decoration: none;
@@ -88,6 +109,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <div class="left">
@@ -121,19 +143,22 @@
         Already have an account? <a href="jobseekerlogin.php">Login</a>
       </div>
       <div style="text-align: center; margin-top: 20px;">
-      <p>Are you an employer? <a href="register.php">Click here to redirect</a></p>
+        <p>Are you an employer? <a href="register.php">Click here to redirect</a></p>
       </div>
     </div>
     <div class="right">
-    <img src="image/logo.png" alt="JobHive Logo" style="height: 70px; margin-bottom: 20px;">
+      <a href="index.php">
+        <img src="image/logo.png" alt="JobHive Logo" style="height: 70px; margin-bottom: 20px;">
+      </a>
       <h2>Your Job<br>Is our Hive</h2>
       <p>JobHive - The pionnering job portal destination for foreigners in Vietnam</p>
       <div class="support">
-                <p>Having trouble registering?</p>
-                <p>Call us at: <strong>012 345 6789</strong></p>
-                <p>Email us at: <a href="mailto:support@jobhive.com">support@jobhive.com</a></p>
-            </div>
+        <p>Having trouble registering?</p>
+        <p>Call us at: <strong>012 345 6789</strong></p>
+        <p>Email us at: <a href="mailto:support@jobhive.com">support@jobhive.com</a></p>
+      </div>
     </div>
   </div>
 </body>
+
 </html>
