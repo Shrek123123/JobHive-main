@@ -115,22 +115,22 @@
     <div class="left">
       <h2>Welcome to JobHive! (Job Seeker portal)</h2>
       <p>Let's create an account to start your employment journey together!</p>
-      <form>
+      <form action="jobseekerregister.php" method="post">
         <div class="form-group">
-          <label>Fullname</label><br>
-          <input type="text" placeholder="Full Name" required>
+          <label>Username</label><br>
+          <input type="text" placeholder="Username" name="username" required>
         </div>
         <div class="form-group">
           <label>Email</label><br>
-          <input type="email" placeholder="Email" required>
+          <input type="email" placeholder="Email" name="email" required>
         </div>
         <div class="form-group">
           <label>Password</label><br>
-          <input type="password" placeholder="Password" required>
+          <input type="password" placeholder="Password" name="password" required>
         </div>
         <div class="form-group">
           <label>Re-enter password</label><br>
-          <input type="password" placeholder="Re-enter password here" required>
+          <input type="password" placeholder="Re-enter password here" name="retypepass" required>
         </div>
         <button class="btn-register">Register</button>
       </form>
@@ -162,3 +162,93 @@
 </body>
 
 </html>
+
+<?php
+require_once('config.php');
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $retypepass = $_POST['retypepass'];
+
+    // Validate input
+    if (empty($username) || empty($email) || empty($password) || empty($retypepass)) {
+      echo "<script>
+      alert('All fields are required.');
+      window.history.back();
+      </script>";
+      exit;
+    }
+
+    if ($password !== $retypepass) {
+      echo "<script>
+      const passwordField = document.querySelector('input[name=\"password\"]');
+      const errorTooltip = document.createElement('div');
+      errorTooltip.textContent = 'Passwords do not match';
+      errorTooltip.style.position = 'absolute';
+      errorTooltip.style.backgroundColor = '#f8d7da';
+      errorTooltip.style.color = '#721c24';
+      errorTooltip.style.padding = '5px';
+      errorTooltip.style.border = '1px solid #f5c6cb';
+      errorTooltip.style.borderRadius = '5px';
+      errorTooltip.style.marginTop = '5px';
+      errorTooltip.style.fontSize = '12px';
+      passwordField.parentNode.appendChild(errorTooltip);
+      passwordField.focus();
+
+      setTimeout(() => {
+        errorTooltip.remove();
+      }, 3000);
+      </script>";
+      exit;
+    }
+
+    // Check if email already exists
+    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+      echo "<script>
+      const emailField = document.querySelector('input[name=\"email\"]');
+      const errorTooltip = document.createElement('div');
+      errorTooltip.textContent = 'Email already exists';
+      errorTooltip.style.position = 'absolute';
+      errorTooltip.style.backgroundColor = '#f8d7da';
+      errorTooltip.style.color = '#721c24';
+      errorTooltip.style.padding = '5px';
+      errorTooltip.style.border = '1px solid #f5c6cb';
+      errorTooltip.style.borderRadius = '5px';
+      errorTooltip.style.marginTop = '5px';
+      errorTooltip.style.fontSize = '12px';
+      emailField.parentNode.appendChild(errorTooltip);
+      emailField.focus();
+
+      setTimeout(() => {
+        errorTooltip.remove();
+      }, 3000);
+      </script>";
+      exit;
+    }
+
+    // Insert new user into the database
+    $stmt = $conn->prepare("INSERT INTO user (username, user_type, email, password) VALUES (?, 'jobseeker', ?, ?)");
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    $stmt->bind_param("sss", $username, $email, $hashed_password);
+
+    if ($stmt->execute()) {
+    // Sử dụng JavaScript để hiển thị thông báo và chuyển hướng
+    echo "<script>
+        alert('Registration successful!');
+        window.location.href = 'jobseekerlogin.php';
+    </script>";
+    exit;
+} else {
+    echo "<script>
+        alert('Error: " . $stmt->error . "');
+    </script>";
+    exit;
+}
+}

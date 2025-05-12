@@ -121,14 +121,14 @@
         <div class="left">
             <h2>We are glad to see our fellow jobseekers back!</h2>
             <p>Let's kickstart your profile to new heights with JobHive</p>
-            <form>
+            <form accept="jobseekerlogin.php" method="POST">
                 <div class="form-group">
                     <label>Email</label><br>
-                    <input type="email" placeholder="Email" required>
+                    <input type="email" placeholder="Email" name="email" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label><br>
-                    <input type="password" placeholder="Password" required>
+                    <input type="password" placeholder="Password" name="password" required>
                     <div class="forgot"><a href="jobseekerforgetpassword.php">Forget password</a></div>
                 </div>
                 <button class="btn-login">Login</button>
@@ -162,3 +162,38 @@
 </body>
 
 </html>
+
+
+<?php
+require_once 'config.php';
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Check if the email and password are correct
+    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if (password_verify($password, $row['password'])) {
+            // Password is correct
+            session_start();
+            $_SESSION['email'] = $email;
+            header("Location: jobseekerhomepage.php");
+            exit();
+        } else {
+            // Invalid password
+            echo "<script>alert('Invalid email or password. Please try again.');</script>";
+        }
+    } else {
+        // Email not found
+        echo "<script>alert('Invalid email. Please try again.');</script>";
+    }
+
+    // Close the statement and connection
+    $stmt->close();
+    $conn->close();
+}
