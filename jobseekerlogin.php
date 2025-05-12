@@ -186,7 +186,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit();
         } else {
             // Invalid password
-            echo "<script>alert('Invalid email or password. Please try again.');</script>";
+            echo "<script>
+                var errorDiv = document.createElement('div');
+                errorDiv.style.color = 'red';
+                errorDiv.style.textAlign = 'center';
+                errorDiv.style.marginTop = '10px';
+                errorDiv.innerText = 'Invalid email or password. Please try again.';
+                document.querySelector('input[name=\"password\"]').parentNode.appendChild(errorDiv);
+            </script>";
         }
     } else {
         // Email not found
