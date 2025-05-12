@@ -1,3 +1,46 @@
+<?php
+session_start();
+require_once 'config.php';
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    // Check if the email and password are correct
+    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if (password_verify($password, $row['password'])) {
+            // Password is correct
+            $_SESSION['username'] = $row['username'];
+            header("Location: jobseekerhomepage.php");
+            exit();
+        } else {
+            // Invalid password
+            echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var errorDiv = document.createElement('div');
+                errorDiv.style.color = 'red';
+                errorDiv.style.textAlign = 'center';
+                errorDiv.style.marginTop = '10px';
+                errorDiv.innerText = 'Invalid password. Please try again.';
+                document.querySelector('input[name=\"password\"]').parentNode.appendChild(errorDiv);
+            });
+            </script>";
+        }
+    } else {
+        // Email not found
+        echo "<script>alert('Invalid email. Please try again.');</script>";
+    }
+
+    // Close the statement and connection
+    $stmt->close();
+    $conn->close();
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -162,45 +205,3 @@
 </body>
 
 </html>
-
-
-<?php
-require_once 'config.php';
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    // Check if the email and password are correct
-    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        if (password_verify($password, $row['password'])) {
-            // Password is correct
-            session_start();
-            $_SESSION['email'] = $email;
-            header("Location: jobseekerhomepage.php");
-            exit();
-        } else {
-            // Invalid password
-            echo "<script>
-                var errorDiv = document.createElement('div');
-                errorDiv.style.color = 'red';
-                errorDiv.style.textAlign = 'center';
-                errorDiv.style.marginTop = '10px';
-                errorDiv.innerText = 'Invalid email or password. Please try again.';
-                document.querySelector('input[name=\"password\"]').parentNode.appendChild(errorDiv);
-            </script>";
-        }
-    } else {
-        // Email not found
-        echo "<script>alert('Invalid email. Please try again.');</script>";
-    }
-
-    // Close the statement and connection
-    $stmt->close();
-    $conn->close();
-}

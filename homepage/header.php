@@ -1,8 +1,68 @@
+<?php
+session_start();
+?>
 <style>
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .user-info img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .user-info span {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .user-dropdown {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        /* nằm ngay dưới .user-info */
+        left: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        flex-direction: column;
+        min-width: 120px;
+        z-index: 1000;
+    }
+
+    .dropdown-menu a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #333;
+        border-bottom: 1px solid #eee;
+    }
+
+    .dropdown-menu a:last-child {
+        border-bottom: none;
+    }
+
+    .user-dropdown:hover .dropdown-menu {
+        display: flex;
+    }
+
+
     body {
         margin: 0;
         padding: 0;
     }
+
     .header {
         display: flex;
         align-items: center;
@@ -12,96 +72,66 @@
         width: 100%;
         box-sizing: border-box;
     }
+
     .header nav {
         display: flex;
         justify-content: space-between;
         align-items: center;
         width: 100%;
     }
-    .navbar{
+
+    .navbar {
         display: flex;
         align-items: center;
     }
-    .main-menu {
-        display: flex;
-        text-decoration: none;
-      
-    }
-    .main-menu li {
-        margin-left: 30px;
-    }
-    .main-menu li a{
-        text-decoration: none;
-        color: #000;
 
-    }
-    .main-menu ul.sub-menu {
-        position: absolute;
-        background-color: #ddd;
-    }
-    .btnfunction a{
-        text-decoration: none;
-        margin-left: 20px;
-    }
-    .btn-register {
-        background-color: #D91616;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 10px;
-        box-shadow: #a39d9d 0px 5px 5px;
-    }
-    .btn-register:hover {
-        background-color: #fff;
-        color: #D91616;
-        font-weight: bold;
-    }
-    .btn-login {
-        background-color: #EFCDCD;
-        color: #D91616;
-        padding: 5px 10px;
-        border-radius: 10px;
-        box-shadow: #a39d9d 0px 5px 5px;
-    }
-    .btn-login:hover {
-        background-color: #D91616;
-        color: white;
-        font-weight: bold;
-    }
-    .btn-cv {
-        background-color: #4B4D4B;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 10px;
-        box-shadow: #a39d9d 0px 5px 5px;
-    }
-    .btn-cv:hover {
-        background-color: #fff;
-        color: #4B4D4B;
-        font-weight: bold;
-    }
+
+
+    .guest-options {
+    display: flex;
+    gap: 15px;
+    margin-left: auto;
+    margin-right: 50px;
+}
+
+.btn-login,
+.btn-register {
+ text-decoration: none;
+}
 
 </style>
 
 <div class="header">
-    <nav>
-        <div class="navbar">
-            <a href="index.php">
-                    <img src="image/logo.png" alt="JobHive Logo" style="height: 50px; margin-right: 10px;">
-            </a>
-            <ul class="main-menu">
-                <li><a href="">Việc làm</a></li>
-                <li><a href="">Tạo CV</a></li>
-                <li><a href="">Công cụ</a></li>
-                <li><a href="">Cẩm nang nghề nghiệp</a></li>
-            </ul>
-        </div>
-        <div class="btnfunction">
-            <a href="jobseekerlogin.php" class="btn-login">Login</a>
-            <a href="jobseekerregister.php" class="btn-register">Register</a>
-            <a href="" class="btn-cv">Job Recruitment</a>
-        </div>
+    <div style="display: flex; align-items: center;">
+        <a href="index.php">
+            <img src="image/logo.png" alt="JobHive Logo" style="height: 50px; margin-right: 10px;">
+        </a>
+    </div>
+    <div style="display: flex; gap: 15px; margin-left: 50px;">
+        <a href="#" style="text-decoration: none; color: #333;">Tạo CV</a>
+        <a href="#" style="text-decoration: none; color: #333;">Công cụ</a>
+        <a href="#" style="text-decoration: none; color: #333;">Cẩm nang nghề nghiệp</a>
+    </div>
+    <div style="display: flex; gap: 15px; margin-left: auto; margin-right: 50px;">
+        <?php if (isset($_SESSION['username'])): ?>
+            <div class="user-dropdown">
+                <div class="user-info">
+                    <img src="image/defaultavatar.jpg" alt="User Avatar">
+                    <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="jobseekerprofile.php">Profile</a>
+                    <a href="jobseekerlogout.php">Logout</a>
+                </div>
+            </div>
 
-    
-    </nav>
-    
+
+        <?php else: ?>
+            <div class="guest-options">
+                <a href="jobseekerlogin.php" class="btn-login">Login/Register for Job Seekers</a>
+                <a href="register.php" class="btn-register">Are you an employer? <br><span>Click here to redirect</span></a>
+            </div>
+        <?php endif; ?>
+    </div>
+
 </div>
