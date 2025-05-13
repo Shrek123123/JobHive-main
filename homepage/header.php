@@ -96,9 +96,8 @@ session_start();
 
 .btn-login,
 .btn-register {
- text-decoration: none;
+text-decoration: none;
 }
-
 </style>
 
 <div class="header">
