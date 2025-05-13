@@ -300,6 +300,8 @@
       <div class="title">Tìm việc làm nhanh 24h, việc làm mới nhất trên toàn quốc.</div>
       <div class="subtitle">Tiếp cận 40,000+ tin tuyển dụng việc làm mới mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại Việt Nam</div>
 
+      <a href="index.php?action=search"><button>🔍 Tìm kiếm việc làm</button></a>
+
       <div class="search-box">
         <select>
           <option>Danh mục nghề</option>
