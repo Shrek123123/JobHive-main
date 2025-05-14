@@ -1,8 +1,10 @@
 <?php
- if(!isset($_SESSION['username'])){
-    header("Location: index.php");
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    $redirect = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'login.php';
+    header("Location: $redirect");
     exit();
- }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
