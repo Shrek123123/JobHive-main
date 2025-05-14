@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (password_verify($password, $row['password'])) {
             // Password is correct
             $_SESSION['username'] = $row['username'];
-            header("Location: jobseekerhomepage.php");
+            header("Location: jobseekerdashboard.php");
             exit();
         } else {
             // Invalid password
