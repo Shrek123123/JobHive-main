@@ -89,19 +89,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt_company->close();
     }
     if ($stmt->affected_rows > 0) {
+        $stmt->close();
         echo "<script>
             alert('Registration successful!');
             window.location.href = 'employerlogin.php';
         </script>";
         exit;
     } else {
+        $stmt->close();
         echo "<script>
             alert('Error: " . addslashes($stmt->error) . "');
             window.history.back();
         </script>";
         exit;
     }
-    $stmt->close();
 }
 ?>
 <!DOCTYPE html>
