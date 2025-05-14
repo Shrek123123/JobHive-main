@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'] ?? '';
 
     // Check if the email and password are correct
-    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
+    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ? AND user_type = 'employer'");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (password_verify($password, $row['password'])) {
             // Password is correct
             $_SESSION['username'] = $row['username'];
-            header("Location: jobseekerhomepage.php");
+            header("Location: employerhomepage.php");
             exit();
         } else {
             // Invalid password
@@ -162,8 +162,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="container">
         <div class="left">
-            <h2>We are glad to see our fellow jobseekers back!</h2>
-            <p>Let's kickstart your profile to new heights with JobHive</p>
+            <h2>We are glad to see our fellow employers back!</h2>
+            <p>Let's find the perfect employee with JobHive</p>
             <form accept="jobseekerlogin.php" method="POST">
                 <div class="form-group">
                     <label>Email</label><br>
@@ -182,14 +182,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <button class="linkedin">LinkedIn</button>
             </div>
             <div class="signup">
-                Don't have an account? <a href="jobseekerregister.php">Register here</a>
+                Don't have an account? <a href="employerregister.php">Register here</a>
             </div>
             <div style="margin-top: 20px; text-align: center;">
-                <p>Are you an employer? <a href="employerpage.php">Click here to redirect</a></p>
+                <p>Are you a jobseeker? <a href="index.php">Click here to redirect</a></p>
             </div>
         </div>
         <div class="right">
-            <a href="index.php">
+            <a href="employerpage.php">
                 <img src="image/logo.png" alt="JobHive Logo" style="height: 70px; margin-bottom: 20px;">
             </a>
             <h2>Your Job<br>Is our Hive</h2>

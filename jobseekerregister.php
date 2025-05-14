@@ -143,7 +143,7 @@
         Already have an account? <a href="jobseekerlogin.php">Login</a>
       </div>
       <div style="text-align: center; margin-top: 20px;">
-        <p>Are you an employer? <a href="register.php">Click here to redirect</a></p>
+        <p>Are you an employer? <a href="employerpage.php">Click here to redirect</a></p>
       </div>
     </div>
     <div class="right">
