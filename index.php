@@ -16,8 +16,6 @@ if ($action === 'search' || $action === 'results') {
 
     exit;
 }
-
-
 ?>
 
 <!DOCTYPE html>
