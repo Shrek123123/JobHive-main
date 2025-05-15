@@ -85,8 +85,6 @@ session_start();
         align-items: center;
     }
 
-
-
     .guest-options {
     display: flex;
     gap: 15px;
@@ -111,7 +109,7 @@ text-decoration: none;
         <a href="#" style="text-decoration: none; color: #333;">Công cụ</a>
         <a href="#" style="text-decoration: none; color: #333;">Cẩm nang nghề nghiệp</a>
     </div>
-    <div style="display: flex; gap: 15px; margin-left: auto; margin-right: 50px;">
+    <div style="display: flex; gap: 15px; margin-left: auto">
         <?php if (isset($_SESSION['username'])): ?>
             <div class="user-dropdown">
                 <div class="user-info">
@@ -129,6 +127,7 @@ text-decoration: none;
             <div class="guest-options">
                 <a href="jobseekerlogin.php" class="btn-login">Login/Register for Job Seekers</a>
                 <a href="employerpage.php" class="btn-register">Are you an employer? <br><span>Click here to redirect</span></a>
+                <a href="admin/adminlogin.php" class="btn-register">Admin login</a>
             </div>
         <?php endif; ?>
     </div>

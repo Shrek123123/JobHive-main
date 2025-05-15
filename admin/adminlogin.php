@@ -1,12 +1,12 @@
 <?php
 session_start();
-require_once 'config.php';
+require_once __DIR__ . '/../config.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
     // Check if the email and password are correct
-    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ? AND user_type = 'employer'");
+    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ? AND user_type = 'admin'");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (password_verify($password, $row['password'])) {
             // Password is correct
             $_SESSION['username'] = $row['username'];
-            header("Location: employerdashboard.php");
+            header("Location: admindashboard.php");
             exit();
         } else {
             // Invalid password
@@ -112,22 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin-top: 10px;
         }
 
-        .forgot,
-        .signup {
+        .forgot {
             text-align: right;
             margin-top: 10px;
             font-size: 14px;
-        }
-
-        .signup {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .signup a {
-            color: #d90000;
-            text-decoration: none;
-            font-weight: bold;
         }
     </style>
 </head>
@@ -135,9 +123,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="container">
         <div class="left">
-            <h2>We are glad to see our fellow employers back!</h2>
-            <p>Let's find the perfect employee with JobHive</p>
-            <form accept="jobseekerlogin.php" method="POST">
+            <h2>Welcome admin</h2>
+            <p>Let's kickstart your profile to new heights with JobHive</p>
+            <form accept="adminlogin.php" method="POST">
                 <div class="form-group">
                     <label>Email</label><br>
                     <input type="email" placeholder="Email" name="email" required>
@@ -149,16 +137,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <button class="btn-login">Login</button>
             </form>
-            <div class="signup">
-                Don't have an account? <a href="employerregister.php">Register here</a>
-            </div>
-            <div style="margin-top: 20px; text-align: center;">
-                <p>Are you a jobseeker? <a href="index.php">Click here to redirect</a></p>
-            </div>
         </div>
         <div class="right">
-            <a href="employerpage.php">
-                <img src="image/logo.png" alt="JobHive Logo" style="height: 70px; margin-bottom: 20px;">
+            <a href="../index.php">
+                <img src="../image/logo.png" alt="JobHive Logo" style="height: 70px; margin-bottom: 20px;">
             </a>
             <h2>Your Job<br>Is our Hive</h2>
             <p>JobHive - The pionnering job portal destination for foreigners in Vietnam</p>

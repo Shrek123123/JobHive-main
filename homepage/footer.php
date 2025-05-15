@@ -118,7 +118,8 @@
                 <p><strong>JobHive.vn - Công Ty Cổ Phần Tìm Kiếm Việc Làm 24h</strong><br>
                     Phòng 102, Tòa nhà 20–208 Trần Cao Vân, Phường Đa Kao, Quận 1, Thành phố Hồ Chí Minh<br>
                     Chi nhánh: Tầng 4, tòa nhà Times Tower, 35 Lê Văn Lương, Thanh Xuân, Hà Nội.<br>
-                    Giấy phép hoạt động dịch vụ việc làm số: 2893/2022/S8LĐTBXH-VLATLĐ do Sở Lao Động Thương Binh và Xã Hội cấp ngày 18/11/2024<br>
+                    Giấy phép hoạt động dịch vụ việc làm số: 2893/2022/S8LĐTBXH-VLATLĐ do Sở Lao Động Thương Binh và Xã
+                    Hội cấp ngày 18/11/2024<br>
                     Điện thoại: (028) 7109 424 | (024) 7109 440<br>
                     Email hỗ trợ người tìm việc: ntv@jobhive.vn<br>
                     Email hỗ trợ nhà tuyển dụng: ntd@jobhive.vn
@@ -149,10 +150,13 @@
                 </div>
                 <h4>Tải ứng dụng trên điện thoại</h4>
                 <div class="qr-and-apps">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://jobhive.vn&size=100x100" alt="QR Code">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://jobhive.vn&size=100x100"
+                        alt="QR Code">
                     <div class="app-links">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
-                        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                            alt="Google Play">
+                        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                            alt="App Store">
                     </div>
 
                 </div>

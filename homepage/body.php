@@ -305,7 +305,7 @@
           <option>Marketing</option>
           <option>Finance</option>
           <option>Healthcare</option>
-          <option>Government</option>
+          <option>Government & Public Sector</option>
         </select>
         <input type="text" placeholder="Vị trí tuyển dụng, tên công ty">
         <input type="text" placeholder="Địa điểm">
@@ -395,7 +395,7 @@
         <div class="job-card">
           <div class="job-header">
             <h4>Financial Planning & Analysis</h4>
-            <img src="image/financialplanning&analysisjobhive.png" alt="Logo công ty">
+            <img src="image/financialplanning&analysisjobhive.png" alt="Logo công ty" style="max-width: 48px; max-height: 48px; border-radius: 8px; object-fit: contain; background: #f5f5f5; padding: 4px;">
           </div>
           <p class="company">Công Ty Cổ Phần Giáo Dục SAPP</p>
           <p class="salary">💰 12 - 18 triệu</p>
