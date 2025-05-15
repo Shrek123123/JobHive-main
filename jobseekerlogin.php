@@ -112,33 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin-top: 10px;
         }
 
-        .btn-social {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
-
-        .btn-social button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-            cursor: pointer;
-            color: white;
-        }
-
-        .google {
-            background: #DB4437;
-        }
-
-        .facebook {
-            background: #3B5998;
-        }
-
-        .linkedin {
-            background: #0077B5;
-        }
-
         .forgot,
         .signup {
             text-align: right;
@@ -176,11 +149,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <button class="btn-login">Login</button>
             </form>
-            <div class="btn-social">
-                <button class="google">Google</button>
-                <button class="facebook">Facebook</button>
-                <button class="linkedin">LinkedIn</button>
-            </div>
             <div class="signup">
                 Don't have an account? <a href="jobseekerregister.php">Register here</a>
             </div>

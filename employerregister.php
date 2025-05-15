@@ -56,6 +56,11 @@
             border: 1px solid #ccc;
         }
 
+        input[type="checkbox"] {
+            width: auto;
+            padding: 0;
+        }
+
         .btn-register {
             width: 100%;
             padding: 12px;
@@ -79,6 +84,7 @@
             text-decoration: none;
             font-weight: bold;
         }
+
         select {
             width: 100%;
             padding: 10px;
@@ -144,7 +150,13 @@
                     Are you a jobseeker? <a href="index.php">Click here to redirect</a>
                 </div>
             </div>
-              <small style="text-align: center; margin-top: 20px;">By registering, you agree to the <a href="term.php">Terms of Use</a> of Job Hive</small>
+            <div style="margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
+                <div style="display: flex; align-items: center;">
+                    <input type="checkbox" name="terms" value="accepted" style="margin-right: 5px;" required>
+                    <small>I have read and agree to the <a href="term.html">Terms of Use</a> of JobHive</small>
+                </div>
+                <span id="terms-error" style="color: red; font-size: 0.9em; margin-top: 5px; display: none;"></span>
+            </div>
         </div>
         <div class="right">
             <a href="index.php">
@@ -235,6 +247,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       </script>";
         exit;
     }
+    if (!isset($_POST['terms']) || $_POST['terms'] !== 'accepted') {
+        echo "<script>
+            alert('Please read the term and check the box');
+            window.history.back();
+        </script>";
+        exit;
+    }
 
     // Insert new user into the database
     // Insert user first
@@ -270,3 +289,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const termsCheckbox = document.querySelector('input[name="terms"]');
+            const termsError = document.getElementById('terms-error');
+
+            form.addEventListener('submit', function(event) {
+                if (!termsCheckbox.checked) {
+                    event.preventDefault(); // Ngăn chặn form submit
+                    termsError.textContent = 'Please read the terms and check the box';
+                    termsError.style.display = 'block'; // Hiển thị thông báo lỗi
+
+                    // Thiết lập thời gian chờ 3 giây (3000 milliseconds) để ẩn thông báo
+                    setTimeout(function() {
+                        termsError.style.display = 'none';
+                        termsError.textContent = ''; // Xóa nội dung thông báo (tùy chọn)
+                    }, 3000);
+                } else {
+                    termsError.style.display = 'none'; // Ẩn thông báo lỗi nếu checkbox được chọn
+                }
+            });
+        });
+    </script>
