@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi tiết tuyển dụng</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         body {
             background-color: #f8f9fa;
@@ -38,6 +39,18 @@
             margin-bottom: 10px;
         }
     </style>
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AJAX load applyform.php -->
+    <script>
+        $(document).ready(function() {
+            $('.apply-btn').on('click', function() {
+                $('#applyModal').modal('show');
+                $('#applyFormContent').load('applyform.php');
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -81,9 +94,10 @@
                             <i class="bi bi-calendar-event me-2"></i> Hạn nộp hồ sơ: 04/06/2025
                         </div>
                         <div class="d-flex gap-3">
-                            <button class="btn btn-danger px-4">Ứng tuyển ngay</button>
-                            <button class="btn btn-outline-danger px-4">Lưu tin</button>
+                            <button class="btn btn-danger apply-btn">Apply Now</button>
+                            <a href="#" class="btn btn-secondary">Lưu tin</a>
                         </div>
+
                     </div>
 
                     <h2 class="text-danger mt-4">Chi tiết tuyển dụng</h2>
@@ -120,8 +134,20 @@
                     <p><strong>Cách thức ứng tuyển:</strong> Ứng tuyển ngay hoặc lưu tin</p>
 
                     <div class="mt-3">
-                        <a href="#" class="btn btn-danger me-2">Ứng tuyển ngay</a>
+                        <button class="btn btn-danger apply-btn">Apply Now</button>
                         <a href="#" class="btn btn-secondary">Lưu tin</a>
+                    </div>
+                    <!-- Modal xử lý nút Apply-->
+                    <div class="modal fade " id="applyModal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content" id="applyFormContent">
+                                <!-- Nội dung form sẽ được load ở đây -->
+                                <div class="modal-body text-center p-10">
+                                    <div class="spinner-border" role="status"></div>
+                                    <p>Đang tải form...</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
