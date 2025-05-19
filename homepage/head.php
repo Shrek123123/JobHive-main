@@ -238,6 +238,16 @@
     object-fit: contain;
   }
 
+  .section-4 {
+    background-color: #f9f5f5;
+
+  } */
+
+  .info {
+    background-color: #f9f5f5;
+    
+  }
+  
   .section-4 h3 {
     font-size: 20px;
     font-weight: bold;
