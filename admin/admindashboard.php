@@ -1,5 +1,19 @@
+<?php
+session_start();
+if (!isset($_SESSION['usernameadmin'])) {
+  if (isset($_SERVER['HTTP_REFERER'])) {
+    echo "Bạn đến từ: " . $_SERVER['HTTP_REFERER'];
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    exit();
+  } else {
+    echo "Không xác định trang trước đó.";
+    header('Location: index.php');
+  }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,6 +24,7 @@
       font-family: Arial, sans-serif;
       background-color: #f3f0f2;
     }
+
     .sidebar {
       width: 200px;
       background-color: #0b1e45;
@@ -18,37 +33,45 @@
       position: fixed;
       padding: 20px 10px;
     }
+
     .sidebar h2 {
       margin-top: 0;
     }
+
     .sidebar ul {
       list-style: none;
       padding: 0;
     }
+
     .sidebar ul li {
       margin: 20px 0;
       padding: 10px;
       background-color: #15294c;
       border-radius: 5px;
     }
+
     .sidebar ul li:hover {
       background-color: #1e3a66;
       cursor: pointer;
     }
+
     .main {
       margin-left: 220px;
       padding: 20px;
     }
+
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
+
     .cards {
       display: flex;
       gap: 15px;
       margin: 20px 0;
     }
+
     .card {
       flex: 1;
       padding: 15px;
@@ -56,25 +79,41 @@
       color: white;
       text-align: center;
     }
-    .yellow { background-color: #f4b400; }
-    .green { background-color: #0f9d58; }
-    .blue { background-color: #4285f4; }
-    .purple { background-color: #9b59b6; }
+
+    .yellow {
+      background-color: #f4b400;
+    }
+
+    .green {
+      background-color: #0f9d58;
+    }
+
+    .blue {
+      background-color: #4285f4;
+    }
+
+    .purple {
+      background-color: #9b59b6;
+    }
+
     .content-grid {
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: 20px;
     }
+
     .box {
       background-color: white;
       padding: 15px;
       border-radius: 10px;
     }
+
     .user-status {
       display: flex;
       align-items: center;
       gap: 10px;
     }
+
     .status-dot {
       height: 10px;
       width: 10px;
@@ -83,6 +122,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="sidebar">
     <h2>Admin</h2>
@@ -107,6 +147,11 @@
       <div>
         <img src="" alt="Profile" style="width: 32px; height: 32px; border-radius: 50%; background: #ccc;">
       </div>
+      <form method="post" action="/JobHive-main/admin/adminlogout.php" style="display: inline;">
+        <button type="submit" name="admin_logout" style="padding: 8px 16px; background: #e74c3c; color: #fff; border-radius: 5px; border: none; font-weight: bold; cursor: pointer;">
+          Logout
+        </button>
+      </form>
     </div>
     <div class="cards">
       <div class="card yellow">
@@ -132,7 +177,9 @@
     </div>
     <div class="content-grid">
       <div class="box">
-        <img src="https://www.presentationgo.com/wp-content/uploads/2018/12/Free-Growth-Arrow-PowerPoint-Template-Chart.png" width="100%" alt="Graph"/>
+        <img
+          src="https://www.presentationgo.com/wp-content/uploads/2018/12/Free-Growth-Arrow-PowerPoint-Template-Chart.png"
+          width="100%" alt="Graph" />
       </div>
       <div class="box">
         <h3>Access Activities</h3>
@@ -153,4 +200,5 @@
     </div>
   </div>
 </body>
+
 </html>
