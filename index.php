@@ -28,13 +28,13 @@ if ($action === 'search' || $action === 'results') {
 </head>
 <body>
     <?php
-    include_once(__DIR__ . '/../homepage/header.php');
-    include_once(__DIR__ . '/../homepage/body.php');
+    include_once(__DIR__ . '/homepage/header.php');
+    include_once(__DIR__ . '/homepage/body.php');
     ?>
 </body>
 <footer>
     <?php
-    include_once(__DIR__ . '/../homepage/footer.php');
+    include_once(__DIR__ . '/homepage/footer.php');
     ?>
 </footer>
 </html>
