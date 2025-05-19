@@ -1,11 +1,11 @@
 <?php
-session_start();
 ?>
 <style>
     .user-info {
         display: flex;
         align-items: center;
         gap: 10px;
+        margin-right: 50px;
     }
 
     .user-info img {
@@ -111,16 +111,16 @@ text-decoration: none;
         <a href="#" style="text-decoration: none; color: #333;">Công cụ</a>
         <a href="#" style="text-decoration: none; color: #333;">Cẩm nang nghề nghiệp</a>
     </div>
-    <div style="display: flex; gap: 15px; margin-left: auto">
-        <?php if (isset($_SESSION['username'])): ?>
+    <div style="display: flex; gap: 15px; margin-left: auto;">
+        <?php if (isset($_SESSION['usernameemployer'])): ?>
             <div class="user-dropdown">
                 <div class="user-info">
                     <img src="image/defaultavatar.jpg" alt="User Avatar">
-                    <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                    <span><?php echo htmlspecialchars($_SESSION['usernameemployer']); ?></span>
                 </div>
                 <div class="dropdown-menu">
-                    <a href="jobseekerprofile.php">Profile</a>
-                    <a href="jobseekerlogout.php">Logout</a>
+                    <a href="employerprofile.php">Profile</a>
+                    <a href="employerlogout.php">Logout</a>
                 </div>
             </div>
 

@@ -1,7 +1,7 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id'])) {
-    $redirect = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'login.php';
+if (!isset($_SESSION['usernameemployer'])) {
+    $redirect = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'employerpage.php';
     header("Location: $redirect");
     exit();
 }
@@ -17,14 +17,14 @@ if (!isset($_SESSION['user_id'])) {
 
 <body>
     <?php
-    include 'homepage/header.php';
-    include 'homepage/body.php';
+    include 'employerpage/header.php';
+    include 'employerpage/body.php';
 
     ?>
 </body>
 <footer>
     <?php
-    include 'homepage/footer.php';
+    include 'employerpage/footer.php';
     ?>
 </footer>
 

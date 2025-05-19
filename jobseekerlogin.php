@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'] ?? '';
 
     // Check if the email and password are correct
-    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
+    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ? AND user_type = 'jobseeker'");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
