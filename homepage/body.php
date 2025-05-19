@@ -253,9 +253,10 @@
     list-style: disc;
     margin-left: 20px;
   }
+
   .info {
     background-color: #f9f5f5;
-    
+
   }
 </style>
 
@@ -277,7 +278,7 @@
       <input type="text" placeholder="Địa điểm">
       <button>Tìm kiếm</button>
     </div>
-
+    
     <div class="main-content">
       <div class="left-menu">
         <ul>
@@ -421,4 +422,5 @@
       <p>Tại JobHive, bạn có thể tìm thấy... mức lương tốt nhất!</p>
     </div>
   </section>
+
 </div>
