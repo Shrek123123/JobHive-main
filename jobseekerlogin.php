@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'] ?? '';
 
     // Check if the email and password are correct
-    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
+    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ? AND user_type = 'jobseeker'");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (password_verify($password, $row['password'])) {
             // Password is correct
             $_SESSION['username'] = $row['username'];
-            header("Location: jobseekerhomepage.php");
+            header("Location: jobseekerdashboard.php");
             exit();
         } else {
             // Invalid password
@@ -112,33 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin-top: 10px;
         }
 
-        .btn-social {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
-
-        .btn-social button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-            cursor: pointer;
-            color: white;
-        }
-
-        .google {
-            background: #DB4437;
-        }
-
-        .facebook {
-            background: #3B5998;
-        }
-
-        .linkedin {
-            background: #0077B5;
-        }
-
         .forgot,
         .signup {
             text-align: right;
@@ -176,16 +149,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <button class="btn-login">Login</button>
             </form>
-            <div class="btn-social">
-                <button class="google">Google</button>
-                <button class="facebook">Facebook</button>
-                <button class="linkedin">LinkedIn</button>
-            </div>
             <div class="signup">
                 Don't have an account? <a href="jobseekerregister.php">Register here</a>
             </div>
             <div style="margin-top: 20px; text-align: center;">
-                <p>Are you an employer? <a href="register.php">Click here to redirect</a></p>
+                <p>Are you an employer? <a href="employerpage.php">Click here to redirect</a></p>
             </div>
         </div>
         <div class="right">

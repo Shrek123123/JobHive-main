@@ -12,7 +12,6 @@
       margin: 0;
       padding: 0;
       display: flex;
-      height: 100vh;
     }
 
     .container {
@@ -26,7 +25,6 @@
       padding: 40px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
     }
 
     .right {
@@ -57,6 +55,13 @@
       border: 1px solid #ccc;
     }
 
+    input[type="checkbox"] {
+      width: auto;
+      padding: 0;
+      border-radius: 0;
+      border: none;
+    }
+
     .btn-register {
       width: 100%;
       padding: 12px;
@@ -67,33 +72,6 @@
       border-radius: 5px;
       cursor: pointer;
       margin-top: 10px;
-    }
-
-    .btn-social {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 20px;
-    }
-
-    .btn-social button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      font-size: 14px;
-      cursor: pointer;
-      color: white;
-    }
-
-    .google {
-      background: #DB4437;
-    }
-
-    .facebook {
-      background: #3B5998;
-    }
-
-    .linkedin {
-      background: #0077B5;
     }
 
     .login-link {
@@ -134,17 +112,17 @@
         </div>
         <button class="btn-register">Register</button>
       </form>
-      <div class="btn-social">
-        <button class="google">Google</button>
-        <button class="facebook">Facebook</button>
-        <button class="linkedin">LinkedIn</button>
-      </div>
       <div class="login-link">
         Already have an account? <a href="jobseekerlogin.php">Login</a>
       </div>
       <div style="text-align: center; margin-top: 20px;">
-        <p>Are you an employer? <a href="register.php">Click here to redirect</a></p>
+        <p>Are you an employer? <a href="employerpage.php">Click here to redirect</a></p>
       </div>
+      <div style=" margin-top: 20px; display: flex; justify-content: center;">
+        <input type="checkbox" name="terms" value="accepted" style="margin-right: 5px;" required>
+        <small>I have read and agree to the <a href="term.html">Terms of Use</a> of JobHive</small>
+      </div>
+
     </div>
     <div class="right">
       <a href="index.php">
@@ -167,22 +145,22 @@
 require_once('config.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $retypepass = $_POST['retypepass'];
+  $username = $_POST['username'];
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  $retypepass = $_POST['retypepass'];
 
-    // Validate input
-    if (empty($username) || empty($email) || empty($password) || empty($retypepass)) {
-      echo "<script>
+  // Validate input
+  if (empty($username) || empty($email) || empty($password) || empty($retypepass)) {
+    echo "<script>
       alert('All fields are required.');
       window.history.back();
       </script>";
-      exit;
-    }
+    exit;
+  }
 
-    if ($password !== $retypepass) {
-      echo "<script>
+  if ($password !== $retypepass) {
+    echo "<script>
       const passwordField = document.querySelector('input[name=\"password\"]');
       const errorTooltip = document.createElement('div');
       errorTooltip.textContent = 'Passwords do not match';
@@ -201,17 +179,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         errorTooltip.remove();
       }, 3000);
       </script>";
-      exit;
-    }
+    exit;
+  }
 
-    // Check if email already exists
-    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+  // Check if email already exists
+  $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
+  $stmt->bind_param("s", $email);
+  $stmt->execute();
+  $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
-      echo "<script>
+  if ($result->num_rows > 0) {
+    echo "<script>
       const emailField = document.querySelector('input[name=\"email\"]');
       const errorTooltip = document.createElement('div');
       errorTooltip.textContent = 'Email already exists';
@@ -230,25 +208,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         errorTooltip.remove();
       }, 3000);
       </script>";
-      exit;
-    }
+    exit;
+  }
 
-    // Insert new user into the database
-    $stmt = $conn->prepare("INSERT INTO user (username, user_type, email, password) VALUES (?, 'jobseeker', ?, ?)");
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    $stmt->bind_param("sss", $username, $email, $hashed_password);
+  // Insert new user into the database
+  $stmt = $conn->prepare("INSERT INTO user (username, user_type, email, password) VALUES (?, 'jobseeker', ?, ?)");
+  $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+  $stmt->bind_param("sss", $username, $email, $hashed_password);
 
-    if ($stmt->execute()) {
+  if ($stmt->execute()) {
     // Sử dụng JavaScript để hiển thị thông báo và chuyển hướng
     echo "<script>
         alert('Registration successful!');
         window.location.href = 'jobseekerlogin.php';
     </script>";
     exit;
-} else {
+  } else {
     echo "<script>
         alert('Error: " . $stmt->error . "');
     </script>";
     exit;
-}
+  }
 }

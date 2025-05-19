@@ -238,6 +238,11 @@
     object-fit: contain;
   }
 
+  .section-4 {
+    background-color: #f9f5f5;
+
+  }
+
   .section-4 h3 {
     font-size: 20px;
     font-weight: bold;
@@ -248,58 +253,18 @@
     list-style: disc;
     margin-left: 20px;
   }
-
-  .hotline {
-    background-color: #f8f8f8;
-    padding: 30px 0;
-    border-top: 1px solid #ccc;
-    margin-top: 40px;
-  }
-
-  .hotline .container {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 30px;
-  }
-
-  .hotline-box {
-    flex: 1;
-    min-width: 300px;
-  }
-
-  .hotline-box h4 {
-    color: #c00;
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-
-  .hotline-detail p {
-    margin: 10px 0;
-  }
-
-  .hotline-detail button {
-    background-color: #e00;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    margin-top: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .hotline-detail .btn-recruiter {
-    background-color: #900;
+  .info {
+    background-color: #f9f5f5;
+    
   }
 </style>
-</head>
 
-<body>
-  <section class="section-1">
-    <div class="container">
-      <div class="title">Tìm việc làm nhanh 24h, việc làm mới nhất trên toàn quốc.</div>
-      <div class="subtitle">Tiếp cận 40,000+ tin tuyển dụng việc làm mới mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại Việt Nam</div>
+<section class="section-1">
+  <div class="container">
+    <div class="title">Tìm việc làm nhanh 24h, việc làm mới nhất trên toàn quốc.</div>
+    <div class="subtitle">Tiếp cận 40,000+ tin tuyển dụng việc làm mới mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại Việt Nam</div>
 
+<!--
       <a href="index.php?action=search"><button>🔍 Tìm kiếm việc làm</button></a>
 
       <div class="search-box">
@@ -313,25 +278,40 @@
         </select>
         <input type="text" placeholder="Vị trí tuyển dụng, tên công ty">
         <input type="text" placeholder="Địa điểm">
-        <button>Tìm kiếm</button>
-      </div>
+        <button>Tìm kiếm</button> -->
 
-      <div class="main-content">
-        <div class="left-menu">
-          <ul>
-            <li>IT & Software</li>
-            <li>Marketing</li>
-            <li>Finance</li>
-            <li>Healthcare</li>
-            <li>Government & Public Sector</li>
-          </ul>
-        </div>
-        <div class="right-banner">
-          <img src="image/jobhive.png" alt="Tuyển dụng">
-        </div>
+    <div class="search-box">
+      <select>
+        <option>Danh mục nghề</option>
+        <option>IT & Software</option>
+        <option>Marketing</option>
+        <option>Finance</option>
+        <option>Healthcare</option>
+        <option>Government & Public Sector</option>
+      </select>
+      <input type="text" placeholder="Vị trí tuyển dụng, tên công ty">
+      <input type="text" placeholder="Địa điểm">
+      <button>Tìm kiếm</button>
+    </div>
+
+    <div class="main-content">
+      <div class="left-menu">
+        <ul>
+          <li>IT & Software</li>
+          <li>Marketing</li>
+          <li>Finance</li>
+          <li>Healthcare</li>
+          <li>Government & Public Sector</li>
+        </ul>
+
+      </div>
+      <div class="right-banner">
+        <img src="image/jobhive.png" alt="Tuyển dụng">
       </div>
     </div>
-  </section>
+  </div>
+</section>
+<div class="info">
   <section class="section-2">
     <div class="job-section">
       <div class="job-header">
@@ -357,7 +337,7 @@
             <h4>Nhân viên IT (CNTT phần cứng)</h4>
             <img src="image/nhanvienitjobhive.png" alt="Logo công ty">
           </div>
-          <p class="company">Công Ty Cổ Phần Đầu Tư Công Nghệ Hacom</p>
+          <p class="company"><a href="jobdetailpage.php">Công Ty Cổ Phần Đầu Tư Công Nghệ Hacom</a></p>
           <p class="salary">💰 10 - 11 triệu</p>
           <p class="location">📍 Hà Nội</p>
           <p class="posted">🕒 3 ngày trước</p>
@@ -399,7 +379,7 @@
         <div class="job-card">
           <div class="job-header">
             <h4>Financial Planning & Analysis</h4>
-            <img src="image/financialplanning&analysisjobhive.png" alt="Logo công ty">
+            <img src="image/financialplanning&analysisjobhive.png" alt="Logo công ty" style="max-width: 48px; max-height: 48px; border-radius: 8px; object-fit: contain; background: #f5f5f5; padding: 4px;">
           </div>
           <p class="company">Công Ty Cổ Phần Giáo Dục SAPP</p>
           <p class="salary">💰 12 - 18 triệu</p>
@@ -458,24 +438,4 @@
       <p>Tại JobHive, bạn có thể tìm thấy... mức lương tốt nhất!</p>
     </div>
   </section>
-
-  <section class="hotline">
-    <div class="container">
-      <div class="hotline-box">
-        <h4>Hotline cho ứng viên</h4>
-        <div class="hotline-detail">
-          <p>📞 Hotline hỗ trợ miền nam<br />HCM: (028) 7109 440</p>
-          <p>📞 Hotline hỗ trợ miền bắc<br />HN: (028) 7109 424</p>
-          <button> Tư vấn cho người tìm việc </button>
-        </div>
-      </div>
-      <div class="hotline-box">
-        <h4>Hotline cho nhà tuyển dụng</h4>
-        <div class="hotline-detail">
-          <p>📞 Hotline hỗ trợ miền nam<br />HCM: (029) 7109 440</p>
-          <p>📞 Hotline hỗ trợ miền bắc<br />HN: (029) 7109 424</p>
-          <button class="btn-recruiter">Tư vấn cho nhà tuyển dụng</button>
-        </div>
-      </div>
-    </div>
-  </section>
+</div>
