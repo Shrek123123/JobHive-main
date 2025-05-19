@@ -1,5 +1,4 @@
 <?php
-session_start();
 ?>
 <style>
     .user-info {
@@ -128,6 +127,7 @@ session_start();
 
         <?php else: ?>
             <div class="guest-options">
+                <a href="index.php?action=advancedSearch">Advanced Search</a>
                 <a href="jobseekerlogin.php" class="btn-login">Login/Register for Job Seekers</a>
                 <a href="jobseekerregister.php" class="btn-register">Are you an employer? <br><span>Click here to redirect</span></a>
             </div>

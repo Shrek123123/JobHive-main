@@ -1,6 +1,5 @@
 <!-- Xử lý tương tác với cơ sở dữ liệu -->
 
-<!-- /app/models/Job.php -->
 <?php
 class Job {
     public static function searchJobs($keyword, $job_id, $location, $company_name, $minSalary, $maxSalary, $sort_by, $category, $experience, $job_type, $remote, $industry) {
@@ -48,8 +47,15 @@ class Job {
         $sql .= " ORDER BY salary DESC";
     }
 
-    $result = $conn->query($sql);
+    // DEBUG: xem SQL trước khi chạy
+    // echo "<pre>SQL = $sql</pre>";
+    // Chạy query
+    $result = $conn->query($sql) 
+        or die("<pre>MySQL Error: " . $conn->error ."</pre>");
     return $result->fetch_all(MYSQLI_ASSOC);
+
+    // $result = $conn->query($sql);
+    // return $result->fetch_all(MYSQLI_ASSOC);
 }
 
 }

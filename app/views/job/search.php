@@ -1,6 +1,6 @@
 <!-- View cho form tìm kiếm -->
- <!-- /app/views/job/search.php -->
-<form method="GET" action="/index.php?action=results">
+ <!-- search.php -->
+<!-- <form method="GET" action="index.php?action=results">
     <input type="text" name="keyword" placeholder="Keyword (e.g. Software Engineer)">
     <input type="text" name="company_name" placeholder="Company Name">
     <input type="text" name="job_id" placeholder="Job ID">
@@ -46,6 +46,6 @@
 
     <input type="text" name="industry" placeholder="Industry (optional)">
 
-    <button type="submit">Search</button>
+    <button type="submit">🔍 Search</button>
 </form>
-
+ -->
