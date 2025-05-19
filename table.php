@@ -101,6 +101,22 @@ $sql->query("CREATE TABLE IF NOT EXISTS employerfeedback (
     FOREIGN KEY (employer_id) REFERENCES user(id) ON DELETE CASCADE
 )");
 
+$sql->query("CREATE TABLE IF NOT EXISTS application (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    job_id INT UNSIGNED NOT NULL,
+    jobseeker_id INT UNSIGNED NOT NULL,
+    fullname VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    cv_path VARCHAR(255),
+    allow_search BOOLEAN DEFAULT 0,
+    status ENUM('applied', 'interviewed', 'hired', 'rejected') DEFAULT 'applied',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- Khóa ngoại liên kết với bảng job và user
+    FOREIGN KEY (job_id) REFERENCES job(id) ON DELETE CASCADE,
+    FOREIGN KEY (jobseeker_id) REFERENCES user(id) ON DELETE CASCADE
+)");
 
 echo "✅ All tables created successfully!";
 
@@ -127,6 +143,8 @@ $stmt = $sql->query("CREATE TABLE IF NOT EXISTS company (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (employer_id) REFERENCES user(id)
 )");
+
+
 if ($stmt === TRUE) {
     echo "Table company created successfully <br>";
 } else {
