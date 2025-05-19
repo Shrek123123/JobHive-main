@@ -17,8 +17,13 @@ $sql->select_db("jobhive");
 $sql->query("CREATE TABLE IF NOT EXISTS user (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(30) NOT NULL,
+
     user_type ENUM('jobseeker', 'employer', 'admin') NOT NULL DEFAULT 'jobseeker',
     email VARCHAR(50) NOT NULL UNIQUE,
+
+    -- user_type VARCHAR(30) NOT NULL,
+    -- email VARCHAR(50) NOT NULL,
+
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )");
@@ -96,6 +101,7 @@ $sql->query("CREATE TABLE IF NOT EXISTS employerfeedback (
     FOREIGN KEY (employer_id) REFERENCES user(id) ON DELETE CASCADE
 )");
 
+
 echo "✅ All tables created successfully!";
 
 // Chèn dữ liệu mẫu vào bảng job
@@ -104,5 +110,29 @@ VALUES
 ('Junior PHP Developer', 'Looking for an entry-level PHP dev.', 'TechCorp', 'Hanoi', 800, 'IT', 'entry', 'full-time', 'onsite', 'Software', NOW()),
 ('Marketing Intern', 'Internship for social media marketing.', 'MarketingMax', 'Ho Chi Minh', 500, 'Marketing', 'entry', 'internship', 'onsite', 'Advertising', NOW()),
 ('Senior Backend Engineer', 'Develop scalable backend services.', 'BigData Inc', 'Remote', 2000, 'IT', 'senior', 'full-time', 'remote', 'Technology', NOW());
-")
+");
+
+if ($stmt === TRUE) {
+    echo "Table employerfeedback created successfully <br>";
+} else {
+    echo "Error creating table: " . $sql->error;
+}
+
+$stmt = $sql->query("CREATE TABLE IF NOT EXISTS company (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    employer_id INT(6) UNSIGNED NOT NULL,
+    company_name VARCHAR(100) NOT NULL,
+    company_address VARCHAR(255) NOT NULL,
+    industry VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (employer_id) REFERENCES user(id)
+)");
+if ($stmt === TRUE) {
+    echo "Table company created successfully <br>";
+} else {
+    echo "Error creating table: " . $sql->error;
+}
 ?>
+
+
+

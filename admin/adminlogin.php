@@ -1,3 +1,46 @@
+<?php
+session_start();
+require_once __DIR__ . '/../config.php';
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    // Check if the email and password are correct
+    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ? AND user_type = 'admin'");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if (password_verify($password, $row['password'])) {
+            // Password is correct
+            $_SESSION['usernameadmin'] = $row['username'];
+            header("Location: admindashboard.php");
+            exit();
+        } else {
+            // Invalid password
+            echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var errorDiv = document.createElement('div');
+                errorDiv.style.color = 'red';
+                errorDiv.style.textAlign = 'center';
+                errorDiv.style.marginTop = '10px';
+                errorDiv.innerText = 'Invalid password. Please try again.';
+                document.querySelector('input[name=\"password\"]').parentNode.appendChild(errorDiv);
+            });
+            </script>";
+        }
+    } else {
+        // Email not found
+        echo "<script>alert('Invalid email. Please try again.');</script>";
+    }
+
+    // Close the statement and connection
+    $stmt->close();
+    $conn->close();
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -69,22 +112,10 @@
             margin-top: 10px;
         }
 
-        .forgot,
-        .signup {
+        .forgot {
             text-align: right;
             margin-top: 10px;
             font-size: 14px;
-        }
-
-        .signup {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .signup a {
-            color: #d90000;
-            text-decoration: none;
-            font-weight: bold;
         }
     </style>
 </head>
@@ -92,37 +123,34 @@
 <body>
     <div class="container">
         <div class="left">
-            <h2>We are glad to see our fellow jobseekers back!</h2>
-            <p>Type in your email and we'll check if there's an email that matches our record</p>
-            <form>
+            <h2>Welcome admin</h2>
+            <p>Let's kickstart your profile to new heights with JobHive</p>
+            <form accept="adminlogin.php" method="POST">
                 <div class="form-group">
                     <label>Email</label><br>
-                    <input type="email" placeholder="Email" required>
+                    <input type="email" placeholder="Email" name="email" required>
                 </div>
-                
-                <button class="btn-login">Submit</button>
+                <div class="form-group">
+                    <label>Password</label><br>
+                    <input type="password" placeholder="Password" name="password" required>
+                    <div class="forgot"><a href="jobseekerforgetpassword.php">Forget password</a></div>
+                </div>
+                <button class="btn-login">Login</button>
             </form>
-            <div class="signup">
-                Haven't had an account yet? <a href="jobseekerregister.php">Register here</a>
-            </div>
-            <div style="margin-top: 20px; text-align: center;">
-                <p>Are you an employer? <a href="register.php">Click here to redirect</a></p>
-            </div>
         </div>
         <div class="right">
-            <a href="index.php">
-            <img src="image/logo.png" alt="JobHive Logo" style="height: 70px; margin-bottom: 20px;">
+            <a href="../index.php">
+                <img src="../image/logo.png" alt="JobHive Logo" style="height: 70px; margin-bottom: 20px;">
             </a>
             <h2>Your Job<br>Is our Hive</h2>
             <p>JobHive - The pionnering job portal destination for foreigners in Vietnam</p>
-            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #ccc;">
             <div class="support">
                 <p>Having trouble logging in?</p>
                 <p>Call us at: <strong>012 345 6789</strong></p>
                 <p>Email us at: <a href="mailto:support@jobhive.com">support@jobhive.com</a></p>
             </div>
         </div>
-        
+
     </div>
 </body>
 

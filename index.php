@@ -26,7 +26,6 @@ if (in_array($action, ['search','results','quickSearch','quickResults','advanced
             $controller->quickResults();
             break;
     }
-
     exit;
 }
 
@@ -44,5 +43,6 @@ if (in_array($action, ['search','results','quickSearch','quickResults','advanced
 </body>
 <footer>
   <?php include_once __DIR__ . '/homepage/footer.php'; ?>
+
 </footer>
 </html>
