@@ -247,13 +247,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       </script>";
         exit;
     }
-    if (!isset($_POST['terms']) || $_POST['terms'] !== 'accepted') {
-        echo "<script>
-            alert('Please read the term and check the box');
-            window.history.back();
-        </script>";
-        exit;
-    }
 
     // Insert new user into the database
     // Insert user first
