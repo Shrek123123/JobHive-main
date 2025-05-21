@@ -148,7 +148,7 @@ if (isset($_GET['id'])) {
 <script>
     // Giả sử mỗi job có một ID duy nhất, ở đây ví dụ là "job-123"
     const jobId = "job-123"; // Bạn nên lấy ID thực tế từ database hoặc URL
-
+    
     // Kiểm tra trạng thái đã lưu khi load trang
     document.addEventListener('DOMContentLoaded', function () {
         const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
