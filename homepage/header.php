@@ -86,16 +86,16 @@
     }
 
     .guest-options {
-    display: flex;
-    gap: 15px;
-    margin-left: auto;
-    margin-right: 50px;
-}
+        display: flex;
+        gap: 15px;
+        margin-left: auto;
+        margin-right: 50px;
+    }
 
-.btn-login,
-.btn-register {
-text-decoration: none;
-}
+    .btn-login,
+    .btn-register {
+        text-decoration: none;
+    }
 </style>
 
 <div class="header">

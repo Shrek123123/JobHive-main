@@ -46,3 +46,4 @@ if (in_array($action, ['search','results','quickSearch','quickResults','advanced
 
 </footer>
 </html>
+
