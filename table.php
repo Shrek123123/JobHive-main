@@ -71,6 +71,21 @@ $stmt = $sql->query("CREATE TABLE IF NOT EXISTS job (
     category VARCHAR(50),
     posted_date DATE DEFAULT CURRENT_DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    posted_by_employer_id INT UNSIGNED NOT NULL,
+    company_name VARCHAR(100) NOT NULL,
+    job_title VARCHAR(100) NOT NULL,
+    job_description TEXT NOT NULL,
+    job_location VARCHAR(100) NOT NULL,
+    salary DECIMAL(10,2) NOT NULL,
+    contact_email VARCHAR(100) NOT NULL,
+    contact_phone VARCHAR(20),
+    job_type VARCHAR(50) NOT NULL,
+    job_category VARCHAR(100) NOT NULL,
+    required_certification VARCHAR(255),
+    job_experience VARCHAR(100),
+    company_logo VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (posted_by_employer_id) REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE
 )");
 if ($stmt === TRUE) {
     echo "Table job created successfully <br>";
