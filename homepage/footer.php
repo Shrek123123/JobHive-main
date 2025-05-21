@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 
@@ -161,6 +162,8 @@
     }
 </style>
 =======
+=======
+>>>>>>> Stashed changes
 <!DOCTYPE html>
 <html lang="en">
 
@@ -268,12 +271,16 @@
             height: 60px;
         }
     </style>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 </head>
 
 <body>
 
 </body>
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 
 <footer class="footer-new">
@@ -369,6 +376,8 @@
     </div>
 </footer>
 =======
+=======
+>>>>>>> Stashed changes
 <footer>
     <footer class="footer-new">
         <div class="footer-container">
@@ -418,6 +427,9 @@
             </div>
         </div>
     </footer>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 

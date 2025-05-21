@@ -1,6 +1,9 @@
 <<<<<<< Updated upstream
 =======
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 <?php
 session_start();
@@ -11,7 +14,10 @@ session_start();
         align-items: center;
         gap: 10px;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         margin-right: 50px;
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     }
@@ -94,6 +100,7 @@ session_start();
     }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     .guest-options {
         display: flex;
         gap: 15px;
@@ -106,6 +113,8 @@ session_start();
         text-decoration: none;
     }
 =======
+=======
+>>>>>>> Stashed changes
 
 
     .guest-options {
@@ -119,6 +128,9 @@ session_start();
 .btn-register {
 text-decoration: none;
 }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 </style>
 
@@ -136,7 +148,11 @@ text-decoration: none;
         <a href="feedback.php" style="text-decoration: none; color: #333;">Feedback</a>
     </div>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <div style="display: flex; gap: 15px; margin-left: auto">
+=======
+    <div style="display: flex; gap: 15px; margin-left: auto; margin-right: 50px;">
+>>>>>>> Stashed changes
 =======
     <div style="display: flex; gap: 15px; margin-left: auto; margin-right: 50px;">
 >>>>>>> Stashed changes
@@ -157,8 +173,12 @@ text-decoration: none;
             <div class="guest-options">
                 <a href="jobseekerlogin.php" class="btn-login">Login/Register for Job Seekers</a>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 <a href="employerpage.php" class="btn-register">Are you an employer? <br><span>Click here to redirect</span></a>
                 <a href="admin/adminlogin.php" class="btn-register">Admin login</a>
+=======
+                <a href="register.php" class="btn-register">Are you an employer? <br><span>Click here to redirect</span></a>
+>>>>>>> Stashed changes
 =======
                 <a href="register.php" class="btn-register">Are you an employer? <br><span>Click here to redirect</span></a>
 >>>>>>> Stashed changes

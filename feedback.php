@@ -1,5 +1,6 @@
 <?php
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 ?>
 
@@ -61,6 +62,8 @@
     </html>
 <!-- </html> -->
 =======
+=======
+>>>>>>> Stashed changes
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include 'db_connect.php'; // file kết nối cơ sở dữ liệu
 
@@ -151,4 +154,7 @@ button:hover {
         <button type="submit">Gửi phản hồi</button>
     </form>
 </div>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
