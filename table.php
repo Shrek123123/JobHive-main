@@ -59,18 +59,21 @@ if ($stmt === TRUE) {
 // Tạo bảng job
 $stmt = $sql->query("CREATE TABLE IF NOT EXISTS job (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
-    description TEXT NOT NULL,
+    posted_by_employer_id INT UNSIGNED NOT NULL,
     company_name VARCHAR(100) NOT NULL,
-    location VARCHAR(100) NOT NULL,
-    salary INT NOT NULL,
-    industry VARCHAR(50),
-    experience_level ENUM('internship', 'entry', 'mid', 'senior') DEFAULT 'entry',
-    job_type ENUM('full-time', 'part-time', 'internship', 'contract') DEFAULT 'full-time',
-    remote ENUM('remote', 'onsite') DEFAULT 'onsite',
-    category VARCHAR(50),
-    posted_date DATE DEFAULT CURRENT_DATE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    job_title VARCHAR(100) NOT NULL,
+    job_description TEXT NOT NULL,
+    job_location VARCHAR(100) NOT NULL,
+    salary DECIMAL(10,2) NOT NULL,
+    contact_email VARCHAR(100) NOT NULL,
+    contact_phone VARCHAR(20),
+    job_type VARCHAR(50) NOT NULL,
+    job_category VARCHAR(100) NOT NULL,
+    required_certification VARCHAR(255),
+    job_experience VARCHAR(100),
+    company_logo VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (posted_by_employer_id) REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE
 )");
 if ($stmt === TRUE) {
     echo "Table job created successfully <br>";
@@ -184,11 +187,10 @@ if ($stmt === TRUE) {
 }
 
 // Chèn dữ liệu mẫu vào bảng job
-$stmt = $sql->query("INSERT INTO job (title, description, company_name, location, salary, category, experience_level, job_type, remote, industry, created_at)
-VALUES
-('Junior PHP Developer', 'Looking for an entry-level PHP dev.', 'TechCorp', 'Hanoi', 800, 'IT', 'entry', 'full-time', 'onsite', 'Software', NOW()),
-('Marketing Intern', 'Internship for social media marketing.', 'MarketingMax', 'Ho Chi Minh', 500, 'Marketing', 'entry', 'internship', 'onsite', 'Advertising', NOW()),
-('Senior Backend Engineer', 'Develop scalable backend services.', 'BigData Inc', 'Remote', 2000, 'IT', 'senior', 'full-time', 'remote', 'Technology', NOW());
+$stmt = $sql->query("INSERT INTO job (posted_by_employer_id, company_name, job_title, job_description, job_location, salary, contact_email, contact_phone, job_type, job_category, required_certification, job_experience, company_logo) VALUES 
+    (1, 'ABC Corp', 'Web Developer', 'Develop and maintain web applications.', 'Hanoi', 1500.00, 'hr@abccorp.com', '0123456789', 'Full-time', 'IT', 'Bachelor of IT', '2 years', 'logo1.png'),
+    (1, 'XYZ Ltd', 'Graphic Designer', 'Design marketing materials and branding.', 'Ho Chi Minh City', 1200.00, 'jobs@xyzltd.com', '0987654321', 'Part-time', 'Design', 'Bachelor of Design', '1 year', 'logo2.png'),
+    (2, 'Tech Solutions', 'System Analyst', 'Analyze and improve IT systems.', 'Da Nang', 2000.00, 'careers@techsolutions.com', '0112233445', 'Full-time', 'IT', 'Bachelor of Computer Science', '3 years', 'logo3.png')
 ");
 if ($stmt === TRUE) {
     echo "Sample data inserted into job table successfully <br>";

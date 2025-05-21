@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (password_verify($password, $row['password'])) {
             // Password is correct
             $_SESSION['usernameemployer'] = $row['username'];
+            $_SESSION['employerid'] = $row['id'];
             header("Location: employerdashboard.php");
             exit();
         } else {
