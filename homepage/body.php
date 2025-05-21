@@ -1,237 +1,443 @@
-<?php
-// You can add any PHP code here, like retrieving job listings from a database, etc.
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urgent Job Listings</title>
-    <style>
-        .urgent-jobs-container {
-            background: #fff5f5;
-            border: 1px solid #f5c6cb;
-            border-radius: 10px;
-            padding: 20px;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    color: #000;
+  }
 
-        .urgent-jobs-wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 20px;
+  .section-1 {
+    background: linear-gradient(to right, #c31432, #240b36);
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 40px 20px;
+  }
+
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .subtitle {
+    text-align: center;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #ddd;
+  }
+
+  .search-box {
     margin-top: 30px;
-}
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
 
-.job-box {
-    background: #fff;
-    border: 1px solid #f5c6cb;
+  }
+
+  .search-box input,
+  .search-box select {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    min-width: 220px;
+  }
+
+  .search-box button {
+    background-color: #c4002f;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .main-content {
+    display: flex;
+    margin-top: 30px;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .left-menu {
+    flex: 1;
+    min-width: 200px;
+    background: white;
+    color: black;
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    text-align: left;
-}
+  }
 
-.job-box h3 {
-    color: #e74c3c;
-    margin-bottom: 10px;
-}
+  .left-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
-.job-box p {
+  .left-menu li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+  }
+
+  .right-banner {
+    flex: 3;
+    min-width: 300px;
+  }
+
+  .right-banner img {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .job-section {
+    background-color: #f9f5f5;
+    padding: 40px 20px;
+    border-radius: 10px;
+    background-color: #eee;
+    margin: 10px;
+  }
+
+  .job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #660000;
+  }
+
+  .job-filters {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .job-filters button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: #eee;
+    color: #333;
+    cursor: pointer;
+  }
+
+  .job-filters button.active {
+    background-color: #d70018;
+    color: white;
+    font-weight: bold;
+  }
+
+  .sort-dropdown button {
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  .job-listings {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .job-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    color: #333;
+  }
+
+  .job-card .job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .circle-logo {
+    background-color: #888;
+    color: white;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    line-height: 32px;
+    font-weight: bold;
+  }
+
+  .job-card p {
     margin: 4px 0;
     font-size: 14px;
-}
+  }
 
-
-        .job-categories {
+  .pagination {
+    margin-top: 30px;
     text-align: center;
-    margin-top: 20px;
-}
+  }
 
-.job-categories button {
-    background-color: #fff; /* White background for buttons */
-    border: 1px solid #e74c3c; /* Red border for buttons */
-    color: #e74c3c; /* Red text color */
-    padding: 8px 16px;
-    margin: 5px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s, color 0.3s; /* Smooth hover effect */
-}
-
-.job-categories button:hover {
-    background-color: #e74c3c; /* Red background on hover */
-    color: white; /* White text color on hover */
-}
-.nav-buttons {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.nav-buttons button {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    padding: 10px 20px;
+  .pagination .dot {
+    height: 10px;
+    width: 10px;
+    margin: 0 4px;
+    background-color: #ccc;
     border-radius: 50%;
-    cursor: pointer;
-    font-size: 18px;
-    margin: 0 10px;
-    transition: background-color 0.3s;
-}
+    display: inline-block;
+  }
 
-.nav-buttons button:hover {
-    background-color: #c0392b;
-}
+  .pagination .dot.active {
+    background-color: #d70018;
+  }
 
-.nav-buttons button:focus {
-    outline: none;
-}
-.featured-companies-container {
-    background: #ffffff;
-    border: 1px solid #eee;
+  .section-3 {
+    background-color: #f9f5f5;
+    padding: 40px 20px;
     border-radius: 10px;
+    background-color: #eee;
+    margin: 10px;
+  }
+
+  .section-3 .container {
+    max-width: 1100px;
+    margin: 0 auto;
     padding: 20px;
-    width: 100%;
-    max-width: 1200px;
-    margin: 50px auto 30px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-}
+  }
 
-.featured-companies-title {
-    color: #e67e22;
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: left;
-}
-
-.featured-companies-logos {
+  .section-3 .header {
     display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 30px;
-    padding-bottom: 10px;
-}
-
-.featured-company-logo {
-    flex: 0 0 auto;
-    background-color: #f8f8f8;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 10px;
-    display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    min-width: 140px;
-    height: 80px;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.03);
-    transition: transform 0.3s ease;
-}
+  }
 
-.featured-company-logo:hover {
-    transform: translateY(-3px);
-}
+  .section-3 h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+  }
 
-.featured-company-logo img {
-    max-width: 100%;
+  .section-3 .view-all {
+    color: #c00;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .logos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    gap: 20px;
+  }
+
+  .logos img {
     max-height: 60px;
     object-fit: contain;
-}
+  }
 
-    </style>
-</head>
-<body>
-    <div class="urgent-jobs-container">
-        <h2 style="color: #e74c3c;">🔥 Việc làm tuyển gấp</h2>
+  .section-4 {
+    background-color: #f9f5f5;
 
-<div class="job-categories">
-    <button>Tất cả</button>
-    <button>IT & Software</button>
-    <button>Marketing</button>
-    <button>Finance</button>
-    <button>Healthcare</button>
-    <button>Government & Public Sector</button>
-</div>
+  }
 
-<div class="urgent-jobs-wrapper">
-    <div class="job-box">
-        <h3>Nhân viên IT (CNTT phần cứng)</h3>
-        <p><strong>Công Ty Cổ Phần Dịch Vụ Công Nghệ Hacom</strong> - Hà Nội</p>
-        <p>Lương: 10 - 15 triệu</p>
-        <p>Ngành: IT & Software</p>
-        <p>Ngày đăng: 01/05/2025</p>
+  .section-4 h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 30px;
+  }
+
+  .section-4 ul {
+    list-style: disc;
+    margin-left: 20px;
+  }
+
+  .info {
+    background-color: #f9f5f5;
+
+  }
+</style>
+
+<section class="section-1">
+  <div class="container">
+    <div class="title">Tìm việc làm nhanh 24h, việc làm mới nhất trên toàn quốc.</div>
+    <div class="subtitle">Tiếp cận 40,000+ tin tuyển dụng việc làm mới mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại Việt Nam</div>
+
+<!--
+      <a href="index.php?action=search"><button>🔍 Tìm kiếm việc làm</button></a>
+
+      <div class="search-box">
+        <select>
+          <option>Danh mục nghề</option>
+          <option>IT & Software</option>
+          <option>Marketing</option>
+          <option>Finance</option>
+          <option>Healthcare</option>
+          <option>Government</option>
+        </select>
+        <input type="text" placeholder="Vị trí tuyển dụng, tên công ty">
+        <input type="text" placeholder="Địa điểm">
+        <button>Tìm kiếm</button> -->
+
+    <div class="search-box">
+      <select>
+        <option>Danh mục nghề</option>
+        <option>IT & Software</option>
+        <option>Marketing</option>
+        <option>Finance</option>
+        <option>Healthcare</option>
+        <option>Government & Public Sector</option>
+      </select>
+      <input type="text" placeholder="Vị trí tuyển dụng, tên công ty">
+      <input type="text" placeholder="Địa điểm">
+      <button>Tìm kiếm</button>
     </div>
+    
+    <div class="main-content">
+      <div class="left-menu">
+        <ul>
+          <li>IT & Software</li>
+          <li>Marketing</li>
+          <li>Finance</li>
+          <li>Healthcare</li>
+          <li>Government & Public Sector</li>
+        </ul>
 
-    <div class="job-box">
-        <h3>Junior IT Support</h3>
-        <p><strong>Công Ty TNHH Leap Solutions Việt Nam</strong> - TP.HCM</p>
-        <p>Lương: 8 - 12 triệu</p>
-        <p>Ngành: IT & Software</p>
-        <p>Ngày đăng: 02/05/2025</p>
+      </div>
+      <div class="right-banner">
+        <img src="image/jobhive.png" alt="Tuyển dụng">
+      </div>
     </div>
-
-    <div class="job-box">
-        <h3>Content Marketing/Growth</h3>
-        <p><strong>tabtab.me</strong> - Hà Nội</p>
-        <p>Lương: 12 - 18 triệu</p>
-        <p>Ngành: Marketing</p>
-        <p>Ngày đăng: 03/05/2025</p>
-    </div>
-
-    <div class="job-box">
-        <h3>Chuyên viên Tư Vấn Tài Chính</h3>
-        <p><strong>Công Ty Tài Chính ACB</strong> - Hà Nội</p>
-        <p>Lương: 15 - 20 triệu</p>
-        <p>Ngành: Finance</p>
-        <p>Ngày đăng: 04/05/2025</p>
-    </div>
-
-    <div class="job-box">
-        <h3>Y tá tại Bệnh viện ĐK Quốc tế</h3>
-        <p><strong>Bệnh viện ĐK Quốc tế Hòa Bình</strong> - TP.HCM</p>
-        <p>Lương: 8 - 12 triệu</p>
-        <p>Ngành: Healthcare</p>
-        <p>Ngày đăng: 05/05/2025</p>
-    </div>
-
-    <div class="job-box">
-        <h3>Giám Đốc Dự Án Chính Phủ</h3>
-        <p><strong>Cơ Quan Chính Phủ Việt Nam</strong> - Hà Nội</p>
-        <p>Lương: 20 - 30 triệu</p>
-        <p>Ngành: Government & Public Sector</p>
-        <p>Ngày đăng: 06/05/2025</p>
-    </div>
-</div>
-<div class="nav-buttons">
-    <button>&#8592;</button> 
-    <button>&#8594;</button> 
-</div>
-</div>
-    </div>
-    <div class="featured-companies-container">
-    <div class="featured-companies-title">🌟 Công Ty Nổi Bật</div>
-    <div class="featured-companies-logos">
-        <div class="featured-company-logo">
-            <img src="https://via.placeholder.com/120x60?text=tabtab.me" alt="tabtab.me">
+  </div>
+</section>
+<div class="info">
+  <section class="section-2">
+    <div class="job-section">
+      <div class="job-header">
+        <h2>🔥 Việc làm tuyển gấp</h2>
+        <div class="sort-dropdown">
+          <button>Sắp xếp theo ▾</button>
         </div>
-        <div class="featured-company-logo">
-            <img src="https://via.placeholder.com/120x60?text=DN+Group" alt="DN Group">
+      </div>
+
+      <div class="job-filters">
+        <button class="active">Tất cả</button>
+        <button>IT & Software</button>
+        <button>Marketing</button>
+        <button>Finance</button>
+        <button>Healthcare</button>
+        <button>Government & Public Sector</button>
+      </div>
+
+      <div class="job-listings">
+
+        <div class="job-card">
+          <div class="job-header">
+            <h4>Nhân viên IT (CNTT phần cứng)</h4>
+            <img src="image/nhanvienitjobhive.png" alt="Logo công ty">
+          </div>
+          <p class="company"><a href="jobdetailpage.php">Công Ty Cổ Phần Đầu Tư Công Nghệ Hacom</a></p>
+          <p class="salary">💰 10 - 11 triệu</p>
+          <p class="location">📍 Hà Nội</p>
+          <p class="posted">🕒 3 ngày trước</p>
         </div>
-        <div class="featured-company-logo">
-            <img src="https://via.placeholder.com/120x60?text=NhanHoa" alt="Nhân Hòa">
+
+        <div class="job-card">
+          <div class="job-header">
+            <h4>Junior IT Support</h4>
+            <img src="image/junioritsupportjobhive.png" alt="Logo công ty">
+          </div>
+          <p class="company">Công Ty TNHH Leap Strategies Việt Nam</p>
+          <p class="salary">💰 10 - 15 triệu</p>
+          <p class="location">📍 Hà Nội</p>
+          <p class="posted">🕒 5 ngày trước</p>
         </div>
-        <div class="featured-company-logo">
-            <img src="https://via.placeholder.com/120x60?text=EY" alt="EY">
+
+        <div class="job-card">
+          <div class="job-header">
+            <h4>Chuyên viên công nghệ thông tin</h4>
+            <img src="image/chuyenviencongnghethongtinjobhive.png" alt="Logo công ty">
+          </div>
+          <p class="company">Công Ty Cổ Phần Quản Lý và phát triển BĐS</p>
+          <p class="salary">💰 18 - 20 triệu</p>
+          <p class="location">📍 Hà Nội</p>
+          <p class="posted">🕒 5 ngày trước</p>
         </div>
-        <div class="featured-company-logo">
-            <img src="https://via.placeholder.com/120x60?text=KaroFi" alt="KaroFi">
+
+        <div class="job-card">
+          <div class="job-header">
+            <h4>Content Marketing/Growth</h4>
+            <img src="image/contentmarketinggrowthjobhive.png" alt="Logo công ty">
+          </div>
+          <p class="company">Công Ty TabTab Việt Nam</p>
+          <p class="salary">💰 12 -25 triệu</p>
+          <p class="location">📍 Hà Nội</p>
+          <p class="posted">🕒 2 ngày trước</p>
         </div>
+
+        <div class="job-card">
+          <div class="job-header">
+            <h4>Financial Planning & Analysis</h4>
+            <img src="image/financialplanning&analysisjobhive.png" alt="Logo công ty" style="max-width: 48px; max-height: 48px; border-radius: 8px; object-fit: contain; background: #f5f5f5; padding: 4px;">
+          </div>
+          <p class="company">Công Ty Cổ Phần Giáo Dục SAPP</p>
+          <p class="salary">💰 12 - 18 triệu</p>
+          <p class="location">📍 Hà Nội</p>
+          <p class="posted">🕒 8 ngày trước</p>
+        </div>
+
+        <div class="job-card">
+          <div class="job-header">
+            <h4>Medical Representative (ETC)</h4>
+            <img src="image/medicalrepresentative(etc)jobhive.png" alt="Logo công ty">
+          </div>
+          <p class="company">Abbott Laboratories</p>
+          <p class="salary">💰 10 - 11 triệu</p>
+          <p class="location">📍 Hà Nội</p>
+          <p class="posted">🕒 15 ngày trước</p>
+        </div>
+        <div class="pagination">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+  </section>
+  <section class="section-3">
+    <div class="container">
+      <div class="header">
+        <h2>🌟 Công Ty Nổi Bật</h2>
+        <a href="#" class="view-all">Xem tất cả →</a>
+      </div>
+      <div class="logos">
+        <img src="image/logo1.png" alt="Tabtab.me" />
+        <img src="image/logo2.png" alt="DIC" />
+        <img src="image/logo3.png" alt="NhanHoa" />
+        <img src="image/logo4.png" alt="EY" />
+        <img src="image/logo5.png" alt="Karofi" />
+      </div>
     </div>
+  </section>
+
+  <section class="section-4">
+    <div class="container">
+      <h3>Cơ hội ứng tuyển việc làm với đãi ngộ hấp dẫn tại các công ty hàng đầu</h3>
+      <p>Trước sự phát triển vượt bậc của nền kinh tế... chuyên nghiệp.</p>
+
+      <h3>Vậy tại sao nên tìm việc làm tại JobHive?</h3>
+      <ul>
+        <li><strong>Việc làm Chất lượng</strong><br />
+          Hàng ngàn tin tuyển dụng chất lượng... CV của bạn.</li>
+        <li><strong>Công cụ viết CV đẹp Miễn phí</strong><br />
+          Nhiều mẫu CV đẹp... trong vòng 5 phút.</li>
+        <li><strong>Hỗ trợ Người tìm việc</strong><br />
+          Nhà tuyển dụng... xem CV và gửi lời mời.</li>
+      </ul>
+
+      <p>Tại JobHive, bạn có thể tìm thấy... mức lương tốt nhất!</p>
+    </div>
+  </section>
+
 </div>
-</body>
-</html>
