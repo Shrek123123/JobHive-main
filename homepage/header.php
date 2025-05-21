@@ -109,6 +109,8 @@ session_start();
         <a href="#" style="text-decoration: none; color: #333;">Tạo CV</a>
         <a href="#" style="text-decoration: none; color: #333;">Công cụ</a>
         <a href="#" style="text-decoration: none; color: #333;">Cẩm nang nghề nghiệp</a>
+        <a href="contractus.php" style="text-decoration: none; color: #333;">Contract Us</a>
+        <a href="feedback.php" style="text-decoration: none; color: #333;">Feedback</a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: auto">
         <?php if (isset($_SESSION['username'])): ?>
