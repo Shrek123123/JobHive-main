@@ -1,3 +1,7 @@
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 <?php
 session_start();
 ?>
@@ -6,7 +10,10 @@ session_start();
         display: flex;
         align-items: center;
         gap: 10px;
+<<<<<<< Updated upstream
         margin-right: 50px;
+=======
+>>>>>>> Stashed changes
     }
 
     .user-info img {
@@ -86,6 +93,7 @@ session_start();
         align-items: center;
     }
 
+<<<<<<< Updated upstream
     .guest-options {
         display: flex;
         gap: 15px;
@@ -97,6 +105,21 @@ session_start();
     .btn-register {
         text-decoration: none;
     }
+=======
+
+
+    .guest-options {
+    display: flex;
+    gap: 15px;
+    margin-left: auto;
+    margin-right: 50px;
+}
+
+.btn-login,
+.btn-register {
+text-decoration: none;
+}
+>>>>>>> Stashed changes
 </style>
 
 <div class="header">
@@ -112,7 +135,11 @@ session_start();
         <a href="contractus.php" style="text-decoration: none; color: #333;">Contract Us</a>
         <a href="feedback.php" style="text-decoration: none; color: #333;">Feedback</a>
     </div>
+<<<<<<< Updated upstream
     <div style="display: flex; gap: 15px; margin-left: auto">
+=======
+    <div style="display: flex; gap: 15px; margin-left: auto; margin-right: 50px;">
+>>>>>>> Stashed changes
         <?php if (isset($_SESSION['username'])): ?>
             <div class="user-dropdown">
                 <div class="user-info">
@@ -129,8 +156,12 @@ session_start();
         <?php else: ?>
             <div class="guest-options">
                 <a href="jobseekerlogin.php" class="btn-login">Login/Register for Job Seekers</a>
+<<<<<<< Updated upstream
                 <a href="employerpage.php" class="btn-register">Are you an employer? <br><span>Click here to redirect</span></a>
                 <a href="admin/adminlogin.php" class="btn-register">Admin login</a>
+=======
+                <a href="register.php" class="btn-register">Are you an employer? <br><span>Click here to redirect</span></a>
+>>>>>>> Stashed changes
             </div>
         <?php endif; ?>
     </div>
