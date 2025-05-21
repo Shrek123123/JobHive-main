@@ -39,10 +39,9 @@
             margin-bottom: 10px;
         }
     </style>
-    <!-- Bootstrap Bundle JS -->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- AJAX load applyform.php -->
     <script>
         $(document).ready(function() {
             $('.apply-btn').on('click', function() {
@@ -65,7 +64,6 @@
     </div>
     <div class="container my-5">
         <div class="row">
-            <!-- Left Column -->
             <div class="col-lg-8 mb-4">
                 <div class="bg-white p-4 shadow rounded">
                     <div class="bg-white p-3 mb-4 shadow rounded ">
@@ -138,11 +136,9 @@
                         <button class="btn btn-danger apply-btn">Apply Now</button>
                         <a href="#" class="btn btn-secondary">Lưu tin</a>
                     </div>
-                    <!-- Modal xử lý nút Apply-->
                     <div class="modal fade " id="applyModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content" id="applyFormContent">
-                                <!-- Nội dung form sẽ được load ở đây -->
                                 <div class="modal-body text-center p-10">
                                     <div class="spinner-border" role="status"></div>
                                     <p>Đang tải form...</p>
@@ -152,7 +148,6 @@
                     </div>
                 </div>
 
-                <!-- Việc làm liên quan -->
                 <div class="bg-white p-4 shadow rounded mt-5">
                     <h4 class="text-danger">Việc làm liên quan</h4>
                     <div class="list-group">
@@ -164,8 +159,6 @@
                 </div>
             </div>
 
-
-            <!-- Right Column -->
             <div class="col-lg-4">
                 <div class="bg-white p-3 mb-4 shadow rounded">
                     <div class="d-flex align-items-center mb-3">
@@ -207,10 +200,8 @@
         </div>
     </div>
 <script>
-    // Giả sử mỗi job có một ID duy nhất, ở đây ví dụ là "job-123"
-    const jobId = "job-123"; // Bạn nên lấy ID thực tế từ database hoặc URL
+    const jobId = "job-123";
 
-    // Kiểm tra trạng thái đã lưu khi load trang
     document.addEventListener('DOMContentLoaded', function () {
         const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
         if (savedJobs.includes(jobId)) {
@@ -220,19 +211,16 @@
         }
     });
 
-    // Xử lý khi click nút lưu
     document.getElementById('save-job-btn').addEventListener('click', function (e) {
         e.preventDefault();
         let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
         const icon = document.getElementById('save-job-icon');
         if (savedJobs.includes(jobId)) {
-            // Bỏ lưu
             savedJobs = savedJobs.filter(id => id !== jobId);
             icon.innerHTML = '☆';
             this.classList.remove('btn-danger');
             this.classList.add('btn-secondary');
         } else {
-            // Lưu tin
             savedJobs.push(jobId);
             icon.innerHTML = '★';
             this.classList.add('btn-danger');
