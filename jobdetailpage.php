@@ -95,7 +95,8 @@
                         </div>
                         <div class="d-flex gap-3">
                             <button class="btn btn-danger apply-btn">Apply Now</button>
-                            <a href="#" class="btn btn-secondary">Lưu tin</a>
+                            <a href="#" id="save-job-btn" class="btn btn-secondary">
+                            <span id="save-job-icon">&#9734;</span> Lưu tin</a>
                         </div>
 
                     </div>
@@ -205,7 +206,41 @@
             </div>
         </div>
     </div>
+<script>
+    // Giả sử mỗi job có một ID duy nhất, ở đây ví dụ là "job-123"
+    const jobId = "job-123"; // Bạn nên lấy ID thực tế từ database hoặc URL
 
+    // Kiểm tra trạng thái đã lưu khi load trang
+    document.addEventListener('DOMContentLoaded', function () {
+        const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+        if (savedJobs.includes(jobId)) {
+            document.getElementById('save-job-icon').innerHTML = '★';
+            document.getElementById('save-job-btn').classList.add('btn-danger');
+            document.getElementById('save-job-btn').classList.remove('btn-secondary');
+        }
+    });
+
+    // Xử lý khi click nút lưu
+    document.getElementById('save-job-btn').addEventListener('click', function (e) {
+        e.preventDefault();
+        let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+        const icon = document.getElementById('save-job-icon');
+        if (savedJobs.includes(jobId)) {
+            // Bỏ lưu
+            savedJobs = savedJobs.filter(id => id !== jobId);
+            icon.innerHTML = '☆';
+            this.classList.remove('btn-danger');
+            this.classList.add('btn-secondary');
+        } else {
+            // Lưu tin
+            savedJobs.push(jobId);
+            icon.innerHTML = '★';
+            this.classList.add('btn-danger');
+            this.classList.remove('btn-secondary');
+        }
+        localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
+    });
+</script>
 </body>
 <footer>
     <?php require_once 'homepage/footer.php' ?>
