@@ -100,7 +100,6 @@ require_once('config.php');
   }
 
   .job-section {
-    background-color: #f9f5f5;
     padding: 40px 20px;
     border-radius: 10px;
     background-color: #eee;
@@ -144,6 +143,9 @@ require_once('config.php');
     cursor: pointer;
   }
 
+  .section-2 {
+    background-color: #eee;
+  }
   .job-listings {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -199,11 +201,8 @@ require_once('config.php');
   }
 
   .section-3 {
-    background-color: #f9f5f5;
-    padding: 40px 20px;
-    border-radius: 10px;
     background-color: #eee;
-    margin: 10px;
+
   }
 
   .section-3 .container {
@@ -271,7 +270,7 @@ require_once('config.php');
     <div class="subtitle">Tiếp cận 40,000+ tin tuyển dụng việc làm mới mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại
       Việt Nam</div>
 
-    <!--
+<!--     
       <a href="index.php?action=search"><button>🔍 Tìm kiếm việc làm</button></a>
 
       <div class="search-box">
@@ -365,9 +364,9 @@ require_once('config.php');
         <p class="posted">🕒 
           <?php
             if ($row['day_left'] > 0) {
-          echo $row['day_left'] . ' ngày còn lại';
+          echo $row['day_left'] . ' days left';
             } else {
-          echo 'Hết hạn';
+          echo 'Expired';
             }
           ?>
         </p>
