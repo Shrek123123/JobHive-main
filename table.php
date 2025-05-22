@@ -64,7 +64,8 @@ $stmt = $sql->query("CREATE TABLE IF NOT EXISTS job (
     job_title VARCHAR(100) NOT NULL,
     job_description TEXT NOT NULL,
     job_location VARCHAR(100) NOT NULL,
-    salary DECIMAL(10,2) NOT NULL,
+    salary VARCHAR(30) NOT NULL,
+    post_duration INT UNSIGNED NOT NULL,
     contact_email VARCHAR(100) NOT NULL,
     contact_phone VARCHAR(20),
     job_type VARCHAR(50) NOT NULL,
@@ -166,6 +167,5 @@ if ($stmt === TRUE) {
 } else {
     echo "Error inserting sample data: " . $sql->error;
 }
-?>
 
 

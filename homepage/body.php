@@ -1,4 +1,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+<?php
+require_once('config.php');
+
+// Bây giờ bạn có thể truy cập các cột như $row['ten_cot']
+?>
 <style>
   body {
     margin: 0;
@@ -263,9 +268,10 @@
 <section class="section-1">
   <div class="container">
     <div class="title">Tìm việc làm nhanh 24h, việc làm mới nhất trên toàn quốc.</div>
-    <div class="subtitle">Tiếp cận 40,000+ tin tuyển dụng việc làm mới mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại Việt Nam</div>
+    <div class="subtitle">Tiếp cận 40,000+ tin tuyển dụng việc làm mới mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại
+      Việt Nam</div>
 
-<!--
+    <!--
       <a href="index.php?action=search"><button>🔍 Tìm kiếm việc làm</button></a>
 
       <div class="search-box">
@@ -294,7 +300,7 @@
       <input type="text" placeholder="Địa điểm">
       <button>Tìm kiếm</button>
     </div>
-    
+
     <div class="main-content">
       <div class="left-menu">
         <ul>
@@ -312,6 +318,7 @@
     </div>
   </div>
 </section>
+
 <div class="info">
   <section class="section-2">
     <div class="job-section">
@@ -331,79 +338,53 @@
         <button>Government & Public Sector</button>
       </div>
 
-      <div class="job-listings">
-
-        <div class="job-card">
-          <div class="job-header">
-            <h4>Nhân viên IT (CNTT phần cứng)</h4>
-            <img src="image/nhanvienitjobhive.png" alt="Logo công ty">
+      <div class="job-listings"></div>
+        <?php
+        // Lấy tất cả job
+        $sql = "SELECT job_title, company_logo, company_name, salary, job_location, created_at, post_duration, 
+            DATEDIFF(DATE_ADD(created_at, INTERVAL post_duration DAY), CURDATE()) AS day_left 
+            FROM job LIMIT 9";
+        $result = mysqli_query($conn, $sql);
+        $count = 0;
+        foreach ($result as $row):
+          if ($count % 3 == 0) {
+        if ($count > 0) echo '</div>';
+        echo '<div style="display: flex; gap: 20px; margin-bottom: 20px;">';
+          }
+        ?>
+          <div class="job-card" style="flex:1;">
+        <div class="job-header">
+          <h4><?php echo htmlspecialchars($row['job_title']); ?></h4>
+          <?php if (!empty($row['company_logo'])): ?>
+            <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Logo công ty" style="max-width:48px;max-height:48px;border-radius:8px;object-fit:contain;background:#f5f5f5;padding:4px;">
+          <?php endif; ?>
+        </div>
+        <p class="company"><?php echo htmlspecialchars($row['company_name']); ?></p>
+        <p class="salary">💰 <?php echo htmlspecialchars($row['salary']); ?></p>
+        <p class="location">📍 <?php echo htmlspecialchars($row['job_location']); ?></p>
+        <p class="posted">🕒 
+          <?php
+            if ($row['day_left'] > 0) {
+          echo $row['day_left'] . ' ngày còn lại';
+            } else {
+          echo 'Hết hạn';
+            }
+          ?>
+        </p>
           </div>
-          <p class="company"><a href="jobdetailpage.php">Công Ty Cổ Phần Đầu Tư Công Nghệ Hacom</a></p>
-          <p class="salary">💰 10 - 11 triệu</p>
-          <p class="location">📍 Hà Nội</p>
-          <p class="posted">🕒 3 ngày trước</p>
-        </div>
-
-        <div class="job-card">
-          <div class="job-header">
-            <h4>Junior IT Support</h4>
-            <img src="image/junioritsupportjobhive.png" alt="Logo công ty">
-          </div>
-          <p class="company">Công Ty TNHH Leap Strategies Việt Nam</p>
-          <p class="salary">💰 10 - 15 triệu</p>
-          <p class="location">📍 Hà Nội</p>
-          <p class="posted">🕒 5 ngày trước</p>
-        </div>
-
-        <div class="job-card">
-          <div class="job-header">
-            <h4>Chuyên viên công nghệ thông tin</h4>
-            <img src="image/chuyenviencongnghethongtinjobhive.png" alt="Logo công ty">
-          </div>
-          <p class="company">Công Ty Cổ Phần Quản Lý và phát triển BĐS</p>
-          <p class="salary">💰 18 - 20 triệu</p>
-          <p class="location">📍 Hà Nội</p>
-          <p class="posted">🕒 5 ngày trước</p>
-        </div>
-
-        <div class="job-card">
-          <div class="job-header">
-            <h4>Content Marketing/Growth</h4>
-            <img src="image/contentmarketinggrowthjobhive.png" alt="Logo công ty">
-          </div>
-          <p class="company">Công Ty TabTab Việt Nam</p>
-          <p class="salary">💰 12 -25 triệu</p>
-          <p class="location">📍 Hà Nội</p>
-          <p class="posted">🕒 2 ngày trước</p>
-        </div>
-
-        <div class="job-card">
-          <div class="job-header">
-            <h4>Financial Planning & Analysis</h4>
-            <img src="image/financialplanning&analysisjobhive.png" alt="Logo công ty" style="max-width: 48px; max-height: 48px; border-radius: 8px; object-fit: contain; background: #f5f5f5; padding: 4px;">
-          </div>
-          <p class="company">Công Ty Cổ Phần Giáo Dục SAPP</p>
-          <p class="salary">💰 12 - 18 triệu</p>
-          <p class="location">📍 Hà Nội</p>
-          <p class="posted">🕒 8 ngày trước</p>
-        </div>
-
-        <div class="job-card">
-          <div class="job-header">
-            <h4>Medical Representative (ETC)</h4>
-            <img src="image/medicalrepresentative(etc)jobhive.png" alt="Logo công ty">
-          </div>
-          <p class="company">Abbott Laboratories</p>
-          <p class="salary">💰 10 - 11 triệu</p>
-          <p class="location">📍 Hà Nội</p>
-          <p class="posted">🕒 15 ngày trước</p>
-        </div>
-        <div class="pagination">
-          <span class="dot active"></span>
-          <span class="dot"></span>
-          <span class="dot"></span>
-          <span class="dot"></span>
-        </div>
+        <?php
+          $count++;
+        endforeach;
+        if ($count > 0) echo '</div>';
+        ?>
+      </div>
+      <div class="pagination">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
   </section>
   <section class="section-3">
     <div class="container">
