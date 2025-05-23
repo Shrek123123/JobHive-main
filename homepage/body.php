@@ -340,9 +340,9 @@ require_once('config.php');
       <div class="job-listings"></div>
         <?php
         // Lấy tất cả job
-        $sql = "SELECT job_title, company_logo, company_name, salary, job_location, created_at, post_duration, 
-            DATEDIFF(DATE_ADD(created_at, INTERVAL post_duration DAY), CURDATE()) AS day_left 
-            FROM job LIMIT 9";
+        $sql = "SELECT id, job_title, company_logo, company_name, salary, job_location, created_at, post_duration, 
+        DATEDIFF(DATE_ADD(created_at, INTERVAL post_duration DAY), CURDATE()) AS day_left 
+        FROM job LIMIT 9";
         $result = mysqli_query($conn, $sql);
         $count = 0;
         foreach ($result as $row):
@@ -351,26 +351,28 @@ require_once('config.php');
         echo '<div style="display: flex; gap: 20px; margin-bottom: 20px;">';
           }
         ?>
-          <div class="job-card" style="flex:1;">
-        <div class="job-header">
-          <h4><?php echo htmlspecialchars($row['job_title']); ?></h4>
-          <?php if (!empty($row['company_logo'])): ?>
-            <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Logo công ty" style="max-width:48px;max-height:48px;border-radius:8px;object-fit:contain;background:#f5f5f5;padding:4px;">
-          <?php endif; ?>
-        </div>
-        <p class="company"><?php echo htmlspecialchars($row['company_name']); ?></p>
-        <p class="salary">💰 <?php echo htmlspecialchars($row['salary']); ?></p>
-        <p class="location">📍 <?php echo htmlspecialchars($row['job_location']); ?></p>
-        <p class="posted">🕒 
-          <?php
-            if ($row['day_left'] > 0) {
-          echo $row['day_left'] . ' days left';
-            } else {
-          echo 'Expired';
-            }
-          ?>
-        </p>
+          <a href="jobdetail.php?id=<?php echo urlencode($row['id']); ?>" style="flex:1; text-decoration:none; color:inherit;">
+        <div class="job-card" style="cursor:pointer;">
+          <div class="job-header">
+            <h4><?php echo htmlspecialchars($row['job_title']); ?></h4>
+            <?php if (!empty($row['company_logo'])): ?>
+          <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Logo công ty" style="max-width:48px;max-height:48px;border-radius:8px;object-fit:contain;background:#f5f5f5;padding:4px;">
+            <?php endif; ?>
           </div>
+          <p class="company"><?php echo htmlspecialchars($row['company_name']); ?></p>
+          <p class="salary">💰 <?php echo htmlspecialchars($row['salary']); ?></p>
+          <p class="location">📍 <?php echo htmlspecialchars($row['job_location']); ?></p>
+          <p class="posted">🕒 
+            <?php
+          if ($row['day_left'] > 0) {
+            echo $row['day_left'] . ' days left';
+          } else {
+            echo 'Expired';
+          }
+            ?>
+          </p>
+        </div>
+          </a>
         <?php
           $count++;
         endforeach;
