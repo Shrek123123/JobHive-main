@@ -1,9 +1,5 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-<?php
-require_once('config.php');
-
-// Bây giờ bạn có thể truy cập các cột như $row['ten_cot']
-?>
+<?php require_once('config.php'); // Bây giờ bạn có thể truy cập các cột như $row['ten_cot'] ?>
 <style>
   body {
     margin: 0;
@@ -106,12 +102,7 @@ require_once('config.php');
     margin: 10px;
   }
 
-  .job-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #660000;
-  }
+
 
   .job-filters {
     margin: 20px 0;
@@ -146,25 +137,7 @@ require_once('config.php');
   .section-2 {
     background-color: #eee;
   }
-  .job-listings {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
-  }
 
-  .job-card {
-    background-color: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    color: #333;
-  }
-
-  .job-card .job-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
 
   .circle-logo {
     background-color: #888;
@@ -177,10 +150,7 @@ require_once('config.php');
     font-weight: bold;
   }
 
-  .job-card p {
-    margin: 4px 0;
-    font-size: 14px;
-  }
+
 
   .pagination {
     margin-top: 30px;
@@ -262,6 +232,94 @@ require_once('config.php');
     background-color: #f9f5f5;
 
   }
+
+  .job-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1300px;
+    margin: 0 auto;
+
+  }
+
+  .job-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .job-header h3 {
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .save-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #e74c3c;
+    cursor: pointer;
+  }
+
+  .job-body {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .company-logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border-radius: 5px;
+  }
+
+  .job-info {
+    font-size: 14px;
+  }
+
+  .job-info .company-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .icon {
+    margin-right: 5px;
+  }
+
+  .divider {
+    border-top: 1px solid #e0e0e0;
+    margin: 10px 0;
+  }
+
+  .job-footer {
+    font-size: 13px;
+    color: #999;
+    text-align: right;
+  }
+
+  @media (max-width: 992px) {
+    .job-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .job-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 
 <section class="section-1">
@@ -270,7 +328,7 @@ require_once('config.php');
     <div class="subtitle">Tiếp cận 40,000+ tin tuyển dụng việc làm mới mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại
       Việt Nam</div>
 
-<!--     
+    <!--     
       <a href="index.php?action=search"><button>🔍 Tìm kiếm việc làm</button></a>
 
       <div class="search-box">
@@ -337,55 +395,66 @@ require_once('config.php');
         <button>Government & Public Sector</button>
       </div>
 
-      <div class="job-listings"></div>
+      <div class="job-grid">
+        <!-- 1 -->
         <?php
-        // Lấy tất cả job
-        $sql = "SELECT id, job_title, company_logo, company_name, salary, job_location, created_at, post_duration, 
-        DATEDIFF(DATE_ADD(created_at, INTERVAL post_duration DAY), CURDATE()) AS day_left 
-        FROM job LIMIT 9";
-        $result = mysqli_query($conn, $sql);
-        $count = 0;
-        foreach ($result as $row):
-          if ($count % 3 == 0) {
-        if ($count > 0) echo '</div>';
-        echo '<div style="display: flex; gap: 20px; margin-bottom: 20px;">';
-          }
-        ?>
-          <a href="jobdetail.php?id=<?php echo urlencode($row['id']); ?>" style="flex:1; text-decoration:none; color:inherit;">
-        <div class="job-card" style="cursor:pointer;">
-          <div class="job-header">
-            <h4><?php echo htmlspecialchars($row['job_title']); ?></h4>
-            <?php if (!empty($row['company_logo'])): ?>
-          <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Logo công ty" style="max-width:48px;max-height:48px;border-radius:8px;object-fit:contain;background:#f5f5f5;padding:4px;">
-            <?php endif; ?>
-          </div>
-          <p class="company"><?php echo htmlspecialchars($row['company_name']); ?></p>
-          <p class="salary">💰 <?php echo htmlspecialchars($row['salary']); ?></p>
-          <p class="location">📍 <?php echo htmlspecialchars($row['job_location']); ?></p>
-          <p class="posted">🕒 
-            <?php
-          if ($row['day_left'] > 0) {
-            echo $row['day_left'] . ' days left';
-          } else {
-            echo 'Expired';
-          }
+        // Lấy 9 job mới nhất
+        $sql = "SELECT job_title, company_logo, company_name, salary, job_location, created_at, post_duration 
+          FROM job 
+          LIMIT 9";
+        $result = $conn->query($sql);
+
+        if ($result && $result->num_rows > 0):
+          while ($row = $result->fetch_assoc()):
+            // Tính days_left
+            $created_at = new DateTime($row['created_at']);
+            $post_duration = (int) $row['post_duration'];
+            $expire_at = clone $created_at;
+            $expire_at->modify("+$post_duration days");
+            $now = new DateTime();
+            $interval = $now->diff($expire_at);
+            $days_left = (int) $interval->format('%r%a');
+            $days_left_text = $days_left > 0 ? $days_left . ' days left' : 'Expired';
             ?>
-          </p>
-        </div>
-          </a>
-        <?php
-          $count++;
-        endforeach;
-        if ($count > 0) echo '</div>';
-        ?>
+            <div class="job-card">
+              <div class="job-header">
+                <h3><?php echo htmlspecialchars($row['job_title']); ?></h3>
+                <button class="save-btn">♥</button>
+              </div>
+              <div class="job-body">
+                <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Company Logo" class="company-logo">
+                <div class="job-info">
+                  <div class="company-name"><?php echo htmlspecialchars($row['company_name']); ?></div>
+                  <div><span class="icon">💰</span> <?php echo htmlspecialchars($row['salary']); ?></div>
+                  <div><span class="icon">📍</span> <?php echo htmlspecialchars($row['job_location']); ?></div>
+                </div>
+              </div>
+              <div class="divider"></div>
+              <div class="job-footer">
+                <div class="deadline"><?php echo $days_left_text; ?></div>
+              </div>
+            </div>
+            <?php
+          endwhile;
+        else:
+          ?>
+          <div>No jobs found.</div>
+        <?php endif; ?>
+
+        <!-- 2 -->
+
+
+        <!-- 3 -->
+
+        <!-- Lặp lại 8 lần nữa cho đủ 9 thẻ -->
       </div>
+
       <div class="pagination">
         <span class="dot active"></span>
         <span class="dot"></span>
         <span class="dot"></span>
         <span class="dot"></span>
       </div>
-    </div>
   </section>
   <section class="section-3">
     <div class="container">

@@ -103,7 +103,7 @@ text-decoration: none;
 
 <div class="header">
     <div style="display: flex; align-items: center;">
-        <a href="index.php">
+        <a href="employerpage.php">
             <img src="image/logo.png" alt="JobHive Logo" style="height: 50px; margin-right: 10px;">
         </a>
     </div>
