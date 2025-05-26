@@ -15,6 +15,7 @@ $conn->select_db("jobhive");
 
 // Tạo bảng user
 $sql = "CREATE TABLE IF NOT EXISTS user (
+<<<<<<< Updated upstream
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -56,6 +57,21 @@ if ($stmt === TRUE) {
     echo "Error creating table: " . $sql->error;
 }
 =======
+=======
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    role ENUM('admin', 'employer', 'applicant') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Table 'user' created successfully.<br>" : "Error creating 'user': " . $conn->error . "<br>";
+
+// Tạo bảng company
+$sql = "CREATE TABLE IF NOT EXISTS company (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+>>>>>>> Stashed changes
     name VARCHAR(100) NOT NULL,
     address TEXT,
     website VARCHAR(255),
@@ -65,6 +81,9 @@ if ($stmt === TRUE) {
 )";
 $stmt = $conn->query($sql);
 echo $stmt === TRUE ? "Table 'company' created successfully.<br>" : "Error creating 'company': " . $conn->error . "<br>";
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 // Tạo bảng job
@@ -132,6 +151,7 @@ echo $stmt === TRUE ? "Table 'feedback' created successfully.<br>" : "Error crea
 $sql = "CREATE TABLE IF NOT EXISTS skill (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     employer_id INT UNSIGNED NOT NULL,
     feedback TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -171,6 +191,8 @@ if ($stmt === TRUE) {
     echo "Error inserting sample data: " . $sql->error;
 }
 =======
+=======
+>>>>>>> Stashed changes
     name VARCHAR(100) NOT NULL UNIQUE
 )";
 $stmt = $conn->query($sql);
@@ -243,6 +265,9 @@ echo $stmt === TRUE ? "Inserted sample application.<br>" : "Error inserting appl
 $sql = "INSERT INTO feedback (user_id, message) VALUES (3, 'Great platform!')";
 $stmt = $conn->query($sql);
 echo $stmt === TRUE ? "Inserted sample feedback.<br>" : "Error inserting feedback: " . $conn->error . "<br>";
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 
