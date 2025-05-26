@@ -1,36 +1,34 @@
 <?php
 // Kết nối đến MySQL để tạo cơ sở dữ liệu
-$sql = new mysqli("localhost", "root", "", "");
+$conn = new mysqli("localhost", "root", "", "");
 
 // Kiểm tra kết nối
-if ($sql->connect_error) {
+if ($conn->connect_error) {
     die("Connection failed: " . $sql->connect_error);
 }
 
 // Tạo cơ sở dữ liệu jobhive nếu chưa tồn tại
-$sql->query("CREATE DATABASE IF NOT EXISTS jobhive");
+$conn->query("CREATE DATABASE IF NOT EXISTS jobhive");
 
 // Chọn cơ sở dữ liệu jobhive
-$sql->select_db("jobhive");
+$conn->select_db("jobhive");
 
 // Tạo bảng user
-$stmt = $sql->query("CREATE TABLE IF NOT EXISTS user (
-    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(30) NOT NULL,
-    user_type VARCHAR(30) NOT NULL,
-    email VARCHAR(50) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)");
-if ($stmt === TRUE) {
-    echo "Table user created successfully <br>";
-} else {
-    echo "Error creating table: " . $sql->error;
-}
-
-// Tạo bảng jobseeker_profile
-$stmt = $sql->query("CREATE TABLE IF NOT EXISTS jobseeker_profile (
+$sql = "CREATE TABLE IF NOT EXISTS user (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    role ENUM('admin', 'employer', 'applicant') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Table 'user' created successfully.<br>" : "Error creating 'user': " . $conn->error . "<br>";
+
+// Tạo bảng company
+$sql = "CREATE TABLE IF NOT EXISTS company (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+<<<<<<< Updated upstream
     jobseeker_id INT UNSIGNED NOT NULL,
     profile_description TEXT NOT NULL,
     profile_pic VARCHAR(255),
@@ -57,9 +55,20 @@ if ($stmt === TRUE) {
 } else {
     echo "Error creating table: " . $sql->error;
 }
+=======
+    name VARCHAR(100) NOT NULL,
+    address TEXT,
+    website VARCHAR(255),
+    logo VARCHAR(255),
+    created_by_user_id INT UNSIGNED,
+    FOREIGN KEY (created_by_user_id) REFERENCES user(id) ON DELETE CASCADE
+)";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Table 'company' created successfully.<br>" : "Error creating 'company': " . $conn->error . "<br>";
+>>>>>>> Stashed changes
 
 // Tạo bảng job
-$stmt = $sql->query("CREATE TABLE IF NOT EXISTS job (
+$sql = "CREATE TABLE IF NOT EXISTS job (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     posted_by_employer_id INT UNSIGNED NOT NULL,
     company_name VARCHAR(100) NOT NULL,
@@ -71,66 +80,58 @@ $stmt = $sql->query("CREATE TABLE IF NOT EXISTS job (
     contact_email VARCHAR(100) NOT NULL,
     contact_phone VARCHAR(20),
     job_type VARCHAR(50) NOT NULL,
+    job_remote VARCHAR(50) NOT NULL,
     job_category VARCHAR(100) NOT NULL,
     required_certification VARCHAR(255),
     job_experience VARCHAR(100),
     company_logo VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (posted_by_employer_id) REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE
-)");
-if ($stmt === TRUE) {
-    echo "Table job created successfully <br>";
-} else {
-    echo "Error creating table: " . $sql->error;
-}
+)";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Table 'job' created successfully.<br>" : "Error creating 'job': " . $conn->error . "<br>";
 
 // Tạo bảng resume
-$stmt = $sql->query("CREATE TABLE IF NOT EXISTS resume (
+$sql = "CREATE TABLE IF NOT EXISTS resume (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    jobseeker_id INT UNSIGNED NOT NULL,
-    resume_file VARCHAR(255) NOT NULL,
+    applicant_id INT UNSIGNED,
+    resume_path VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (jobseeker_id) REFERENCES user(id) ON DELETE CASCADE
-)");
-if ($stmt === TRUE) {
-    echo "Table resume created successfully <br>";
-} else {
-    echo "Error creating table: " . $sql->error;
-}
+    FOREIGN KEY (applicant_id) REFERENCES user(id) ON DELETE CASCADE
+)";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Table 'resume' created successfully.<br>" : "Error creating 'resume': " . $conn->error . "<br>";
 
 // Tạo bảng application
-$stmt = $sql->query("CREATE TABLE IF NOT EXISTS application (
+$sql = "CREATE TABLE IF NOT EXISTS application (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    job_id INT UNSIGNED NOT NULL,
-    jobseeker_id INT UNSIGNED NOT NULL,
-    status ENUM('applied', 'interviewed', 'hired', 'rejected') DEFAULT 'applied',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    job_id INT UNSIGNED,
+    applicant_id INT UNSIGNED,
+    resume_id INT UNSIGNED,
+    cover_letter TEXT,
+    applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (job_id) REFERENCES job(id) ON DELETE CASCADE,
-    FOREIGN KEY (jobseeker_id) REFERENCES user(id) ON DELETE CASCADE
-)");
-if ($stmt === TRUE) {
-    echo "Table application created successfully <br>";
-} else {
-    echo "Error creating table: " . $sql->error;
-}
+    FOREIGN KEY (applicant_id) REFERENCES user(id) ON DELETE CASCADE,
+    FOREIGN KEY (resume_id) REFERENCES resume(id) ON DELETE SET NULL
+)";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Table 'application' created successfully.<br>" : "Error creating 'application': " . $conn->error . "<br>";
 
-// Tạo bảng jobseekerfeedback
-$stmt = $sql->query("CREATE TABLE IF NOT EXISTS jobseekerfeedback (
+// Tạo bảng feedback
+$sql = "CREATE TABLE IF NOT EXISTS feedback (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    jobseeker_id INT UNSIGNED NOT NULL,
-    feedback TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (jobseeker_id) REFERENCES user(id) ON DELETE CASCADE
-)");
-if ($stmt === TRUE) {
-    echo "Table jobseekerfeedback created successfully <br>";
-} else {
-    echo "Error creating table: " . $sql->error;
-}
+    user_id INT UNSIGNED,
+    message TEXT,
+    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+)";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Table 'feedback' created successfully.<br>" : "Error creating 'feedback': " . $conn->error . "<br>";
 
-// Tạo bảng employerfeedback
-$stmt = $sql->query("CREATE TABLE IF NOT EXISTS employerfeedback (
+// Tạo bảng skill
+$sql = "CREATE TABLE IF NOT EXISTS skill (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+<<<<<<< Updated upstream
     employer_id INT UNSIGNED NOT NULL,
     feedback TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -169,5 +170,80 @@ if ($stmt === TRUE) {
 } else {
     echo "Error inserting sample data: " . $sql->error;
 }
+=======
+    name VARCHAR(100) NOT NULL UNIQUE
+)";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Table 'skill' created successfully.<br>" : "Error creating 'skill': " . $conn->error . "<br>";
+
+// Tạo bảng job_skill
+$sql = "CREATE TABLE IF NOT EXISTS job_skill (
+    job_id INT UNSIGNED,
+    skill_id INT UNSIGNED,
+    PRIMARY KEY (job_id, skill_id),
+    FOREIGN KEY (job_id) REFERENCES job(id) ON DELETE CASCADE,
+    FOREIGN KEY (skill_id) REFERENCES skill(id) ON DELETE CASCADE
+)";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Table 'job_skill' created successfully.<br>" : "Error creating 'job_skill': " . $conn->error . "<br>";
+
+// Thêm dữ liệu mẫu vào các bảng đã tạo
+// 1. Thêm user
+$sql = "INSERT INTO user (username, password, email, role) VALUES
+('admin1', '123456', 'admin1@example.com', 'admin'),
+('employer1', '123456', 'employer1@example.com', 'employer'),
+('applicant1', '123456', 'applicant1@example.com', 'applicant')";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Inserted sample users.<br>" : "Error inserting users: " . $conn->error . "<br>";
+
+// 2. Thêm company (gắn với employer1 có id = 2)
+$sql = "INSERT INTO company (name, address, website, logo, created_by_user_id) VALUES
+('TechCorp', '123 Street, City', 'https://techcorp.com', 'logo.png', 2)";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Inserted sample company.<br>" : "Error inserting company: " . $conn->error . "<br>";
+
+// 3. Thêm job (gắn với employer1 có id = 2)
+$sql = "INSERT INTO job (
+    posted_by_employer_id, company_name, job_title, job_description,
+    job_location, salary, contact_email, contact_phone,
+    job_type, job_remote, job_category, required_certification, job_experience,
+    company_logo
+) VALUES
+(2, 'Tech Solutions', 'Backend Developer', 'Phát triển hệ thống web với PHP và MySQL.', 'Hà Nội', 1500.00, 'hr@techsolutions.vn', '0123456789', 'Toàn thời gian', 'Onsite', 'CNTT', 'PHP, MySQL', '2 năm kinh nghiệm', 'logo1.jpg'),
+(2, 'Digital Works', 'Mobile App Developer', 'Xây dựng ứng dụng iOS và Android.', 'TP.HCM', 1800.00, 'jobs@digitalworks.com', '0933221122', 'Toàn thời gian', 'Remote', 'Mobile', 'Flutter hoặc React Native', '3 năm', 'logo2.jpg'),
+(2, 'DataCorp', 'Data Analyst', 'Phân tích dữ liệu và lập báo cáo thống kê.', 'Đà Nẵng', 1700.00, 'apply@datacorp.vn', NULL, 'Bán thời gian', 'OnSite', 'Phân tích dữ liệu', 'SQL, Excel nâng cao', '1 năm', 'logo3.jpg'),
+(2, 'SecureNet', 'System Administrator', 'Quản trị hệ thống mạng và máy chủ.', 'Hải Phòng', 1600.00, 'admin@securenet.vn', '0909888777', 'Toàn thời gian', 'OnSite', 'Hệ thống', 'Linux, CCNA', '3 năm trở lên', 'logo4.jpg'),
+(2, 'BrightSoft', 'Frontend Developer', 'Thiết kế giao diện người dùng bằng HTML, CSS, JS.', 'Cần Thơ', 1400.00, 'frontend@brightsoft.vn', '0987654321', 'Thực tập', 'Remote', 'Web Development', 'Không yêu cầu', 'Không yêu cầu', 'logo5.jpg')";
+
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Inserted sample job.<br>" : "Error inserting job: " . $conn->error . "<br>";
+
+// 4. Thêm resume cho applicant1 có id = 3
+$sql = "INSERT INTO resume (applicant_id, resume_path) VALUES (3, 'uploads/resume1.pdf')";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Inserted sample resume.<br>" : "Error inserting resume: " . $conn->error . "<br>";
+
+// 5. Thêm skills
+$sql = "INSERT INTO skill (name) VALUES ('PHP'), ('MySQL'), ('Laravel')";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Inserted sample skills.<br>" : "Error inserting skills: " . $conn->error . "<br>";
+
+// 6. Gán kỹ năng cho job (job id = 1)
+$sql = "INSERT INTO job_skill (job_id, skill_id) VALUES (1, 1), (1, 2)";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Inserted job_skill mappings.<br>" : "Error inserting job_skill: " . $conn->error . "<br>";
+
+// 7. Thêm application (ứng viên 3 apply job 1 với resume 1)
+$sql = "INSERT INTO application (job_id, applicant_id, resume_id, cover_letter)
+VALUES (1, 3, 1, 'I am very interested in this job.')";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Inserted sample application.<br>" : "Error inserting application: " . $conn->error . "<br>";
+
+// 8. Thêm feedback từ user
+$sql = "INSERT INTO feedback (user_id, message) VALUES (3, 'Great platform!')";
+$stmt = $conn->query($sql);
+echo $stmt === TRUE ? "Inserted sample feedback.<br>" : "Error inserting feedback: " . $conn->error . "<br>";
+>>>>>>> Stashed changes
 
 
+$conn->close();
