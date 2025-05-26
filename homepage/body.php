@@ -339,7 +339,6 @@ require_once('config.php');
 
       <div class="job-listings"></div>
         <?php
-<<<<<<< Updated upstream
         // Lấy tất cả job
         $sql = "SELECT id, job_title, company_logo, company_name, salary, job_location, created_at, post_duration, 
         DATEDIFF(DATE_ADD(created_at, INTERVAL post_duration DAY), CURDATE()) AS day_left 
@@ -359,24 +358,6 @@ require_once('config.php');
             <?php if (!empty($row['company_logo'])): ?>
           <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Logo công ty" style="max-width:48px;max-height:48px;border-radius:8px;object-fit:contain;background:#f5f5f5;padding:4px;">
             <?php endif; ?>
-=======
-        include_once 'config.php';
-        $sql = "SELECT id, job_title, company_logo, company_name, salary, job_location, created_at FROM job ORDER BY created_at DESC LIMIT 6";
-        $result = $conn->query($sql);
-
-        while ($job = $result->fetch_assoc()):
-        ?>
-          <div class="job-card">
-            <div class="job-header">
-              <h4><?= htmlspecialchars($job['job_title']) ?></h4>
-              <img src="image/<?= htmlspecialchars($job['company_logo']) ?>" alt="Logo công ty">
-            </div>
-            <p class="company"><a href="jobdetailpage.php?id=<?= $job['id'] ?>"><?= htmlspecialchars($job['company_name']) ?></a></p>
-            <p class="salary">💰 <?= number_format($job['salary']) ?> USD</p>
-            <p class="location">📍 <?= htmlspecialchars($job['job_location']) ?></p>
-            <p class="posted">🕒 <?= date('d/m/Y', strtotime($job['created_at'])) ?></p>
-            <a href="jobdetailpage.php?id=<?= $job['id'] ?>" class="btn btn-danger mt-2">Chi tiết công việc</a>
->>>>>>> Stashed changes
           </div>
           <p class="company"><?php echo htmlspecialchars($row['company_name']); ?></p>
           <p class="salary">💰 <?php echo htmlspecialchars($row['salary']); ?></p>

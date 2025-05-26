@@ -35,7 +35,7 @@ $sql = "CREATE TABLE IF NOT EXISTS company (
     profile_pic VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (jobseeker_id) REFERENCES user(id) ON DELETE CASCADE
-)");
+)";
 if ($stmt === TRUE) {
     echo "Table jobseeker_profile created successfully <br>";
 } else {
@@ -56,8 +56,6 @@ if ($stmt === TRUE) {
 } else {
     echo "Error creating table: " . $sql->error;
 }
-=======
-=======
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
