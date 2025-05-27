@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $jobDescription = $_POST['jobDescription'];
     $jobLocation = $_POST['jobLocation'];
     $salary = $_POST['salary'];
+    $post_duration = $_POST['post_duration'];
     $contactEmail = $_POST['contactEmail'];
     $contactPhone = $_POST['contactPhone'];
     $jobType = $_POST['jobType'];
@@ -34,13 +35,61 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Handle file upload
     if (isset($_FILES['companylogo']) && $_FILES['companylogo']['error'] == 0) {
         $targetDir = "uploads/";
-        $targetFile = $targetDir . basename($_FILES["companylogo"]["name"]);
-        move_uploaded_file($_FILES["companylogo"]["tmp_name"], $targetFile);
+        $fileName = basename($_FILES["companylogo"]["name"]);
+        $targetFile = $targetDir . uniqid() . "_" . $fileName;
+        $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+        // Check file size (1MB limit)
+        if ($_FILES["companylogo"]["size"] > 1000000) {
+            echo "<script>alert('Sorry, your file is too large.');</script>";
+            exit;
+        }
+
+        // Allow certain file formats
+        $allowedTypes = ['jpg', 'png', 'jpeg', 'gif'];
+        if (!in_array($fileType, $allowedTypes)) {
+            echo "<script>alert('Sorry, only JPG, JPEG, PNG & GIF files are allowed.');</script>";
+            exit;
+        }
+
+        // Upload file
+        if (!move_uploaded_file($_FILES["companylogo"]["tmp_name"], $targetFile)) {
+            echo "<script>alert('Sorry, there was an error uploading your file.');</script>";
+            exit;
+        }
+    } else {
+        $targetFile = ""; // No file uploaded
+    }
+    if (empty($targetFile)) {
+        $targetFile = "uploads/default.png"; // Default image if no upload
+    }
+
+    // Validate required fields
+    $requiredFields = [
+      'companyName' => $companyName,
+      'jobTitle' => $jobTitle,
+      'jobDescription' => $jobDescription,
+      'jobLocation' => $jobLocation,
+      'salary' => $salary,
+      'contactEmail' => $contactEmail,
+      'contactPhone' => $contactPhone,
+      'jobType' => $jobType,
+      'jobCategory' => $jobCategory,
+      'requiredcertification' => $requiredcertification,
+      'jobExperience' => $jobExperience,
+      'post_duration' => $post_duration
+    ];
+
+    foreach ($requiredFields as $field => $value) {
+      if (empty($value)) {
+        echo "<script>alert('Please fill out all required information.');</script>";
+        exit;
+      }
     }
 
     // Database connection and insertion logic here
-    $stmt = $conn->prepare("INSERT INTO job (posted_by_employer_id, company_name, job_title, job_description, job_location, salary, contact_email, contact_phone, job_type, job_category, required_certification, job_experience, company_logo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("issssssssssss", $employerid, $companyName, $jobTitle, $jobDescription, $jobLocation, $salary, $contactEmail, $contactPhone, $jobType, $jobCategory, $requiredcertification, $jobExperience, $targetFile);
+    $stmt = $conn->prepare("INSERT INTO job (posted_by_employer_id, company_name, job_title, job_description, job_location, salary, post_duration, contact_email, contact_phone, job_type, job_category, required_certification, job_experience, company_logo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("isssssisssssss", $employerid, $companyName, $jobTitle, $jobDescription, $jobLocation, $salary, $post_duration, $contactEmail, $contactPhone, $jobType, $jobCategory, $requiredcertification, $jobExperience, $targetFile);
     if ($stmt->execute()) {
         echo "<script>alert('Job posted successfully!');</script>";
     } else {
@@ -135,21 +184,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
 </style>
-<section class="hero">
-    <div class="hero-overlay">
-      <h1>Post Jobs & Find Candidates Effectively</h1>
-      <ul>
-        <li>Post jobs for free, easily and quickly</li>
-        <li>Huge candidate pool from various industries and fields</li>
-        <li>Toppy AI recommends potential candidates, filters top profiles, and ranks them by relevance</li>
-      </ul>
-      <div class="hero-buttons">
-        <button class="consult-btn">Recruitment Consulting</button>
-        <button class="post-now-btn" id="openModalBtn">Post a Job Now →</button>
-      </div>
+<section class="hero" style="background: url('image/employerpagebackground.png') no-repeat center center/cover;">
+  <div class="hero-overlay">
+    <h1>Post Jobs & Find Candidates Effectively</h1>
+    <ul>
+    <li>Post jobs for free, easily and quickly</li>
+    <li>Huge candidate pool from various industries and fields</li>
+    <li>Toppy AI recommends potential candidates, filters top profiles, and ranks them by relevance</li>
+    </ul>
+    <div class="hero-buttons">
+    <button class="consult-btn">Recruitment Consulting</button>
+    <button class="post-now-btn" id="openModalBtn">Post a Job Now →</button>
     </div>
-  </section>
+  </div>
+</section>
 
+<?php
+// include modal form for posting job
+// This modal will be triggered when the user clicks on the "Post a Job Now" button
+?>
 
 <div id="myModal" class="modal">
   <div class="modal-content">
@@ -177,6 +230,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <tr>
           <td><label for="salary">Salary:</label></td>
           <td><input type="text" id="salary" name="salary" placeholder="Eg: 1000 USD, 20 million VND, negotiable..." required></td>
+        </tr>
+        <tr>
+          <td><label for ="post_duration">Duration of the post:</label></td>
+          <td><input type="number" id="post_duration" name="post_duration" placeholder="Expiry duration (eg: 30 (days))"></td>
         </tr>
         <tr>
           <td><label for="contactEmail">Contact Email:</label></td>

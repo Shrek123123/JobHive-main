@@ -55,10 +55,8 @@
 
 <body>
 
-    <header class="bg-danger text-white py-3">
-        <div class="container">
+    <header>
             <?php require_once 'homepage/header.php' ?>
-        </div>
     </header>
     <div>
 

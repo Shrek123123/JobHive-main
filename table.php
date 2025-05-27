@@ -33,6 +33,7 @@ $stmt = $sql->query("CREATE TABLE IF NOT EXISTS jobseeker_profile (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     jobseeker_id INT UNSIGNED NOT NULL,
     profile_description TEXT NOT NULL,
+    profile_pic VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (jobseeker_id) REFERENCES user(id) ON DELETE CASCADE
 )");
@@ -47,6 +48,7 @@ $stmt = $sql->query("CREATE TABLE IF NOT EXISTS employer_profile (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     employer_id INT UNSIGNED NOT NULL,
     company_description TEXT NOT NULL,
+    profile_pic VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (employer_id) REFERENCES user(id) ON DELETE CASCADE
 )");
@@ -64,7 +66,8 @@ $stmt = $sql->query("CREATE TABLE IF NOT EXISTS job (
     job_title VARCHAR(100) NOT NULL,
     job_description TEXT NOT NULL,
     job_location VARCHAR(100) NOT NULL,
-    salary DECIMAL(10,2) NOT NULL,
+    salary VARCHAR(30) NOT NULL,
+    post_duration INT UNSIGNED NOT NULL,
     contact_email VARCHAR(100) NOT NULL,
     contact_phone VARCHAR(20),
     job_type VARCHAR(50) NOT NULL,
@@ -166,6 +169,5 @@ if ($stmt === TRUE) {
 } else {
     echo "Error inserting sample data: " . $sql->error;
 }
-?>
 
 
