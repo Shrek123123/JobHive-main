@@ -16,8 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (password_verify($password, $row['password'])) {
             // Password is correct
             $_SESSION['username'] = $row['username'];
-            header("Location: jobseekerdashboard.php");
-            exit();
+            $_SESSION['role'] = 'jobseeker';
+
+            if (isset($_GET['redirect'])) {
+                $redirect_url = urldecode($_GET['redirect']);
+                header("Location: $redirect_url");
+                exit();
+            } else {
+                header("Location: jobseekerdashboard.php");
+                exit();
+            }
         } else {
             // Invalid password
             echo "<script>
