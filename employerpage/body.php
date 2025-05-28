@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $jobExperience = $_POST['jobExperience'];
   $jobPosition = $_POST['jobPosition'] ?? '';
   $noEmplpoyeeNeeeded = $_POST['noEmplpoyeeNeeded'] ?? 0;
+
   $jobDetailedLocation = $_POST['jobDetailedLocation'] ?? '';
   $jobLocationDistrict = $_POST['jobLocationDistrict'] ?? '';
   if (!isset($_SESSION['employerid'])) {
@@ -75,47 +76,75 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   }
 
   // Validate required fields
-  $requiredFields = [
-    'companyName' => $companyName,
-    'jobTitle' => $jobTitle,
-    'jobDescription' => $jobDescription,
-    'jobLocation' => $jobLocation,
-    'salary' => $salary,
-    'contactEmail' => $contactEmail,
-    'contactPhone' => $contactPhone,
-    'jobType' => $jobType,
-    'jobCategory' => $jobCategory,
-    'requiredcertification' => $requiredcertification,
-    'jobExperience' => $jobExperience,
-    'post_duration' => $post_duration,
-    'jobRequirementText' => $jobRequirementText,
-    'jobBenefit' => $jobBenefit,
-    'companySize' => $companySize,
-    'jobPosition' => $jobPosition,
-    'noEmplpoyeeNeeded' => $noEmplpoyeeNeeeded,
-    'jobDetailedLocation' => $jobDetailedLocation,
-    'jobLocationDistrict' => $jobLocationDistrict
-  ];
+  // $requiredFields = [
+  //   'companyName' => $companyName,
+  //   'jobTitle' => $jobTitle,
+  //   'jobDescription' => $jobDescription,
+  //   'jobLocation' => $jobLocation,
+  //   'salary' => $salary,
+  //   'contactEmail' => $contactEmail,
+  //   'contactPhone' => $contactPhone,
+  //   'jobType' => $jobType,
+  //   'jobCategory' => $jobCategory,
+  //   'requiredcertification' => $requiredcertification,
+  //   'jobExperience' => $jobExperience,
+  //   'post_duration' => $post_duration,
+  //   'jobRequirementText' => $jobRequirementText,
+  //   'jobBenefit' => $jobBenefit,
+  //   'companySize' => $companySize,
+  //   'jobPosition' => $jobPosition,
+  //   'noEmplpoyeeNeeded' => $noEmplpoyeeNeeeded,
+  //   'jobDetailedLocation' => $jobDetailedLocation,
+  //   'jobLocationDistrict' => $jobLocationDistrict
+  // ];
 
-  foreach ($requiredFields as $field => $value) {
-    if (empty($value)) {
-      echo "<script>alert('Please fill out all required information.');</script>";
-      exit;
-    }
-  }
+  // foreach ($requiredFields as $field => $value) {
+  //   if (empty($value)) {
+  //     echo "<script>alert('Please fill out all required information.');</script>";
+  //   }
+  // }
 
   // Database connection and insertion logic here
-  $stmt = $conn->prepare("INSERT INTO job (posted_by_employer_id, company_name, job_title, job_description, job_location, salary, post_duration, contact_email, contact_phone, job_type, job_category, required_certification, job_experience, company_logo, job_requirement, job_benefits, company_size, no_employee_needed, job_position, job_detailed_location, job_location_district) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+  $stmt = $conn->prepare("INSERT INTO job (
+    posted_by_employer_id, company_name, job_title, job_description, job_location, salary, post_duration, contact_email, contact_phone, job_type, job_category, required_certification, job_experience, company_logo, job_requirement, job_benefit, company_size, no_employee_needed, job_position, job_detailed_location, job_location_district
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
   if (!$stmt) {
     echo "<script>alert('Error preparing statement: {$conn->error}');</script>";
     exit;
   }
-  $stmt->bind_param("isssssissssssssssisss", $employerid, $companyName, $jobTitle, $jobDescription, $jobLocation, $salary, $post_duration, $contactEmail, $contactPhone, $jobType, $jobCategory, $requiredcertification, $jobExperience, $targetFile, $jobRequirementText, $jobBenefit, $companySize);
+
+  $stmt->bind_param(
+    "isssssissssssssssisss",
+    $employerid,
+    $companyName,
+    $jobTitle,
+    $jobDescription,
+    $jobLocation,
+    $salary,
+    $post_duration,
+    $contactEmail,
+    $contactPhone,
+    $jobType,
+    $jobCategory,
+    $requiredcertification,
+    $jobExperience,
+    $targetFile,
+    $jobRequirementText,
+    $jobBenefit,
+    $companySize,
+    $noEmplpoyeeNeeeded,
+    $jobPosition,
+    $jobDetailedLocation,
+    $jobLocationDistrict
+  );
+
   if ($stmt->execute()) {
     echo "<script>alert('Job posted successfully!');</script>";
   } else {
-    echo "<script>alert(`Error posting job: {$stmt->error}`);</script>";
+    echo "<script>alert('Error posting job: {$stmt->error}');</script>";
   }
+  $stmt->close();
 }
 ?>
 <style>
@@ -230,35 +259,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <div class="modal-content">
     <span class="closeBtn">&times;</span>
     <h2>Post job form</h2>
-    <form accept="multipart/form-data" method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data">
       <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
-      < class="form-table">
+      <table class="form-table">
         <tr>
           <td><label for="companyName">Company Name:</label></td>
           <td><input type="text" id="companyName" name="companyName" placeholder="Company Name" required></td>
         </tr>
         <tr>
-          <label for="company_size_select">Company Size:</label><br>
-          <select id="company_size_select" onchange="toggleCustomInput()" required>
-            <option value="">-- Select Company Size --</option>
-            <option value="1-10">1–10 employees</option>
-            <option value="11-50">11–50 employees</option>
-            <option value="51-200">51–200 employees</option>
-            <option value="201-500">201–500 employees</option>
-            <option value="501-1000">501–1000 employees</option>
-            <option value="1001-5000">1001–5000 employees</option>
-            <option value="5000+">5000+ employees</option>
-            <option value="other">Other</option>
-          </select><br><br>
-
-          <!-- Input thực sự gửi đi -->
-          <input type="hidden" name="company_size" id="company_size">
-
-          <!-- Hiện ô nhập nếu chọn "Other" -->
-          <div id="custom_input_wrapper" style="display: none;">
-            <input type="text" id="custom_company_size" placeholder="e.g. 10-150 or 5000+" oninput="updateHiddenInput()"
-              pattern="^\d{1,5}-\d{1,5}|\d{1,5}\+$" title="Enter like 10-150 or 5000+" required>
-          </div>
+          <td><label for="company_size_select">Company Size:</label></td>
+          <td>
+            <select id="company_size_select" onchange="toggleCustomInput()" required>
+              <option value="">-- Select Company Size --</option>
+              <option value="1-10">1–10 employees</option>
+              <option value="11-50">11–50 employees</option>
+              <option value="51-200">51–200 employees</option>
+              <option value="201-500">201–500 employees</option>
+              <option value="501-1000">501–1000 employees</option>
+              <option value="1001-5000">1001–5000 employees</option>
+              <option value="5000+">5000+ employees</option>
+              <option value="other">Other</option>
+            </select>
+            <input type="hidden" name="company_size" id="company_size">
+            <div id="custom_input_wrapper" style="display: none; margin-top: 8px;">
+              <input type="text" id="custom_company_size" name="custom_company_size" placeholder="e.g. 10-150 or 5000+"
+                title="Enter like 10-150 or 5000+">
+            </div>
+          </td>
         </tr>
         <tr>
           <td><label for="jobTitle">Job Title:</label></td>
@@ -266,8 +293,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
           <td><label for="jobDescription">Job Description:</label></td>
-          <td><textarea id="jobDescription" name="jobDescription" placeholder="Job Description" required></textarea>
-          </td>
+          <td><textarea id="jobDescription" name="jobDescription" placeholder="Job Description" required></textarea></td>
         </tr>
         <tr>
           <td><label for="jobLocation">Job Location:</label></td>
@@ -275,13 +301,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
           <td><label for="salary">Salary:</label></td>
-          <td><input type="text" id="salary" name="salary" placeholder="Eg: 1000 USD, 20 million VND, negotiable..."
-              required></td>
+          <td><input type="text" id="salary" name="salary" placeholder="Eg: 1000 USD, 20 million VND, negotiable..." required></td>
         </tr>
         <tr>
           <td><label for="post_duration">Duration of the post:</label></td>
-          <td><input type="number" id="post_duration" name="post_duration"
-              placeholder="Expiry duration (eg: 30 (days))"></td>
+          <td><input type="number" id="post_duration" name="post_duration" placeholder="Expiry duration (eg: 30 (days))"></td>
         </tr>
         <tr>
           <td><label for="contactEmail">Contact Email:</label></td>
@@ -292,23 +316,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <td><input type="text" id="contactPhone" name="contactPhone" placeholder="Contact Phone" required></td>
         </tr>
         <tr>
-          <label for="noEmplpoyeeNeeded">Number of Employees Needed:</label></td>
-          <td><input type="number" id="noEmplpoyeeNeeded" name="noEmplpoyeeNeeded"
-              placeholder="Number of Employees Needed (optional)"></td>
+          <td><label for="noEmplpoyeeNeeded">Number of Employees Needed:</label></td>
+          <td>
+            <input type="number" id="noEmplpoyeeNeeded" name="noEmplpoyeeNeeded" placeholder="Number of Employees Needed (optional)" min="0" oninput="this.value = Math.abs(this.value)">
+          </td>
         </tr>
         <tr>
           <td><label for="jobDetailedLocation">Job Detailed Location:</label></td>
-          <td><input type="text" id="jobDetailedLocation" name="jobDetailedLocation"
-              placeholder="Eg: 123 Main St, City, Country"></td>
+          <td><input type="text" id="jobDetailedLocation" name="jobDetailedLocation" placeholder="Eg: 123 Main St, City, Country"></td>
         </tr>
         <tr>
           <td><label for="jobLocationDistrict">District:</label></td>
-          <td><input type="text" id="jobLocationDistrict" name="jobLocationDistrict"
-              placeholder="Eg: District 1"></td>
+          <td><input type="text" id="jobLocationDistrict" name="jobLocationDistrict" placeholder="Eg: District 1"></td>
         </tr>
         <tr>
           <td><label for="jobPosition">Job Position:</label></td>
           <td><input type="text" id="jobPosition" name="jobPosition" placeholder="Eg: Software Engineer, Marketing Manager..."></td>
+        </tr>
         <tr>
           <td><label for="jobType">Job Type:</label></td>
           <td>
@@ -335,23 +359,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
           <td><label for="requiredcertification">Require certification:</label></td>
-          <td><input type="text" id="requiredcertification" name="requiredcertification"
-              placeholder="Eg: Bachelor of finance, none..." required></td>
+          <td><input type="text" id="requiredcertification" name="requiredcertification" placeholder="Eg: Bachelor of finance, none..." required></td>
         </tr>
         <tr>
-          <td><label for="jobExperience">Job experience required</label></td>
-          <td><input type="text" id="jobExperience" name="jobExperience" placeholder="Eg: 1 year, 6 months, none..."
-              required></td>
+          <td><label for="jobExperience">Job experience required:</label></td>
+          <td><input type="text" id="jobExperience" name="jobExperience" placeholder="Eg: 1 year, 6 months, none..." required></td>
         </tr>
         <tr>
-          <label for="jobRequirementText">Job Experience:</label>
+          <td><label for="jobRequirementText">Job Requirement:</label></td>
           <td>
-            <textarea id="jobExperienceText" name="jobRequirementText" placeholder="Describe the job experience required"
-              required></textarea>
+            <textarea id="jobRequirementText" name="jobRequirementText" placeholder="Describe the job requirement" required></textarea>
           </td>
         </tr>
         <tr>
-          <label for="jobBenefit">Job Benefit:</label>
+          <td><label for="jobBenefit">Job Benefit:</label></td>
           <td>
             <textarea id="jobBenefit" name="jobBenefit" placeholder="Describe the job benefit (optional)"></textarea>
           </td>

@@ -264,71 +264,143 @@ require_once 'config.php';
         </div>
     </div>
 
-    <script>
-    $(document).ready(function () {
-        // Kiểm tra trạng thái đã lưu khi tải trang
-        <?php if ($is_logged_in): ?>
-            $.get('check_saved_job.php', { job_id: <?= $job_detail_id ?> }, function (data) {
-                if (data === 'saved') {
-                    $('#save-job-btn').removeClass('btn-secondary').addClass('btn-danger');
-                    $('#save-job-icon').html('&#9733;');
-                } else {
-                    $('#save-job-btn').removeClass('btn-danger').addClass('btn-secondary');
-                    $('#save-job-icon').html('&#9734;');
-                }
-            });
-        <?php endif; ?>
-
-        $('#save-job-btn').on('click', function (e) {
-            <?php if (!$is_logged_in): ?>
-                // Đã xử lý chuyển hướng bằng thuộc tính onclick trên nút
-                return;
-            <?php else: ?>
-                var btn = $(this);
-                var jobId = btn.data('job-id');
-                var isSaved = btn.hasClass('btn-danger');
-                $.ajax({
-                    url: 'toggle_save_job.php',
-                    type: 'POST',
-                    data: { job_id: jobId, action: isSaved ? 'unsave' : 'save' },
-                    dataType: 'json',
-                    success: function (response) {
-                        if (response.status === 'saved') {
-                            btn.removeClass('btn-secondary').addClass('btn-danger');
-                            $('#save-job-icon').html('&#9733;');
-                            showToast('Job saved successfully');
-                        } else if (response.status === 'unsaved') {
-                            btn.removeClass('btn-danger').addClass('btn-secondary');
-                            $('#save-job-icon').html('&#9734;');
-                            showToast('Job unsaved successfully');
-                        }
-                    }
-                });
-            <?php endif; ?>
-        });
-
-        function showToast(message) {
-            var toast = $(
-                '<div class="toast align-items-center text-bg-primary border-0 position-fixed bottom-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true" style="z-index:9999;">' +
-                    '<div class="d-flex">' +
-                        '<div class="toast-body">' + message + '</div>' +
-                        '<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>' +
-                    '</div>' +
-                '</div>'
-            );
-            $('body').append(toast);
-            var bsToast = new bootstrap.Toast(toast[0]);
-            bsToast.show();
-            toast.on('hidden.bs.toast', function () { toast.remove(); });
+<script>
+    // Lấy jobId từ thuộc tính data-job-id của nút Save job
+    document.addEventListener('DOMContentLoaded', function () {
+        const saveBtn = document.getElementById('save-job-btn');
+        if (!saveBtn) return;
+        const jobId = saveBtn.getAttribute('data-job-id');
+        const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+        if (savedJobs.includes(jobId)) {
+            document.getElementById('save-job-icon').innerHTML = '★';
+            saveBtn.classList.add('btn-danger');
+            saveBtn.classList.remove('btn-secondary');
         }
-    });
-    </script>
 
+        // Hiển thị thông báo
+        function showToast(message) {
+            let toast = document.createElement('div');
+            toast.innerText = message;
+            toast.style.position = 'fixed';
+            toast.style.bottom = '30px';
+            toast.style.right = '30px';
+            toast.style.background = '#333';
+            toast.style.color = '#fff';
+            toast.style.padding = '12px 24px';
+            toast.style.borderRadius = '6px';
+            toast.style.zIndex = 9999;
+            toast.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => document.body.removeChild(toast), 400);
+            }, 1500);
+        }
+
+        saveBtn.addEventListener('click', function (e) {
+            // Nếu nút có thuộc tính onclick (tức là chưa đăng nhập), không xử lý lưu job
+            if (saveBtn.hasAttribute('onclick')) {
+                return;
+            }
+            e.preventDefault();
+            let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+            const icon = document.getElementById('save-job-icon');
+            if (savedJobs.includes(jobId)) {
+                savedJobs = savedJobs.filter(id => id !== jobId);
+                icon.innerHTML = '☆';
+                this.classList.remove('btn-danger');
+                this.classList.add('btn-secondary');
+                showToast('Unsaved job successfully!');
+            } else {
+                savedJobs.push(jobId);
+                icon.innerHTML = '★';
+                this.classList.add('btn-danger');
+                this.classList.remove('btn-secondary');
+                showToast('Saved job successfully!');
+            }
+            localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
+        });
+    });
+</script>
+<?php
+// Xử lý AJAX tăng/giảm interest_count khi lưu/huỷ lưu job
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['job_id'])) {
+    session_start();
+    if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'jobseeker') {
+        http_response_code(403);
+        exit('Unauthorized');
+    }
+    require_once 'config.php';
+    $job_id = intval($_POST['job_id']);
+    $action = $_POST['action'];
+
+    if ($job_id > 0 && in_array($action, ['save', 'unsave'])) {
+        // Kiểm tra xem đã có dòng cho job_id này chưa
+        $stmt = $conn->prepare("SELECT interest_count FROM job_interest_count WHERE job_id = ?");
+        $stmt->bind_param("i", $job_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            // Đã có, cập nhật
+            if ($action === 'save') {
+                $stmt2 = $conn->prepare("UPDATE job_interest_count SET interest_count = GREATEST(interest_count - 1, 0) WHERE job_id = ?");
+                $stmt2->bind_param("i", $job_id);
+                $stmt2->execute();
+                $stmt2->close();
+            } elseif ($action === 'unsave') {
+                $stmt2 = $conn->prepare("UPDATE job_interest_count SET interest_count = interest_count + 1 WHERE job_id = ?");
+                $stmt2->bind_param("i", $job_id);
+                $stmt2->execute();
+                $stmt2->close();
+            }
+        } else {
+            // Chưa có, thêm mới nếu là unsave
+            if ($action === 'unsave') {
+                $stmt2 = $conn->prepare("INSERT INTO job_interest_count (job_id, interest_count) VALUES (?, 1)");
+                $stmt2->bind_param("i", $job_id);
+                $stmt2->execute();
+                $stmt2->close();
+            }
+        }
+        $stmt->close();
+        echo 'success';
+        exit;
+    }
+    http_response_code(400);
+    exit('Invalid request');
+}
+?>
+
+<script>
+//Chuyển màu nút Save job
+document.addEventListener('DOMContentLoaded', function () {
+    const saveBtn = document.getElementById('save-job-btn');
+    if (!saveBtn) return;
+    const jobId = saveBtn.getAttribute('data-job-id');
+    // Đã có xử lý localStorage ở trên, chỉ cần thêm AJAX gọi PHP khi đã đăng nhập
+    saveBtn.addEventListener('click', function (e) {
+        if (saveBtn.hasAttribute('onclick')) return; // chưa đăng nhập
+        // Xác định action
+        let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+        let action = savedJobs.includes(jobId) ? 'unsave' : 'save';
+        // Gửi AJAX tới PHP
+        fetch(window.location.pathname, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'action=' + encodeURIComponent(action) + '&job_id=' + encodeURIComponent(jobId)
+        })
+        .then(res => res.text())
+        .then(data => {
+            // Không cần xử lý gì thêm, localStorage và giao diện đã xử lý ở trên
+        });
+    });
+});
+</script>
 </body>
 
 
 <footer>
-    <?php require_once 'homepage/footer.php' ?>
+    <?php require_once 'homepage/footer.php' ?>`
 </footer>
 
 </html>
