@@ -265,6 +265,7 @@ require_once 'config.php';
     </div>
 
 <script>
+    //Đổi màu nút Save job
     // Lấy jobId từ thuộc tính data-job-id của nút Save job
     document.addEventListener('DOMContentLoaded', function () {
         const saveBtn = document.getElementById('save-job-btn');
@@ -310,13 +311,13 @@ require_once 'config.php';
                 icon.innerHTML = '☆';
                 this.classList.remove('btn-danger');
                 this.classList.add('btn-secondary');
-                showToast('Unsaved job successfully!');
+                showToast('Job unsaved successfully!');
             } else {
                 savedJobs.push(jobId);
                 icon.innerHTML = '★';
                 this.classList.add('btn-danger');
                 this.classList.remove('btn-secondary');
-                showToast('Saved job successfully!');
+                showToast('Job saved successfully!');
             }
             localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
         });
@@ -372,7 +373,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['job
 ?>
 
 <script>
-//Chuyển màu nút Save job
+//Ngăn ko đổi màu nút Save job khi chưa đăng nhập
 document.addEventListener('DOMContentLoaded', function () {
     const saveBtn = document.getElementById('save-job-btn');
     if (!saveBtn) return;
