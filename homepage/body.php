@@ -424,7 +424,7 @@
                   <button class="save-btn">♥</button>
                 </div>
                 <div class="job-body">
-                  <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Company Logo" class="company-logo">
+                  <img src="image/<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Company Logo" class="company-logo">
                   <div class="job-info">
                     <div class="company-name"><?php echo htmlspecialchars($row['company_name']); ?></div>
                     <div><span class="icon">💰</span> <?php echo htmlspecialchars($row['salary']); ?></div>
@@ -466,11 +466,11 @@
         <a href="#" class="view-all">Xem tất cả →</a>
       </div>
       <div class="logos">
-        <img src="image/logo1.png" alt="Tabtab.me" />
-        <img src="image/logo2.png" alt="DIC" />
-        <img src="image/logo3.png" alt="NhanHoa" />
-        <img src="image/logo4.png" alt="EY" />
-        <img src="image/logo5.png" alt="Karofi" />
+        <img src="image/logo1.jpg" alt="ABC Corp" />
+        <img src="image/logo2.jpg" alt="XYZ Ltd" />
+        <img src="image/logo3.jpg" alt="Tech Solutions" />
+        <img src="image/logo4.jpg" alt="NextGen Co" />
+        <img src="image/logo5.jpg" alt="Creative Minds" />
       </div>
     </div>
   </section>
