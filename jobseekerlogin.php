@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Password is correct
             $_SESSION['username'] = $row['username'];
             $_SESSION['role'] = 'jobseeker';
+            $_SESSION['jobseeker_id'] = $row['id'];
 
             if (isset($_GET['redirect'])) {
                 $redirect_url = urldecode($_GET['redirect']);

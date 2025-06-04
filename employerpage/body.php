@@ -45,7 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   // Handle file upload
   if (isset($_FILES['companylogo']) && $_FILES['companylogo']['error'] == 0) {
-    $targetDir = "uploads/";
+    $targetDir = "uploads/companylogo/";
+    if (!is_dir($targetDir)) {
+      mkdir($targetDir, 0777, true);
+    }
     $fileName = basename($_FILES["companylogo"]["name"]);
     $targetFile = $targetDir . uniqid() . "_" . $fileName;
     $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));

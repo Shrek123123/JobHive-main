@@ -107,7 +107,13 @@ $stmt = $sql->query("CREATE TABLE IF NOT EXISTS application (
     job_id INT UNSIGNED NOT NULL,
     jobseeker_id INT UNSIGNED NOT NULL,
     status ENUM('applied', 'interviewed', 'hired', 'rejected') DEFAULT 'applied',
+    fullname VARCHAR(100) NOT NULL,
+    phonenumber VARCHAR(20) NOT NULL,
+    email VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    cv_file VARCHAR(255),
+    allow_search BOOLEAN DEFAULT FALSE,
+    UNIQUE (job_id, jobseeker_id),
     FOREIGN KEY (job_id) REFERENCES job(id) ON DELETE CASCADE,
     FOREIGN KEY (jobseeker_id) REFERENCES user(id) ON DELETE CASCADE
 )");

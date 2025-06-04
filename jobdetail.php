@@ -46,15 +46,45 @@ require_once 'config.php';
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- AJAX load applyform.php -->
-    <script>
-        $(document).ready(function () {
-            $('.apply-btn').on('click', function () {
-                $('#applyModal').modal('show');
-                $('#applyFormContent').load('applyform.php');
-            });
-        });
-    </script>
+
 </head>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const applyBtn = document.querySelector('.apply-btn');
+        if (!applyBtn) return;
+
+        applyBtn.addEventListener('click', function () {
+            const isLoggedIn = this.getAttribute('data-logged-in') === '1';
+            const loginUrl = this.getAttribute('data-login-url');
+            const jobId = this.getAttribute('data-job-id');
+
+            if (!isLoggedIn) {
+                window.location.href = loginUrl;
+                return;
+            }
+
+            // Hiển thị modal
+            const applyModal = new bootstrap.Modal(document.getElementById('applyModal'));
+            applyModal.show();
+
+            // Hiển thị loading
+            document.getElementById('applyFormContent').innerHTML = `
+                <div class="modal-body text-center p-10">
+                    <div class="spinner-border" role="status"></div>
+                    <p>Loading...</p>
+                </div>
+            `;
+
+            // Load form qua AJAX
+            fetch('applyform.php?id=' + encodeURIComponent(jobId))
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('applyFormContent').innerHTML = html;
+                });
+        });
+    });
+</script>
 
 <body>
 
@@ -111,7 +141,7 @@ require_once 'config.php';
                         <hr>
                         <div class="row mb-3">
                             <div class="col-md-4 d-flex align-items-center">
-                                <i class="bi bi-currency-dollar me-2"></i> <strong>Mức lương</strong>
+                                <i class="bi bi-currency-dollar me-2"></i> <strong>Salary:</strong>
                             </div>
                             <div class="col-md-8 text-danger fw-bold">
                                 <?= htmlspecialchars($job['salary'] ?? 'Negotiable') ?>
@@ -119,19 +149,19 @@ require_once 'config.php';
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-4 d-flex align-items-center">
-                                <i class="bi bi-geo-alt me-2"></i> <strong>Địa điểm</strong>
+                                <i class="bi bi-geo-alt me-2"></i> <strong>Location:</strong>
                             </div>
                             <div class="col-md-8"><?= htmlspecialchars($job['job_location'] ?? 'No data') ?></div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-4 d-flex align-items-center">
-                                <i class="bi bi-person-workspace me-2"></i> <strong>Kinh nghiệm</strong>
+                                <i class="bi bi-person-workspace me-2"></i> <strong>Experience:</strong>
                             </div>
                             <div class="col-md-8"><?= htmlspecialchars($job['job_experience'] ?? 'No requirement') ?>
                             </div>
                         </div>
                         <div class="text-muted mb-3">
-                            <i class="bi bi-calendar-event me-2"></i> Hạn nộp hồ sơ: <?= $job_deadline ?>
+                            <i class="bi bi-calendar-event me-2"></i>Application deadline: <?= $job_deadline ?>
                         </div>
                         <?php
                         $is_logged_in = isset($_SESSION['username']) && $_SESSION['role'] === 'jobseeker';
@@ -143,9 +173,11 @@ require_once 'config.php';
                         ?>
 
                         <div class="d-flex gap-3">
-                            <button class="btn btn-danger apply-btn" <?php if (!$is_logged_in): ?>
-                                    onclick="window.location.href='<?= $login_url ?>'; return false;" <?php else: ?>
-                                    data-job-id="<?= $job_detail_id ?>" <?php endif; ?>>Apply now</button>
+                            <button class="btn btn-danger apply-btn" type="button"
+                                data-logged-in="<?= $is_logged_in ? '1' : '0' ?>" data-login-url="<?= $login_url ?>"
+                                data-job-id="<?= $job['id'] ?>">
+                                Apply now
+                            </button>
 
                             <button class="btn btn-secondary" type="button" id="save-job-btn"
                                 data-job-id="<?= $job_detail_id ?>" <?php if (!$is_logged_in): ?>
@@ -181,6 +213,8 @@ require_once 'config.php';
                         </div>
                     </div>
                 </div>
+
+
 
                 <!-- Việc làm liên quan -->
                 <?php
@@ -264,139 +298,139 @@ require_once 'config.php';
         </div>
     </div>
 
-<script>
-    //Đổi màu nút Save job
-    // Lấy jobId từ thuộc tính data-job-id của nút Save job
-    document.addEventListener('DOMContentLoaded', function () {
-        const saveBtn = document.getElementById('save-job-btn');
-        if (!saveBtn) return;
-        const jobId = saveBtn.getAttribute('data-job-id');
-        const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
-        if (savedJobs.includes(jobId)) {
-            document.getElementById('save-job-icon').innerHTML = '★';
-            saveBtn.classList.add('btn-danger');
-            saveBtn.classList.remove('btn-secondary');
-        }
-
-        // Hiển thị thông báo
-        function showToast(message) {
-            let toast = document.createElement('div');
-            toast.innerText = message;
-            toast.style.position = 'fixed';
-            toast.style.bottom = '30px';
-            toast.style.right = '30px';
-            toast.style.background = '#333';
-            toast.style.color = '#fff';
-            toast.style.padding = '12px 24px';
-            toast.style.borderRadius = '6px';
-            toast.style.zIndex = 9999;
-            toast.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => document.body.removeChild(toast), 400);
-            }, 1500);
-        }
-
-        saveBtn.addEventListener('click', function (e) {
-            // Nếu nút có thuộc tính onclick (tức là chưa đăng nhập), không xử lý lưu job
-            if (saveBtn.hasAttribute('onclick')) {
-                return;
-            }
-            e.preventDefault();
-            let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
-            const icon = document.getElementById('save-job-icon');
+    <script>
+        //Đổi màu nút Save job
+        // Lấy jobId từ thuộc tính data-job-id của nút Save job
+        document.addEventListener('DOMContentLoaded', function () {
+            const saveBtn = document.getElementById('save-job-btn');
+            if (!saveBtn) return;
+            const jobId = saveBtn.getAttribute('data-job-id');
+            const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
             if (savedJobs.includes(jobId)) {
-                savedJobs = savedJobs.filter(id => id !== jobId);
-                icon.innerHTML = '☆';
-                this.classList.remove('btn-danger');
-                this.classList.add('btn-secondary');
-                showToast('Job unsaved successfully!');
-            } else {
-                savedJobs.push(jobId);
-                icon.innerHTML = '★';
-                this.classList.add('btn-danger');
-                this.classList.remove('btn-secondary');
-                showToast('Job saved successfully!');
+                document.getElementById('save-job-icon').innerHTML = '★';
+                saveBtn.classList.add('btn-danger');
+                saveBtn.classList.remove('btn-secondary');
             }
-            localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
-        });
-    });
-</script>
-<?php
-// Xử lý AJAX tăng/giảm interest_count khi lưu/huỷ lưu job
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['job_id'])) {
-    session_start();
-    if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'jobseeker') {
-        http_response_code(403);
-        exit('Unauthorized');
-    }
-    require_once 'config.php';
-    $job_id = intval($_POST['job_id']);
-    $action = $_POST['action'];
 
-    if ($job_id > 0 && in_array($action, ['save', 'unsave'])) {
-        // Kiểm tra xem đã có dòng cho job_id này chưa
-        $stmt = $conn->prepare("SELECT interest_count FROM job_interest_count WHERE job_id = ?");
-        $stmt->bind_param("i", $job_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($row = $result->fetch_assoc()) {
-            // Đã có, cập nhật
-            if ($action === 'save') {
-                $stmt2 = $conn->prepare("UPDATE job_interest_count SET interest_count = GREATEST(interest_count - 1, 0) WHERE job_id = ?");
-                $stmt2->bind_param("i", $job_id);
-                $stmt2->execute();
-                $stmt2->close();
-            } elseif ($action === 'unsave') {
-                $stmt2 = $conn->prepare("UPDATE job_interest_count SET interest_count = interest_count + 1 WHERE job_id = ?");
-                $stmt2->bind_param("i", $job_id);
-                $stmt2->execute();
-                $stmt2->close();
+            // Hiển thị thông báo
+            function showToast(message) {
+                let toast = document.createElement('div');
+                toast.innerText = message;
+                toast.style.position = 'fixed';
+                toast.style.bottom = '30px';
+                toast.style.right = '30px';
+                toast.style.background = '#333';
+                toast.style.color = '#fff';
+                toast.style.padding = '12px 24px';
+                toast.style.borderRadius = '6px';
+                toast.style.zIndex = 9999;
+                toast.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => document.body.removeChild(toast), 400);
+                }, 1500);
             }
-        } else {
-            // Chưa có, thêm mới nếu là unsave
-            if ($action === 'unsave') {
-                $stmt2 = $conn->prepare("INSERT INTO job_interest_count (job_id, interest_count) VALUES (?, 1)");
-                $stmt2->bind_param("i", $job_id);
-                $stmt2->execute();
-                $stmt2->close();
-            }
+
+            saveBtn.addEventListener('click', function (e) {
+                // Nếu nút có thuộc tính onclick (tức là chưa đăng nhập), không xử lý lưu job
+                if (saveBtn.hasAttribute('onclick')) {
+                    return;
+                }
+                e.preventDefault();
+                let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+                const icon = document.getElementById('save-job-icon');
+                if (savedJobs.includes(jobId)) {
+                    savedJobs = savedJobs.filter(id => id !== jobId);
+                    icon.innerHTML = '☆';
+                    this.classList.remove('btn-danger');
+                    this.classList.add('btn-secondary');
+                    showToast('Job unsaved successfully!');
+                } else {
+                    savedJobs.push(jobId);
+                    icon.innerHTML = '★';
+                    this.classList.add('btn-danger');
+                    this.classList.remove('btn-secondary');
+                    showToast('Job saved successfully!');
+                }
+                localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
+            });
+        });
+    </script>
+    <?php
+    // Xử lý AJAX tăng/giảm interest_count khi lưu/huỷ lưu job
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['job_id'])) {
+        session_start();
+        if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'jobseeker') {
+            http_response_code(403);
+            exit('Unauthorized');
         }
-        $stmt->close();
-        echo 'success';
-        exit;
-    }
-    http_response_code(400);
-    exit('Invalid request');
-}
-?>
+        require_once 'config.php';
+        $job_id = intval($_POST['job_id']);
+        $action = $_POST['action'];
 
-<script>
-//Ngăn ko đổi màu nút Save job khi chưa đăng nhập
-document.addEventListener('DOMContentLoaded', function () {
-    const saveBtn = document.getElementById('save-job-btn');
-    if (!saveBtn) return;
-    const jobId = saveBtn.getAttribute('data-job-id');
-    // Đã có xử lý localStorage ở trên, chỉ cần thêm AJAX gọi PHP khi đã đăng nhập
-    saveBtn.addEventListener('click', function (e) {
-        if (saveBtn.hasAttribute('onclick')) return; // chưa đăng nhập
-        // Xác định action
-        let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
-        let action = savedJobs.includes(jobId) ? 'unsave' : 'save';
-        // Gửi AJAX tới PHP
-        fetch(window.location.pathname, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: 'action=' + encodeURIComponent(action) + '&job_id=' + encodeURIComponent(jobId)
-        })
-        .then(res => res.text())
-        .then(data => {
-            // Không cần xử lý gì thêm, localStorage và giao diện đã xử lý ở trên
+        if ($job_id > 0 && in_array($action, ['save', 'unsave'])) {
+            // Kiểm tra xem đã có dòng cho job_id này chưa
+            $stmt = $conn->prepare("SELECT interest_count FROM job_interest_count WHERE job_id = ?");
+            $stmt->bind_param("i", $job_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($row = $result->fetch_assoc()) {
+                // Đã có, cập nhật
+                if ($action === 'save') {
+                    $stmt2 = $conn->prepare("UPDATE job_interest_count SET interest_count = GREATEST(interest_count - 1, 0) WHERE job_id = ?");
+                    $stmt2->bind_param("i", $job_id);
+                    $stmt2->execute();
+                    $stmt2->close();
+                } elseif ($action === 'unsave') {
+                    $stmt2 = $conn->prepare("UPDATE job_interest_count SET interest_count = interest_count + 1 WHERE job_id = ?");
+                    $stmt2->bind_param("i", $job_id);
+                    $stmt2->execute();
+                    $stmt2->close();
+                }
+            } else {
+                // Chưa có, thêm mới nếu là unsave
+                if ($action === 'unsave') {
+                    $stmt2 = $conn->prepare("INSERT INTO job_interest_count (job_id, interest_count) VALUES (?, 1)");
+                    $stmt2->bind_param("i", $job_id);
+                    $stmt2->execute();
+                    $stmt2->close();
+                }
+            }
+            $stmt->close();
+            echo 'success';
+            exit;
+        }
+        http_response_code(400);
+        exit('Invalid request');
+    }
+    ?>
+
+    <script>
+        //Ngăn ko đổi màu nút Save job khi chưa đăng nhập
+        document.addEventListener('DOMContentLoaded', function () {
+            const saveBtn = document.getElementById('save-job-btn');
+            if (!saveBtn) return;
+            const jobId = saveBtn.getAttribute('data-job-id');
+            // Đã có xử lý localStorage ở trên, chỉ cần thêm AJAX gọi PHP khi đã đăng nhập
+            saveBtn.addEventListener('click', function (e) {
+                if (saveBtn.hasAttribute('onclick')) return; // chưa đăng nhập
+                // Xác định action
+                let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+                let action = savedJobs.includes(jobId) ? 'unsave' : 'save';
+                // Gửi AJAX tới PHP
+                fetch(window.location.pathname, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'action=' + encodeURIComponent(action) + '&job_id=' + encodeURIComponent(jobId)
+                })
+                    .then(res => res.text())
+                    .then(data => {
+                        // Không cần xử lý gì thêm, localStorage và giao diện đã xử lý ở trên
+                    });
+            });
         });
-    });
-});
-</script>
+    </script>
 </body>
 
 
@@ -405,3 +439,43 @@ document.addEventListener('DOMContentLoaded', function () {
 </footer>
 
 </html>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Delegate because the form is loaded dynamically
+    document.body.addEventListener('submit', function (e) {
+        if (e.target && e.target.id === 'apply-form') {
+            e.preventDefault();
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            fetch('applyform.php?id=' + encodeURIComponent(formData.get('job_id') || ''), {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.text())
+            .then(data => {
+                // Show success message
+                document.getElementById('applyFormContent').innerHTML = `
+                    <div class="modal-body text-center p-5">
+                        <div class="alert alert-success">Applied successfully!</div>
+                    </div>
+                `;
+                // Optionally close modal after a delay:
+                setTimeout(() => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('applyModal'));
+                    modal.hide();
+                }, 1500);
+            })
+            .catch(() => {
+                document.getElementById('applyFormContent').innerHTML = `
+                    <div class="modal-body text-center p-5">
+                        <div class="alert alert-danger">There was an error. Please try again.</div>
+                    </div>
+                `;
+            });
+        }
+    });
+});
+</script>
