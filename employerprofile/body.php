@@ -231,15 +231,22 @@ require_once 'config.php';
     <script>
         $('#btn-jobposts').on('click', function () {
             // Remove active class from all buttons
-                $('.sidebar button').removeClass('active');
+            $('.sidebar button').removeClass('active');
             // Add active class to the clicked button
-                $(this).addClass('active');
-            // Load the job posts content-area
+            $(this).addClass('active');
+            // Show loading
             $('.content-area').html('<div style="padding:30px;text-align:center;">Loading...</div>');
-            $.get('employerprofile/jobposts-content.php', function (data) {
+            // Lấy employer_id từ URL PHP và truyền vào Ajax
+            var employer_id = <?php echo isset($_GET['id']) ? intval($_GET['id']) : 0; ?>;
+            $.get('employerprofile/jobposts-content.php', { id: employer_id }, function (data) {
                 $('.content-area').html(data);
             });
         });
+
+        // Tự động load jobposts khi vào trang (nếu muốn)
+        // $(document).ready(function() {
+        //     $('#btn-jobposts').trigger('click');
+        // });
     </script>
 </body>
 
