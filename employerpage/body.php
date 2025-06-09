@@ -62,13 +62,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Allow certain file formats
     $allowedTypes = ['jpg', 'png', 'jpeg', 'gif'];
     if (!in_array($fileType, $allowedTypes)) {
-      echo "<script>alert('Sorry, only JPG, JPEG, PNG & GIF files are allowed.');</script>";
+      echo "<script>
+      alert('Sorry, only JPG, JPEG, PNG & GIF files are allowed.');
+      window.history.back();
+      </script>";
       exit;
     }
 
     // Upload file
     if (!move_uploaded_file($_FILES["companylogo"]["tmp_name"], $targetFile)) {
-      echo "<script>alert('Sorry, there was an error uploading your file.');</script>";
+      echo "<script>alert('Sorry, there was an error uploading your file.');
+      window.history.back();
+      </script>";
       exit;
     }
   } else {
@@ -296,7 +301,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
           <td><label for="jobDescription">Job Description:</label></td>
-          <td><textarea id="jobDescription" name="jobDescription" placeholder="Job Description" required></textarea></td>
+          <td><textarea id="jobDescription" name="jobDescription" placeholder="Job Description" required></textarea>
+          </td>
         </tr>
         <tr>
           <td><label for="jobLocation">Job Location:</label></td>
@@ -304,11 +310,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
           <td><label for="salary">Salary:</label></td>
-          <td><input type="text" id="salary" name="salary" placeholder="Eg: 1000 USD, 20 million VND, negotiable..." required></td>
+          <td><input type="text" id="salary" name="salary" placeholder="Eg: 1000 USD, 20 million VND, negotiable..."
+              required></td>
         </tr>
         <tr>
           <td><label for="post_duration">Duration of the post:</label></td>
-          <td><input type="number" id="post_duration" name="post_duration" placeholder="Expiry duration (eg: 30 (days))"></td>
+          <td><input type="number" id="post_duration" name="post_duration"
+              placeholder="Expiry duration (eg: 30 (days))"></td>
         </tr>
         <tr>
           <td><label for="contactEmail">Contact Email:</label></td>
@@ -321,12 +329,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <tr>
           <td><label for="noEmplpoyeeNeeded">Number of Employees Needed:</label></td>
           <td>
-            <input type="number" id="noEmplpoyeeNeeded" name="noEmplpoyeeNeeded" placeholder="Number of Employees Needed (optional)" min="0" oninput="this.value = Math.abs(this.value)">
+            <input type="number" id="noEmplpoyeeNeeded" name="noEmplpoyeeNeeded"
+              placeholder="Number of Employees Needed (optional)" min="0" oninput="this.value = Math.abs(this.value)">
           </td>
         </tr>
         <tr>
           <td><label for="jobDetailedLocation">Job Detailed Location:</label></td>
-          <td><input type="text" id="jobDetailedLocation" name="jobDetailedLocation" placeholder="Eg: 123 Main St, City, Country"></td>
+          <td><input type="text" id="jobDetailedLocation" name="jobDetailedLocation"
+              placeholder="Eg: 123 Main St, City, Country"></td>
         </tr>
         <tr>
           <td><label for="jobLocationDistrict">District:</label></td>
@@ -334,7 +344,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
           <td><label for="jobPosition">Job Position:</label></td>
-          <td><input type="text" id="jobPosition" name="jobPosition" placeholder="Eg: Software Engineer, Marketing Manager..."></td>
+          <td><input type="text" id="jobPosition" name="jobPosition"
+              placeholder="Eg: Software Engineer, Marketing Manager..."></td>
         </tr>
         <tr>
           <td><label for="jobType">Job Type:</label></td>
@@ -362,16 +373,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </tr>
         <tr>
           <td><label for="requiredcertification">Require certification:</label></td>
-          <td><input type="text" id="requiredcertification" name="requiredcertification" placeholder="Eg: Bachelor of finance, none..." required></td>
+          <td><input type="text" id="requiredcertification" name="requiredcertification"
+              placeholder="Eg: Bachelor of finance, none..." required></td>
         </tr>
         <tr>
           <td><label for="jobExperience">Job experience required:</label></td>
-          <td><input type="text" id="jobExperience" name="jobExperience" placeholder="Eg: 1 year, 6 months, none..." required></td>
+          <td><input type="text" id="jobExperience" name="jobExperience" placeholder="Eg: 1 year, 6 months, none..."
+              required></td>
         </tr>
         <tr>
           <td><label for="jobRequirementText">Job Requirement:</label></td>
           <td>
-            <textarea id="jobRequirementText" name="jobRequirementText" placeholder="Describe the job requirement" required></textarea>
+            <textarea id="jobRequirementText" name="jobRequirementText" placeholder="Describe the job requirement"
+              required></textarea>
           </td>
         </tr>
         <tr>
