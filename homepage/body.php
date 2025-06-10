@@ -1,281 +1,79 @@
+<?php
+require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../helper.php';
 
-<!-- <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-<style>
-  body {
-    margin: 0;
-    font-family: 'Roboto', sans-serif;
-    color: #000;
-  }
+// Định nghĩa các action
+define('ACTION_SEARCH', 'quickResults');   // cho form tìm kiếm
+define('ACTION_FILTER', 'filterCategory'); // cho filter category
 
-  .section-1 {
-    background: linear-gradient(to right, #c31432, #240b36);
-  }
+// Lấy category đang chọn
+define('CURRENT_CATEGORY', isset($_GET['category']) ? $_GET['category'] : '');
 
-  .container {
-    max-width: 1100px;
-    margin: auto;
-    padding: 40px 20px;
-  }
+// Danh sách category (code => label)
+define('CATEGORIES', [
+    ''           => 'Tất cả',
+    'IT'         => 'IT & Software',
+    'Marketing'  => 'Marketing',
+    'Finance'    => 'Finance',
+    'Healthcare' => 'Healthcare',
+    'Government' => 'Government & Public Sector'
+]);
+// 1. Thiết lập pagination
+$page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$itemsPerPage = 5;
 
-  .title {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-  }
+// Đếm tổng jobs với filter (nếu có)
+$countSql = "SELECT COUNT(*) AS count FROM job";
+if (CURRENT_CATEGORY !== '') {
+    $safeCat = $conn->real_escape_string(CURRENT_CATEGORY);
+    $countSql .= " WHERE category = '$safeCat'";
+}
+$countRes = $conn->query($countSql);
+$totalItems = $countRes->fetch_assoc()['count'];
 
-  .subtitle {
-    text-align: center;
-    margin-top: 5px;
-    font-size: 14px;
-    color: #ddd;
-  }
+// Tính tổng số trang
+$totalPages = (int) ceil($totalItems / $itemsPerPage);
 
-  .search-box {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-
-  }
-
-  .search-box input,
-  .search-box select {
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-    min-width: 220px;
-  }
-
-  .search-box button {
-    background-color: #c4002f;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-
-  .main-content {
-    display: flex;
-    margin-top: 30px;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  .left-menu {
-    flex: 1;
-    min-width: 200px;
-    background: white;
-    color: black;
-    border-radius: 10px;
-    padding: 20px;
-  }
-
-  .left-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .left-menu li {
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-  }
-
-  .right-banner {
-    flex: 3;
-    min-width: 300px;
-  }
-
-  .right-banner img {
-    width: 100%;
-    border-radius: 10px;
-  }
-
-  .job-section {
-    background-color: #f9f5f5;
-    padding: 40px 20px;
-    border-radius: 10px;
-    background-color: #eee;
-    margin: 10px;
-  }
-
-  .job-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #660000;
-  }
-
-  .job-filters {
-    margin: 20px 0;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .job-filters button {
-    padding: 8px 15px;
-    border: none;
-    border-radius: 20px;
-    background-color: #eee;
-    color: #333;
-    cursor: pointer;
-  }
-
-  .job-filters button.active {
-    background-color: #d70018;
-    color: white;
-    font-weight: bold;
-  }
-
-  .sort-dropdown button {
-    background-color: #e0e0e0;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 12px;
-    cursor: pointer;
-  }
-
-  .job-listings {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
-  }
-
-  .job-card {
-    background-color: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    color: #333;
-  }
-
-  .job-card .job-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .circle-logo {
-    background-color: #888;
-    color: white;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    text-align: center;
-    line-height: 32px;
-    font-weight: bold;
-  }
-
-  .job-card p {
-    margin: 4px 0;
-    font-size: 14px;
-  }
-
-  .pagination {
-    margin-top: 30px;
-    text-align: center;
-  }
-
-  .pagination .dot {
-    height: 10px;
-    width: 10px;
-    margin: 0 4px;
-    background-color: #ccc;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  .pagination .dot.active {
-    background-color: #d70018;
-  }
-
-  .section-3 {
-    background-color: #f9f5f5;
-    padding: 40px 20px;
-    border-radius: 10px;
-    background-color: #eee;
-    margin: 10px;
-  }
-
-  .section-3 .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-
-  .section-3 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .section-3 h2 {
-    font-size: 24px;
-    font-weight: bold;
-    color: #000;
-  }
-
-  .section-3 .view-all {
-    color: #c00;
-    text-decoration: none;
-    font-weight: bold;
-  }
-
-  .logos {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px 0;
-    gap: 20px;
-  }
-
-  .logos img {
-    max-height: 60px;
-    object-fit: contain;
-  }
-
-  .section-4 {
-    background-color: #f9f5f5;
-
-  }
-
-  .section-4 h3 {
-    font-size: 20px;
-    font-weight: bold;
-    margin-top: 30px;
-  }
-
-  .section-4 ul {
-    list-style: disc;
-    margin-left: 20px;
-  }
-
-  .info {
-    background-color: #f9f5f5;
-
-  }
-</style> -->
-
-
+// Truy vấn chính với LIMIT + OFFSET tới cơ sở dữ liệu
+$offset = ($page - 1) * $itemsPerPage;
+$sql = "SELECT id, title, company_name, salary, location, created_at"
+     . " FROM job";
+if (CURRENT_CATEGORY !== '') {
+    $sql .= " WHERE category = '$safeCat'";
+}
+$sql .= " ORDER BY created_at DESC"
+     . " LIMIT $offset, $itemsPerPage";
+$result = $conn->query($sql);
+?>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>JobHive - Trang Chủ</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    .job-card { border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .filter-btn { margin: 0 8px 8px 0; }
+    ul.pagination {
+      list-style: none;
+      padding-left: 0;
+    }
+</style>
+</head>
 <section class="section-1">
   <div class="container">
     <div class="title">Tìm việc làm nhanh 24h, việc làm mới nhất trên toàn quốc.</div>
     <div class="subtitle">Tiếp cận 40,000+ tin tuyển dụng việc làm mới mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại Việt Nam</div>
 
-    <form class="search-box" method="GET" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>?action=quickResults">
-      <!-- Category -->
+    <form class="search-box" method="GET" action="index.php">
+      <input type="hidden" name="action" value="<?php echo ACTION_SEARCH; ?>">
+      <!-- Category tìm kiếm chung -->
       <select name="category">
         <option value="">-- Danh mục nghề --</option>
-        <option value="IT">IT & Software</option>
-        <option value="Marketing">Marketing</option>
-        <option value="Finance">Finance</option>
-        <option value="Healthcare">Healthcare</option>
-        <option value="Government">Government & Public Sector</option>
+        <?php foreach (CATEGORIES as $code => $label): ?>
+          <option value="<?php echo $code; ?>" <?php echo ($code === CURRENT_CATEGORY ? 'selected' : ''); ?>>
+            <?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?>
+          </option>
+        <?php endforeach; ?>
       </select>
 
       <!-- Job Type -->
@@ -291,13 +89,6 @@
       <input type="text" name="location" placeholder="Địa điểm">
       <button type="submit">🔍 Tìm nhanh</button>
     </form>
-
-
-      <!-- <input type="text" placeholder="Vị trí tuyển dụng, tên công ty">
-      <input type="text" placeholder="Địa điểm">
-      <button>Tìm kiếm</button>
-    </div> -->
-    
 
     <div class="main-content">
       <div class="left-menu">
@@ -317,7 +108,8 @@
 </section>
 
 <div class="info">
-  <section class="section-2">
+  <!-- Thêm id để anchor -->
+  <section id="job-section" class="section-2">
     <div class="job-section">
       <div class="job-header">
         <h2>🔥 Việc làm tuyển gấp</h2>
@@ -326,43 +118,87 @@
         </div>
       </div>
 
+      <!-- job-filters: động, dẫn lại homepage với action filterCategory và anchor -->
       <div class="job-filters">
-        <button class="active">Tất cả</button>
-        <button>IT & Software</button>
-        <button>Marketing</button>
-        <button>Finance</button>
-        <button>Healthcare</button>
-        <button>Government & Public Sector</button>
+        <?php foreach (CATEGORIES as $code => $label):
+            $activeClass = ($code === CURRENT_CATEGORY) ? 'active' : '';
+            $url = 'index.php?action=' . ACTION_FILTER . '&category=' . urlencode($code). '#job-section';
+        ?>
+          <button class="<?php echo $activeClass; ?>" onclick="window.location.href='<?php echo $url; ?>'">
+            <?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?>
+          </button>
+        <?php endforeach; ?>
       </div>
 
       <div class="job-listings">
-        <?php
-        include_once 'config.php';
-        $sql = "SELECT id, title, company_name, salary, location, created_at FROM job ORDER BY created_at DESC LIMIT 6";
-        $result = $conn->query($sql);
-
-        while ($job = $result->fetch_assoc()):
-        ?>
-          <div class="job-card">
-            <div class="job-header">
-              <h4><?= htmlspecialchars($job['title']) ?></h4>
-              <img src="image/default.png" alt="Logo công ty">
-            </div>
-            <p class="company"><a href="jobdetailpage.php?id=<?= $job['id'] ?>"><?= htmlspecialchars($job['company_name']) ?></a></p>
-            <p class="salary">💰 <?= number_format($job['salary']) ?> USD</p>
-            <p class="location">📍 <?= htmlspecialchars($job['location']) ?></p>
-            <p class="posted">🕒 <?= date('d/m/Y', strtotime($job['created_at'])) ?></p>
-            <a href="jobdetailpage.php?id=<?= $job['id'] ?>" class="btn btn-danger mt-2">Chi tiết công việc</a>
-          </div>
-        <?php endwhile; ?>
+  <?php while ($job = $result->fetch_assoc()): ?>
+    <div class="job-card">
+      <div class="job-header">
+        <h4><?php echo htmlspecialchars($job['title'], ENT_QUOTES, 'UTF-8'); ?></h4>
+        <img src="image/default.png" alt="Logo công ty">
       </div>
+      <p class="company">
+        <a href="jobdetailpage.php?id=<?php echo $job['id']; ?>">
+          <?php echo htmlspecialchars($job['company_name'], ENT_QUOTES, 'UTF-8'); ?>
+        </a>
+      </p>
+      <p class="salary">💰 <?php echo number_format($job['salary']); ?> USD</p>
+      <p class="location">📍 <?php echo htmlspecialchars($job['location'], ENT_QUOTES, 'UTF-8'); ?></p>
+      <p class="posted">🕒 <?php echo date('d/m/Y', strtotime($job['created_at'])); ?></p>
+      <a href="jobdetailpage.php?id=<?php echo $job['id']; ?>"
+         class="btn btn-danger mt-2">
+        Chi tiết công việc
+      </a>
+    </div>
+  <?php endwhile; ?>
+</div>
 
-      <div class="pagination">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-      </div>
+      <?php if ($totalPages > 1): ?>
+  <nav aria-label="Trang" class="mt-4">
+    <ul class="pagination justify-content-center">
+      <!-- Prev -->
+      <?php if ($page > 1): ?>
+        <li class="page-item">
+          <a class="page-link"
+             href="index.php?action=<?php echo ACTION_FILTER; ?>&category=<?php echo urlencode(CURRENT_CATEGORY); ?>&page=<?php echo $page-1; ?>#job-section">
+            &lsaquo; Prev
+          </a>
+        </li>
+      <?php else: ?>
+        <li class="page-item disabled"><span class="page-link">&lsaquo; Prev</span></li>
+      <?php endif; ?>
+
+      <!-- Các số trang -->
+      <?php
+        $start = max(1, $page - 2);
+        $end   = min($totalPages, $page + 2);
+        for ($i = $start; $i <= $end; $i++):
+          $url = "index.php?action=" . ACTION_FILTER
+               . "&category=" . urlencode(CURRENT_CATEGORY)
+               . "&page=$i#job-section";
+      ?>
+        <?php if ($i === $page): ?>
+          <li class="page-item active"><span class="page-link"><?php echo $i; ?></span></li>
+        <?php else: ?>
+          <li class="page-item"><a class="page-link" href="<?php echo $url; ?>"><?php echo $i; ?></a></li>
+        <?php endif; ?>
+      <?php endfor; ?>
+
+      <!-- Next -->
+      <?php if ($page < $totalPages): ?>
+        <li class="page-item">
+          <a class="page-link"
+             href="index.php?action=<?php echo ACTION_FILTER; ?>&category=<?php echo urlencode(CURRENT_CATEGORY); ?>&page=<?php echo $page+1; ?>#job-section">
+            Next &rsaquo;
+          </a>
+        </li>
+      <?php else: ?>
+        <li class="page-item disabled"><span class="page-link">Next &rsaquo;</span></li>
+      <?php endif; ?>
+    </ul>
+  </nav>
+<?php endif; ?>
+
     </div>
   </section>
 

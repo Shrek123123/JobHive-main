@@ -10,20 +10,20 @@ if (in_array($action, ['search','results','quickSearch','quickResults','advanced
     $controller = new JobController();
 
     switch ($action) {
-        // AdvancedSearch Routes
         case 'advancedSearch':
             $controller->advancedSearch();
             break;
         case 'results':
             $controller->searchResults();
             break;
-
-        // <<< Quick Search routes >>>
         case 'quickSearch':
             $controller->quickSearch();
             break;
         case 'quickResults':
             $controller->quickResults();
+            break;
+        case 'filterCategory':
+            include 'body.php';
             break;
     }
     exit;

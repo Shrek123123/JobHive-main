@@ -56,11 +56,18 @@ while ($r = $res2->fetch_assoc()) {
   </style>
   <script>
     $(function(){
-      $('.apply-btn').on('click',function(){
-        $('#applyModal').modal('show');
-        $('#applyFormContent').load('applyform.php');
-      });
+  $('.apply-btn').on('click', function(){
+    // load form vào content trước
+    $('#applyFormContent').load('applyform.php', function(){
+
+      // sau khi load xong, tạo và show modal
+      const modalEl = document.getElementById('applyModal');
+      const bsModal = new bootstrap.Modal(modalEl);
+      bsModal.show();
+
     });
+  });
+});
   </script>
 </head>
 <body>
@@ -132,7 +139,7 @@ while ($r = $res2->fetch_assoc()) {
           </div>
 
           <div class="d-flex gap-3 mb-4">
-            <button class="btn btn-danger apply-btn">Ứng tuyển ngay</button>
+            <button class="btn btn-danger apply-btn">Apply Now</button>
             <a href="#" class="btn btn-secondary">Lưu tin</a>
           </div>
 
@@ -166,7 +173,6 @@ while ($r = $res2->fetch_assoc()) {
             </div>
           </div>
         </div>
-
         <!-- Việc làm liên quan -->
       </div>
 
@@ -179,7 +185,6 @@ while ($r = $res2->fetch_assoc()) {
                    alt="Logo công ty" class="me-3 rounded" style="width:80px; height:80px;">
               <div class="sidebar-title mb-0">
                 <h4><?= htmlspecialchars($job['company_name']) ?></h4>
-                <!-- Nếu có thêm cột company_address, company_size… bạn có thể echo ở đây -->
               </div>
             </div>
           </div>
@@ -210,5 +215,6 @@ while ($r = $res2->fetch_assoc()) {
   <footer>
     <?php require_once __DIR__ . '/homepage/footer.php' ?>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

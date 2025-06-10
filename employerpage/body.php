@@ -276,7 +276,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 <script>
-  const modal = document.getElementById("myModal");
+const modal = document.getElementById("myModal");
 const openBtn = document.getElementById("openModalBtn");
 const closeBtn = document.querySelector(".closeBtn");
 
@@ -293,6 +293,5 @@ window.onclick = (event) => {
     modal.style.display = "none";
   }
 }
-
 </script>
 
