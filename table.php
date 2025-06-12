@@ -271,6 +271,7 @@ $oldTables = [
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         jobseeker_id INT UNSIGNED NOT NULL,
         profile_description TEXT NOT NULL,
+        profile_pic VARCHAR(255),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (jobseeker_id) REFERENCES user(id) ON DELETE CASCADE
     ) ENGINE=InnoDB;",
@@ -319,7 +320,14 @@ $oldTables = [
         industry VARCHAR(100) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (employer_id) REFERENCES user(id) ON DELETE CASCADE
-    ) ENGINE=InnoDB;"
+    ) ENGINE=InnoDB;",
+    "CREATE TABLE IF NOT EXISTS job_interest_count (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    job_id INT(6) UNSIGNED NOT NULL,
+    interest_count INT(6) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (job_id) REFERENCES job(id)
+    ) ENGINE=InnoDB;",
 ];
 foreach ($oldTables as $stmt) {
     $conn->query($stmt);
@@ -327,7 +335,7 @@ foreach ($oldTables as $stmt) {
 echo "<p>✔ Existing tables created/ready</p>";
 
 // 3. Tạo bảng job với tên cột khớp DB cũ (title, description, location, category)
-$conn->query("CREATE TABLE IF NOT EXISTS job (
+$stmt = $sql->query("CREATE TABLE IF NOT EXISTS job (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     posted_by_employer_id INT UNSIGNED NOT NULL,
     title VARCHAR(100) NOT NULL,
@@ -335,6 +343,15 @@ $conn->query("CREATE TABLE IF NOT EXISTS job (
     company_name VARCHAR(100) NOT NULL,
     location VARCHAR(100) NOT NULL,
     salary DECIMAL(10,2) NOT NULL,
+    company_size VARCHAR(50),
+    job_title VARCHAR(100) NOT NULL,
+    job_description TEXT NOT NULL,
+    job_benefit TEXT,
+    job_requirement TEXT,
+    job_location VARCHAR(100) NOT NULL,
+    no_employee_needed INT UNSIGNED NOT NULL,
+    salary VARCHAR(30) NOT NULL,
+    post_duration INT UNSIGNED NOT NULL,
     contact_email VARCHAR(100) NOT NULL,
     contact_phone VARCHAR(20),
     job_type VARCHAR(50) NOT NULL,
@@ -370,6 +387,17 @@ $conn->query("CREATE TABLE IF NOT EXISTS job_skill (
     job_id INT UNSIGNED NOT NULL,
     skill_id INT UNSIGNED NOT NULL,
     PRIMARY KEY (job_id, skill_id),
+
+    -- jobseeker_id INT UNSIGNED NOT NULL,
+    -- status ENUM('applied', 'interviewed', 'hired', 'rejected') DEFAULT 'applied',
+    -- fullname VARCHAR(100) NOT NULL,
+    -- phonenumber VARCHAR(20) NOT NULL,
+    -- email VARCHAR(100) NOT NULL,
+    -- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -- cv_file VARCHAR(255),
+    -- allow_search BOOLEAN DEFAULT FALSE,
+    -- UNIQUE (job_id, jobseeker_id),
+
     FOREIGN KEY (job_id) REFERENCES job(id) ON DELETE CASCADE,
     FOREIGN KEY (skill_id) REFERENCES skill(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;");
@@ -405,7 +433,30 @@ SQL;
 $conn->query($insertJobs);
 echo "<h3>🎉 Sample job data inserted</h3>";
 
-echo "<h3>🎉 Migration complete!</h3>";
-$conn->close();
+// Tạo bảng jobseekerfeedback
+$stmt = $sql->query("CREATE TABLE IF NOT EXISTS jobseekerfeedback (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    jobseeker_id INT UNSIGNED NOT NULL,
+    feedback TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (jobseeker_id) REFERENCES user(id) ON DELETE CASCADE
+)");
+if ($stmt === TRUE) {
+    echo "Table jobseekerfeedback created successfully <br>";
+} else {
+    echo "Error creating table: " . $sql->error;
+}
+
+// Chèn dữ liệu mẫu vào bảng job
+$stmt = $sql->query("INSERT INTO job (posted_by_employer_id, company_name, job_title, job_description, job_location, salary, contact_email, contact_phone, job_type, job_category, required_certification, job_experience, company_logo) VALUES 
+    (1, 'ABC Corp', 'Web Developer', 'Develop and maintain web applications.', 'Hanoi', 1500.00, 'hr@abccorp.com', '0123456789', 'Full-time', 'IT', 'Bachelor of IT', '2 years', 'logo1.png'),
+    (1, 'XYZ Ltd', 'Graphic Designer', 'Design marketing materials and branding.', 'Ho Chi Minh City', 1200.00, 'jobs@xyzltd.com', '0987654321', 'Part-time', 'Design', 'Bachelor of Design', '1 year', 'logo2.png'),
+    (2, 'Tech Solutions', 'System Analyst', 'Analyze and improve IT systems.', 'Da Nang', 2000.00, 'careers@techsolutions.com', '0112233445', 'Full-time', 'IT', 'Bachelor of Computer Science', '3 years', 'logo3.png')
+");
+if ($stmt === TRUE) {
+    echo "Sample data inserted into job table successfully <br>";
+} else {
+    echo "Error inserting sample data: " . $sql->error;
+}
 
 

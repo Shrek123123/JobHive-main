@@ -168,79 +168,81 @@
 <footer class="footer-new">
     <div class="hotline-section">
         <div class="hotline-box">
-            <h3>Hotline for Job Seekers</h3>
+            <h3>Hotline cho ứng viên</h3>
             <div class="hotline-item">
                 <i class="fas fa-headset"></i>
                 <div>
-                    <strong>Southern Support Hotline</strong><br>
+                    <strong>Hotline hỗ trợ miền nam</strong><br>
                     HCM: (028) 7109 440
                 </div>
             </div>
             <div class="hotline-item">
                 <i class="fas fa-headset"></i>
                 <div>
-                    <strong>Northern Support Hotline</strong><br>
+                    <strong>Hotline hỗ trợ miền bắc</strong><br>
                     HN: (028) 7109 424
                 </div>
             </div>
-            <button class="hotline-btn">Consultation for Job Seekers</button>
+            <button class="hotline-btn">Tư vấn cho người tìm việc</button>
         </div>
 
         <div class="hotline-box">
-            <h3>Hotline for Employers</h3>
+            <h3>Hotline cho nhà tuyển dụng</h3>
             <div class="hotline-item">
                 <i class="fas fa-headset"></i>
                 <div>
-                    <strong>Southern Support Hotline</strong><br>
+                    <strong>Hotline hỗ trợ miền nam</strong><br>
                     HCM: (029) 7109 440
                 </div>
             </div>
             <div class="hotline-item">
                 <i class="fas fa-headset"></i>
                 <div>
-                    <strong>Northern Support Hotline</strong><br>
+                    <strong>Hotline hỗ trợ miền bắc</strong><br>
                     HN: (029) 7109 424
                 </div>
             </div>
-            <button class="hotline-btn">Consultation for Employers</button>
+            <button class="hotline-btn">Tư vấn cho nhà tuyển dụng</button>
         </div>
     </div>
 
     <div class="footer-container">
         <div class="footer-column">
-            <h4>About Us</h4>
-            <p><strong>JobHive.vn - 24h Job Search Joint Stock Company</strong><br>
-                Room 102, Building 20–208 Tran Cao Van, Da Kao Ward, District 1, Ho Chi Minh City<br>
-                Branch: 4th Floor, Times Tower, 35 Le Van Luong, Thanh Xuan, Hanoi.<br>
-                Employment service license No.: 2893/2022/S8LĐTBXH-VLATLĐ issued by the Department of Labor, Invalids and Social Affairs on 18/11/2024<br>
-                Phone: (028) 7109 424 | (024) 7109 440<br>
-                Job seeker support email: ntv@jobhive.vn<br>
-                Employer support email: ntd@jobhive.vn
+            <h4>Về chúng tôi</h4>
+            <p><strong>JobHive.vn - Công Ty Cổ Phần Tìm Kiếm Việc Làm 24h</strong><br>
+                Phòng 102, Tòa nhà 20–208 Trần Cao Vân, Phường Đa Kao, Quận 1, Thành phố Hồ Chí Minh<br>
+                Chi nhánh: Tầng 4, tòa nhà Times Tower, 35 Lê Văn Lương, Thanh Xuân, Hà Nội.<br>
+                Giấy phép hoạt động dịch vụ việc làm số: 2893/2022/S8LĐTBXH-VLATLĐ do Sở Lao Động Thương Binh và Xã
+                Hội cấp ngày 18/11/2024<br>
+                Điện thoại: (028) 7109 424 | (024) 7109 440<br>
+                Email hỗ trợ người tìm việc: ntv@jobhive.vn<br>
+                Email hỗ trợ nhà tuyển dụng: ntd@jobhive.vn
             </p>
         </div>
 
         <div class="footer-column">
-            <h4>Information</h4>
+            <h4>Thông tin</h4>
             <ul>
-                <li>Career Handbook</li>
-                <li>Service Pricing</li>
-                <li>Terms of Use</li>
-                <li>Privacy Policy</li>
-                <li>Site Map</li>
-                <li>Personal Data Policy</li>
-                <li>Compliance and Customer Consent</li>
+                <li>Cẩm nang nghề nghiệp</li>
+                <li>Báo giá dịch vụ</li>
+                <li>Điều khoản sử dụng</li>
+                <li>Quy định bảo mật</li>
+                <li>Sơ đồ trang web</li>
+                <li>Chính sách dữ liệu cá nhân</li>
+                <li>Tuân thủ và sự đồng ý của khách hàng</li>
             </ul>
         </div>
 
         <div class="footer-column">
-            <h4>Connect with Us</h4>
+            <h4>Kết nối với chúng tôi</h4>
             <div class="social-icons">
                 <a href=""><i class="fab fa-facebook-f facebook"></i></a>
                 <a href=""><i class="fab fa-tiktok tiktok"></i></a>
                 <a href=""><i class="fab fa-telegram telegram"></i></a>
                 <a href=""><i class="fab fa-instagram instagram"></i></a>
+
             </div>
-            <h4>Download the App</h4>
+            <h4>Tải ứng dụng trên điện thoại</h4>
             <div class="qr-and-apps">
                 <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://jobhive.vn&size=100x100"
                     alt="QR Code">
@@ -250,6 +252,7 @@
                     <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
                         alt="App Store">
                 </div>
+
             </div>
         </div>
     </div>
