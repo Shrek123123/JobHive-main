@@ -187,22 +187,20 @@ $total_feedbacks = getCount($conn, "SELECT COUNT(*) AS c FROM jobseekerfeedback"
         <p>User Feedbacks</p>
       </div>
     </div>
-    <div class="content-grid">
-      <table>
+    <div class="">
+      <table class="table table-responsive">
         <thead>
           <tr>
-            <td>Id</td>
-            <td>Company Name</td>
-            <td>Job Title</td>
-            <td>Job Location</td>
-            <td>Salary</td>
-            <td>Job Type</td>
-            <td>Email</td>
-            <td>Phone Number</td>
-            <td>Action</td>
+            <th>Id</th>
+            <th>Company Name</th>
+            <th>Job Title</th>
+            <th>Job Location</th>
+            <th>Salary</th>
+            <th>Job Type</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Action</th>
           </tr>
-
-
         </thead>
         <tbody>
           <?php
@@ -229,7 +227,6 @@ $total_feedbacks = getCount($conn, "SELECT COUNT(*) AS c FROM jobseekerfeedback"
           } else {
             echo "<tr><td colspan='7'>No job posts available</td></tr>";
           }
-
 
           ?>
 
