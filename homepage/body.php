@@ -404,60 +404,49 @@
           LIMIT 9";
         $result = $conn->query($sql);
 
-        if ($result && $result->num_rows > 0):
-          while ($row = $result->fetch_assoc()):
-            // Tính days_left
-            $created_at = new DateTime($row['created_at']);
-            $post_duration = (int) $row['post_duration'];
-            $expire_at = clone $created_at;
-            $expire_at->modify("+$post_duration days");
-            $now = new DateTime();
-            $interval = $now->diff($expire_at);
-            $days_left = (int) $interval->format('%r%a');
-            $days_left_text = $days_left > 0 ? $days_left . ' days left' : 'Expired';
-            $job_id = (int)$row['id'];
-            ?>
-            <a href="jobdetail.php?id=<?php echo $job_id; ?>" style="text-decoration:none;color:inherit;">
-              <div class="job-card">
-                <div class="job-header">
-                  <h3><?php echo htmlspecialchars($row['job_title']); ?></h3>
-                  <button class="save-btn">♥</button>
-                </div>
-                <div class="job-body">
-                  <img src="image/<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Company Logo" class="company-logo">
-                  <div class="job-info">
-                    <div class="company-name"><?php echo htmlspecialchars($row['company_name']); ?></div>
-                    <div><span class="icon">💰</span> <?php echo htmlspecialchars($row['salary']); ?></div>
-                    <div><span class="icon">📍</span> <?php echo htmlspecialchars($row['job_location']); ?></div>
-                  </div>
-                </div>
-                <div class="divider"></div>
-                <div class="job-footer">
-                  <div class="deadline"><?php echo $days_left_text; ?></div>
-                </div>
+    if ($result && $result->num_rows > 0):
+      while ($row = $result->fetch_assoc()):
+        // Tính days_left
+        $created_at = new DateTime($row['created_at']);
+        $post_duration = (int) $row['post_duration'];
+        $expire_at = clone $created_at;
+        $expire_at->modify("+$post_duration days");
+        $now = new DateTime();
+        $interval = $now->diff($expire_at);
+        $days_left = (int) $interval->format('%r%a');
+        $days_left_text = $days_left > 0 ? $days_left . ' days left' : 'Expired';
+        $job_id = (int)$row['id'];
+        ?>
+        <a href="jobdetail.php?id=<?php echo $job_id; ?>" style="text-decoration:none;color:inherit;">
+          <div class="job-card">
+            <div class="job-header">
+              <h3><?php echo htmlspecialchars($row['job_title']); ?></h3>
+              <button class="save-btn">♥</button>
+            </div>
+            <div class="job-body">
+              <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Company Logo" class="company-logo">
+              <div class="job-info">
+                <div class="company-name"><?php echo htmlspecialchars($row['company_name']); ?></div>
+                <div><span class="icon">💰</span> <?php echo htmlspecialchars($row['salary']); ?></div>
+                <div><span class="icon">📍</span> <?php echo htmlspecialchars($row['job_location']); ?></div>
               </div>
-            </a>
-            <?php
-          endwhile;
-        else:
-          ?>
-          <div>No jobs found.</div>
-        <?php endif; ?>
-
-        <!-- 2 -->
-
-
-        <!-- 3 -->
-
-        <!-- Lặp lại 8 lần nữa cho đủ 9 thẻ -->
-      </div>
-
-      <div class="pagination">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-      </div>
+            </div>
+            <div class="divider"></div>
+            <div class="job-footer">
+              <div class="deadline"><?php echo $days_left_text; ?></div>
+            </div>
+          </div>
+        </a>
+        <?php
+      endwhile;
+    else:
+      ?>
+      <div>No jobs found.</div>
+    <?php endif; ?>
+    <!-- 2 -->
+    <!-- 3 -->
+    <!-- Lặp lại 8 lần nữa cho đủ 9 thẻ -->
+  </div>
   </section>
   <section class="section-3">
     <div class="container">

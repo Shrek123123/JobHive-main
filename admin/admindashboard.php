@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once __DIR__ . '/../config.php';
+
 if (!isset($_SESSION['usernameadmin'])) {
   if (isset($_SERVER['HTTP_REFERER'])) {
     echo "Bạn đến từ: " . $_SERVER['HTTP_REFERER'];
@@ -10,6 +12,23 @@ if (!isset($_SESSION['usernameadmin'])) {
     header('Location: index.php');
   }
 }
+
+//Display information
+function getCount($conn, $sql)
+{
+  $result = $conn->query($sql);
+  if ($result && $row = $result->fetch_assoc()) {
+    return $row[array_key_first($row)];
+  }
+  return 0;
+}
+
+$total_employers = getCount($conn, "SELECT COUNT(*) AS c FROM user WHERE user_type = 'employer'");
+$total_seekers = getCount($conn, "SELECT COUNT(*) AS c FROM user WHERE user_type = 'jobseeker'");
+$total_jobs = getCount($conn, "SELECT COUNT(*) AS c FROM job");
+$total_feedbacks = getCount($conn, "SELECT COUNT(*) AS c FROM jobseekerfeedback") +
+  getCount($conn, "SELECT COUNT(*) AS c FROM employerfeedback");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,6 +37,7 @@ if (!isset($_SESSION['usernameadmin'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <style>
     body {
       margin: 0;
@@ -132,12 +152,8 @@ if (!isset($_SESSION['usernameadmin'])) {
     </div>
     <ul>
       <li>Dashboard</li>
-      <li>Users</li>
       <li>Job Posts</li>
-      <li>Service Packages</li>
-      <li>Settings</li>
       <li>Feedback</li>
-      <li>Reports</li>
       <li>Add Job</li>
     </ul>
   </div>
@@ -145,7 +161,7 @@ if (!isset($_SESSION['usernameadmin'])) {
     <div class="top-bar">
       <h1>Dashboard</h1>
       <div>
-        <img src="" alt="Profile" style="width: 32px; height: 32px; border-radius: 50%; background: #ccc;">
+        <img src="../image/logo.png" alt="Profile" style="width: 150px; height: 50px; border-radius: 30%; background: #ccc;">
       </div>
       <form method="post" action="/JobHive-main/admin/adminlogout.php" style="display: inline;">
         <button type="submit" name="admin_logout" style="padding: 8px 16px; background: #e74c3c; color: #fff; border-radius: 5px; border: none; font-weight: bold; cursor: pointer;">
@@ -155,48 +171,71 @@ if (!isset($_SESSION['usernameadmin'])) {
     </div>
     <div class="cards">
       <div class="card yellow">
-        <h2>120</h2>
+        <h2><?= $total_employers ?></h2>
         <p>Total Employer Accounts</p>
       </div>
       <div class="card yellow">
-        <h2>120</h2>
+        <h2><?= $total_seekers ?></h2>
         <p>Total Job Seeker Accounts</p>
       </div>
       <div class="card green">
-        <h2>17</h2>
+        <h2><?= $total_jobs ?></h2>
         <p>Total Job Posts</p>
       </div>
-      <div class="card blue">
-        <h2>5</h2>
-        <p>Job Post Pendings</p>
-      </div>
       <div class="card purple">
-        <h2>5</h2>
+        <h2><?= $total_feedbacks ?></h2>
         <p>User Feedbacks</p>
       </div>
     </div>
     <div class="content-grid">
-      <div class="box">
-        <img
-          src="https://www.presentationgo.com/wp-content/uploads/2018/12/Free-Growth-Arrow-PowerPoint-Template-Chart.png"
-          width="100%" alt="Graph" />
-      </div>
-      <div class="box">
-        <h3>Access Activities</h3>
-        <ul>
-          <li>Post new job</li>
-          <li>Recruitment</li>
-          <li>Apply</li>
-        </ul>
-      </div>
-    </div>
-    <div class="content-grid" style="margin-top: 20px;">
-      <div class="box">
-        <h3>Notifications</h3>
-      </div>
-      <div class="box">
-        <h3>Page Views</h3>
-      </div>
+      <table>
+        <thead>
+          <tr>
+            <td>Id</td>
+            <td>Company Name</td>
+            <td>Job Title</td>
+            <td>Job Location</td>
+            <td>Salary</td>
+            <td>Job Type</td>
+            <td>Email</td>
+            <td>Phone Number</td>
+            <td>Action</td>
+          </tr>
+
+
+        </thead>
+        <tbody>
+          <?php
+          $sql = "SELECT * FROM job ORDER BY created_at DESC";
+          $result = $conn->query($sql);
+
+          if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+              echo "<tr>
+                      <td>{$row['id']}</td>
+                      <td>{$row['company_name']}</td>
+                      <td>{$row['job_title']}</td>
+                      <td>{$row['job_location']}</td>
+                      <td>{$row['salary']}</td>
+                      <td>{$row['job_type']}</td>
+                      <td>{$row['contact_email']}</td>
+                      <td>{$row['contact_phone']}</td>
+                      <td>
+                        <a href='editjob.php?job_id={$row['id']}' class='btn btn-primary'>Edit</a>
+                        <a href='deletejob.php?job_id={$row['id']}' class='btn btn-danger'>Delete</a> 
+                      </td>
+                    </tr>";
+            }
+          } else {
+            echo "<tr><td colspan='7'>No job posts available</td></tr>";
+          }
+
+
+          ?>
+
+
+      </table>
+
     </div>
   </div>
 </body>

@@ -5,21 +5,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    // Password_hash
-    $result = $conn->query("SELECT id, password FROM user");
-    while ($row = $result->fetch_assoc()) {
-        $id = $row['id'];
-        $plainPassword = $row['password'];
-    
-        // Chỉ hash nếu chưa phải mật khẩu mã hóa (không bắt đầu bằng $2y$)
-        if (strpos($plainPassword, '$2y$') !== 0) {
-            $hashed = password_hash($plainPassword, PASSWORD_DEFAULT);
-            $stmt = $conn->prepare("UPDATE user SET password = ? WHERE id = ?");
-            $stmt->bind_param("si", $hashed, $id);
-            $stmt->execute();
-        }
-    }
-
     // Check if the email and password are correct
     $stmt = $conn->prepare("SELECT * FROM user WHERE email = ? AND user_type = 'admin'");
     $stmt->bind_param("s", $email);
