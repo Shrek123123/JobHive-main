@@ -380,14 +380,14 @@
   <section class="section-2">
     <div class="job-section">
       <div class="job-header">
-        <h2>🔥 Việc làm tuyển gấp</h2>
+        <h2>🔥 Urgent Job Openings</h2>
         <div class="sort-dropdown">
-          <button>Sắp xếp theo ▾</button>
+          <button>Sort by ▾</button>
         </div>
       </div>
 
       <div class="job-filters">
-        <button class="active">Tất cả</button>
+        <button class="active">All</button>
         <button>IT & Software</button>
         <button>Marketing</button>
         <button>Finance</button>
@@ -399,7 +399,7 @@
         <!-- 1 -->
         <?php
         // Lấy 9 job mới nhất
-        $sql = "SELECT job_title, company_logo, company_name, salary, job_location, created_at, post_duration 
+        $sql = "SELECT id, job_title, company_logo, company_name, salary, job_location, created_at, post_duration 
           FROM job 
           LIMIT 9";
         $result = $conn->query($sql);
@@ -415,25 +415,28 @@
             $interval = $now->diff($expire_at);
             $days_left = (int) $interval->format('%r%a');
             $days_left_text = $days_left > 0 ? $days_left . ' days left' : 'Expired';
+            $job_id = (int)$row['id'];
             ?>
-            <div class="job-card">
-              <div class="job-header">
-                <h3><?php echo htmlspecialchars($row['job_title']); ?></h3>
-                <button class="save-btn">♥</button>
-              </div>
-              <div class="job-body">
-                <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Company Logo" class="company-logo">
-                <div class="job-info">
-                  <div class="company-name"><?php echo htmlspecialchars($row['company_name']); ?></div>
-                  <div><span class="icon">💰</span> <?php echo htmlspecialchars($row['salary']); ?></div>
-                  <div><span class="icon">📍</span> <?php echo htmlspecialchars($row['job_location']); ?></div>
+            <a href="jobdetail.php?id=<?php echo $job_id; ?>" style="text-decoration:none;color:inherit;">
+              <div class="job-card">
+                <div class="job-header">
+                  <h3><?php echo htmlspecialchars($row['job_title']); ?></h3>
+                  <button class="save-btn">♥</button>
+                </div>
+                <div class="job-body">
+                  <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Company Logo" class="company-logo">
+                  <div class="job-info">
+                    <div class="company-name"><?php echo htmlspecialchars($row['company_name']); ?></div>
+                    <div><span class="icon">💰</span> <?php echo htmlspecialchars($row['salary']); ?></div>
+                    <div><span class="icon">📍</span> <?php echo htmlspecialchars($row['job_location']); ?></div>
+                  </div>
+                </div>
+                <div class="divider"></div>
+                <div class="job-footer">
+                  <div class="deadline"><?php echo $days_left_text; ?></div>
                 </div>
               </div>
-              <div class="divider"></div>
-              <div class="job-footer">
-                <div class="deadline"><?php echo $days_left_text; ?></div>
-              </div>
-            </div>
+            </a>
             <?php
           endwhile;
         else:
@@ -474,20 +477,20 @@
 
   <section class="section-4">
     <div class="container">
-      <h3>Cơ hội ứng tuyển việc làm với đãi ngộ hấp dẫn tại các công ty hàng đầu</h3>
-      <p>Trước sự phát triển vượt bậc của nền kinh tế... chuyên nghiệp.</p>
+      <h3>Opportunities to apply for attractive jobs at top companies</h3>
+      <p>With the rapid development of the economy... professional environment.</p>
 
-      <h3>Vậy tại sao nên tìm việc làm tại JobHive?</h3>
+      <h3>Why should you look for jobs at JobHive?</h3>
       <ul>
-        <li><strong>Việc làm Chất lượng</strong><br />
-          Hàng ngàn tin tuyển dụng chất lượng... CV của bạn.</li>
-        <li><strong>Công cụ viết CV đẹp Miễn phí</strong><br />
-          Nhiều mẫu CV đẹp... trong vòng 5 phút.</li>
-        <li><strong>Hỗ trợ Người tìm việc</strong><br />
-          Nhà tuyển dụng... xem CV và gửi lời mời.</li>
+        <li><strong>Quality Jobs</strong><br />
+          Thousands of high-quality job postings... to your CV.</li>
+        <li><strong>Free Beautiful CV Builder</strong><br />
+          Many beautiful CV templates... in just 5 minutes.</li>
+        <li><strong>Job Seeker Support</strong><br />
+          Employers... view your CV and send invitations.</li>
       </ul>
 
-      <p>Tại JobHive, bạn có thể tìm thấy... mức lương tốt nhất!</p>
+      <p>At JobHive, you can find... the best salary!</p>
     </div>
   </section>
 

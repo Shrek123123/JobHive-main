@@ -63,9 +63,13 @@ $stmt = $sql->query("CREATE TABLE IF NOT EXISTS job (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     posted_by_employer_id INT UNSIGNED NOT NULL,
     company_name VARCHAR(100) NOT NULL,
+    company_size VARCHAR(50),
     job_title VARCHAR(100) NOT NULL,
     job_description TEXT NOT NULL,
+    job_benefit TEXT,
+    job_requirement TEXT,
     job_location VARCHAR(100) NOT NULL,
+    no_employee_needed INT UNSIGNED NOT NULL,
     salary VARCHAR(30) NOT NULL,
     post_duration INT UNSIGNED NOT NULL,
     contact_email VARCHAR(100) NOT NULL,
@@ -104,7 +108,13 @@ $stmt = $sql->query("CREATE TABLE IF NOT EXISTS application (
     job_id INT UNSIGNED NOT NULL,
     jobseeker_id INT UNSIGNED NOT NULL,
     status ENUM('applied', 'interviewed', 'hired', 'rejected') DEFAULT 'applied',
+    fullname VARCHAR(100) NOT NULL,
+    phonenumber VARCHAR(20) NOT NULL,
+    email VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    cv_file VARCHAR(255),
+    allow_search BOOLEAN DEFAULT FALSE,
+    UNIQUE (job_id, jobseeker_id),
     FOREIGN KEY (job_id) REFERENCES job(id) ON DELETE CASCADE,
     FOREIGN KEY (jobseeker_id) REFERENCES user(id) ON DELETE CASCADE
 )");
@@ -154,6 +164,19 @@ $stmt = $sql->query("CREATE TABLE IF NOT EXISTS company (
 )");
 if ($stmt === TRUE) {
     echo "Table company created successfully <br>";
+} else {
+    echo "Error creating table: " . $sql->error;
+}
+
+$stmt = $sql->query("CREATE TABLE IF NOT EXISTS job_interest_count (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    job_id INT(6) UNSIGNED NOT NULL,
+    interest_count INT(6) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (job_id) REFERENCES job(id)
+)");
+if ($stmt === TRUE) {
+    echo "Table job_interest_count created successfully <br>";
 } else {
     echo "Error creating table: " . $sql->error;
 }

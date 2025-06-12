@@ -120,7 +120,10 @@ text-decoration: none;
                     <span><?php echo htmlspecialchars($_SESSION['usernameemployer']); ?></span>
                 </div>
                 <div class="dropdown-menu">
-                    <a href="employerprofile.php">Profile</a>
+                    <?php
+                        $employerId = isset($_SESSION['employerid']) ? intval($_SESSION['employerid']) : 0;
+                    ?>
+                    <a href="employerprofile.php?id=<?php echo $employerId; ?>">Profile</a>
                     <a href="employerlogout.php">Logout</a>
                 </div>
             </div>
