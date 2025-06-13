@@ -1,45 +1,72 @@
-<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-<?php require_once('config.php'); // Bây giờ bạn có thể truy cập các cột như $row['ten_cot'] ?>
-<style>
+<?php
+require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../helper.php';
+// Định nghĩa các action
+define('ACTION_SEARCH', 'quickResults');   // cho form tìm kiếm
+define('ACTION_FILTER', 'filterCategory'); // cho filter category
+
+// Lấy category đang chọn
+define('CURRENT_CATEGORY', isset($_GET['category']) ? $_GET['category'] : '');
+
+// Danh sách category (code => label)
+define('CATEGORIES', [
+    ''           => 'Tất cả',
+    'IT'         => 'IT & Software',
+    'Marketing'  => 'Marketing',
+    'Finance'    => 'Finance',
+    'Healthcare' => 'Healthcare',
+    'Government' => 'Government & Public Sector'
+]);
+// 1. Thiết lập pagination
+$page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$itemsPerPage = 5;
+
+// Đếm tổng jobs với filter (nếu có)
+$countSql = "SELECT COUNT(*) AS count FROM job";
+if (CURRENT_CATEGORY !== '') {
+    $safeCat = $conn->real_escape_string(CURRENT_CATEGORY);
+    $countSql .= " WHERE category = '$safeCat'";
+}
+$countRes = $conn->query($countSql);
+if (!$countRes) {
+    die("Lỗi truy vấn đếm job: " . $conn->error);
+}
+$totalItems = $countRes->fetch_assoc()['count'];
+// Tính tổng số trang
+$totalPages = (int) ceil($totalItems / $itemsPerPage);
+
+// Truy vấn chính với LIMIT + OFFSET tới cơ sở dữ liệu
+$offset = ($page - 1) * $itemsPerPage;
+$sql = "SELECT id, title, company_name, salary, location, created_at"
+     . " FROM job";
+if (CURRENT_CATEGORY !== '') {
+    $sql .= " WHERE category = '$safeCat'";
+}
+$sql .= " ORDER BY created_at DESC"
+     . " LIMIT $offset, $itemsPerPage";
+$result = $conn->query($sql);
+if (!$result) {
+    die("Lỗi truy vấn danh sách job: " . $conn->error);
+}
+?>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>JobHive - Trang Chủ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
   body {
     margin: 0;
     font-family: 'Roboto', sans-serif;
     color: #000;
   }
-
-  .section-1 {
-    background: linear-gradient(to right, #c31432, #240b36);
-  }
-
-  .container {
-    max-width: 1100px;
-    margin: auto;
-    padding: 40px 20px;
-  }
-
-  .title {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-  }
-
-  .subtitle {
-    text-align: center;
-    margin-top: 5px;
-    font-size: 14px;
-    color: #ddd;
-  }
-
-  .search-box {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-
-  }
-
+    .job-card { border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .filter-btn { margin: 0 8px 8px 0; }
+    ul.pagination {
+      list-style: none;
+      padding-left: 0;
+    }
   .search-box input,
   .search-box select {
     padding: 10px;
@@ -320,14 +347,33 @@
       grid-template-columns: 1fr;
     }
   }
-</style>
+</style></head>
 
-<section class="section-1">
-  <div class="container">
-    <div class="title">Tìm việc làm nhanh 24h, việc làm mới nhất trên toàn quốc.</div>
-    <div class="subtitle">Tiếp cận 40,000+ tin tuyển dụng việc làm mới mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại
-      Việt Nam</div>
+    <form class="search-box" method="GET" action="index.php">
+      <input type="hidden" name="action" value="<?php echo ACTION_SEARCH; ?>">
+      <!-- Category tìm kiếm chung -->
+      <select name="category">
+        <option value="">-- Danh mục nghề --</option>
+        <?php foreach (CATEGORIES as $code => $label): ?>
+          <option value="<?php echo $code; ?>" <?php echo ($code === CURRENT_CATEGORY ? 'selected' : ''); ?>>
+            <?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?>
+          </option>
+        <?php endforeach; ?>
+      </select>
 
+      <!-- Job Type -->
+      <select name="job_type">
+        <option value="">-- Job Type --</option>
+        <option value="full-time">Full-time</option>
+        <option value="part-time">Part-time</option>
+        <option value="internship">Internship</option>
+        <option value="contract">Contract</option>
+      </select>
+
+      <!-- Location -->
+      <input type="text" name="location" placeholder="Địa điểm">
+      <button type="submit">🔍 Tìm nhanh</button>
+    </form>
     <!--     
       <a href="index.php?action=search"><button>🔍 Tìm kiếm việc làm</button></a>
 
@@ -344,7 +390,7 @@
         <input type="text" placeholder="Địa điểm">
         <button>Tìm kiếm</button> -->
 
-    <div class="search-box">
+    <!-- <div class="search-box">
       <select>
         <option>Danh mục nghề</option>
         <option>IT & Software</option>
@@ -355,9 +401,8 @@
       </select>
       <input type="text" placeholder="Vị trí tuyển dụng, tên công ty">
       <input type="text" placeholder="Địa điểm">
-      <button>Tìm kiếm</button>
+      <button>Tìm kiếm</button> -->
     </div>
-
     <div class="main-content">
       <div class="left-menu">
         <ul>
@@ -367,7 +412,6 @@
           <li>Healthcare</li>
           <li>Government & Public Sector</li>
         </ul>
-
       </div>
       <div class="right-banner">
         <img src="image/jobhive.png" alt="Tuyển dụng">
@@ -377,7 +421,8 @@
 </section>
 
 <div class="info">
-  <section class="section-2">
+  <!-- Thêm id để anchor -->
+  <section id="job-section" class="section-2">
     <div class="job-section">
       <div class="job-header">
         <h2>🔥 Urgent Job Openings</h2>
@@ -386,79 +431,144 @@
         </div>
       </div>
 
+      <!-- job-filters: động, dẫn lại homepage với action filterCategory và anchor -->
       <div class="job-filters">
-        <button class="active">All</button>
-        <button>IT & Software</button>
-        <button>Marketing</button>
-        <button>Finance</button>
-        <button>Healthcare</button>
-        <button>Government & Public Sector</button>
+        <?php foreach (CATEGORIES as $code => $label):
+            $activeClass = ($code === CURRENT_CATEGORY) ? 'active' : '';
+            $url = 'index.php?action=' . ACTION_FILTER . '&category=' . urlencode($code). '#job-section';
+        ?>
+          <button class="<?php echo $activeClass; ?>" onclick="window.location.href='<?php echo $url; ?>'">
+            <?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?>
+          </button>
+        <?php endforeach; ?>
       </div>
 
-      <div class="job-grid">
-        <!-- 1 -->
-        <?php
-        // Lấy 9 job mới nhất
-        $sql = "SELECT id, job_title, company_logo, company_name, salary, job_location, created_at, post_duration 
-          FROM job 
-          LIMIT 9";
-        $result = $conn->query($sql);
+      <div class="job-listings">
+  <?php while ($job = $result->fetch_assoc()): ?>
+    <div class="job-card">
+      <div class="job-header">
+        <h4><?php echo htmlspecialchars($job['title'], ENT_QUOTES, 'UTF-8'); ?></h4>
+        <img src="image/default.png" alt="Logo công ty">
+      </div>
+      <p class="company">
+        <a href="jobdetailpage.php?id=<?php echo $job['id']; ?>">
+          <?php echo htmlspecialchars($job['company_name'], ENT_QUOTES, 'UTF-8'); ?>
+        </a>
+      </p>
+      <p class="salary">💰 <?php echo number_format($job['salary']); ?> USD</p>
+      <p class="location">📍 <?php echo htmlspecialchars($job['location'], ENT_QUOTES, 'UTF-8'); ?></p>
+      <p class="posted">🕒 <?php echo date('d/m/Y', strtotime($job['created_at'])); ?></p>
+      <a href="jobdetailpage.php?id=<?php echo $job['id']; ?>"
+         class="btn btn-danger mt-2">
+        Chi tiết công việc
+      </a>
+    </div>
+  <?php endwhile; ?>
+</div>
+      <?php if ($totalPages > 1): ?>
+  <nav aria-label="Trang" class="mt-4">
+    <ul class="pagination justify-content-center">
+      <!-- Prev -->
+      <?php if ($page > 1): ?>
+        <li class="page-item">
+          <a class="page-link"
+             href="index.php?action=<?php echo ACTION_FILTER; ?>&category=<?php echo urlencode(CURRENT_CATEGORY); ?>&page=<?php echo $page-1; ?>#job-section">
+            &lsaquo; Prev
+          </a>
+        </li>
+      <?php else: ?>
+        <li class="page-item disabled"><span class="page-link">&lsaquo; Prev</span></li>
+      <?php endif; ?>
 
-        if ($result && $result->num_rows > 0):
-          while ($row = $result->fetch_assoc()):
-            // Tính days_left
-            $created_at = new DateTime($row['created_at']);
-            $post_duration = (int) $row['post_duration'];
-            $expire_at = clone $created_at;
-            $expire_at->modify("+$post_duration days");
-            $now = new DateTime();
-            $interval = $now->diff($expire_at);
-            $days_left = (int) $interval->format('%r%a');
-            $days_left_text = $days_left > 0 ? $days_left . ' days left' : 'Expired';
-            $job_id = (int)$row['id'];
-            ?>
-            <a href="jobdetail.php?id=<?php echo $job_id; ?>" style="text-decoration:none;color:inherit;">
-              <div class="job-card">
-                <div class="job-header">
-                  <h3><?php echo htmlspecialchars($row['job_title']); ?></h3>
-                  <button class="save-btn">♥</button>
-                </div>
-                <div class="job-body">
-                  <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Company Logo" class="company-logo">
-                  <div class="job-info">
-                    <div class="company-name"><?php echo htmlspecialchars($row['company_name']); ?></div>
-                    <div><span class="icon">💰</span> <?php echo htmlspecialchars($row['salary']); ?></div>
-                    <div><span class="icon">📍</span> <?php echo htmlspecialchars($row['job_location']); ?></div>
-                  </div>
-                </div>
-                <div class="divider"></div>
-                <div class="job-footer">
-                  <div class="deadline"><?php echo $days_left_text; ?></div>
-                </div>
-              </div>
-            </a>
-            <?php
-          endwhile;
-        else:
-          ?>
-          <div>No jobs found.</div>
+      <!-- Các số trang -->
+      <?php
+        $start = max(1, $page - 2);
+        $end   = min($totalPages, $page + 2);
+        for ($i = $start; $i <= $end; $i++):
+          $url = "index.php?action=" . ACTION_FILTER
+               . "&category=" . urlencode(CURRENT_CATEGORY)
+               . "&page=$i#job-section";
+      ?>
+        <?php if ($i === $page): ?>
+          <li class="page-item active"><span class="page-link"><?php echo $i; ?></span></li>
+        <?php else: ?>
+          <li class="page-item"><a class="page-link" href="<?php echo $url; ?>"><?php echo $i; ?></a></li>
         <?php endif; ?>
+      <?php endfor; ?>
 
-        <!-- 2 -->
+      <!-- Next -->
+      <?php if ($page < $totalPages): ?>
+        <li class="page-item">
+          <a class="page-link"
+             href="index.php?action=<?php echo ACTION_FILTER; ?>&category=<?php echo urlencode(CURRENT_CATEGORY); ?>&page=<?php echo $page+1; ?>#job-section">
+            Next &rsaquo;
+          </a>
+        </li>
+      <?php else: ?>
+        <li class="page-item disabled"><span class="page-link">Next &rsaquo;</span></li>
+      <?php endif; ?>
+    </ul>
+  </nav>
+<?php endif; ?>
+<!-- Tìm công việc gần nhất -->
+  <div class="job-grid">
+    <!-- 1 -->
+    <?php
+    // Lấy 9 job mới nhất
+    $sql = "SELECT id, job_title, company_logo, company_name, salary, job_location, created_at, post_duration 
+      FROM job 
+      LIMIT 9";
+    $result = $conn->query($sql);
+    if (!$result) {
+        die("Lỗi truy vấn danh sách job: " . $conn->error);
+    }
 
-
-        <!-- 3 -->
-
-        <!-- Lặp lại 8 lần nữa cho đủ 9 thẻ -->
-      </div>
-
-      <div class="pagination">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-      </div>
+    //
+    if ($result && $result->num_rows > 0):
+      while ($row = $result->fetch_assoc()):
+        // Tính days_left
+        $created_at = new DateTime($row['created_at']);
+        $post_duration = (int) $row['post_duration'];
+        $expire_at = clone $created_at;
+        $expire_at->modify("+$post_duration days");
+        $now = new DateTime();
+        $interval = $now->diff($expire_at);
+        $days_left = (int) $interval->format('%r%a');
+        $days_left_text = $days_left > 0 ? $days_left . ' days left' : 'Expired';
+        $job_id = (int)$row['id'];
+        ?>
+        <a href="jobdetail.php?id=<?php echo $job_id; ?>" style="text-decoration:none;color:inherit;">
+          <div class="job-card">
+            <div class="job-header">
+              <h3><?php echo htmlspecialchars($row['job_title']); ?></h3>
+              <button class="save-btn">♥</button>
+            </div>
+            <div class="job-body">
+              <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Company Logo" class="company-logo">
+              <div class="job-info">
+                <div class="company-name"><?php echo htmlspecialchars($row['company_name']); ?></div>
+                <div><span class="icon">💰</span> <?php echo htmlspecialchars($row['salary']); ?></div>
+                <div><span class="icon">📍</span> <?php echo htmlspecialchars($row['job_location']); ?></div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="job-footer">
+              <div class="deadline"><?php echo $days_left_text; ?></div>
+            </div>
+          </div>
+        </a>
+        <?php
+      endwhile;
+    else:
+      ?>
+      <div>No jobs found.</div>
+    <?php endif; ?>
+    <!-- 2 -->
+    <!-- 3 -->
+    <!-- Lặp lại 8 lần nữa cho đủ 9 thẻ -->
+  </div>
   </section>
+
   <section class="section-3">
     <div class="container">
       <div class="header">
@@ -466,11 +576,11 @@
         <a href="#" class="view-all">Xem tất cả →</a>
       </div>
       <div class="logos">
-        <img src="image/logo1.png" alt="Tabtab.me" />
-        <img src="image/logo2.png" alt="DIC" />
-        <img src="image/logo3.png" alt="NhanHoa" />
-        <img src="image/logo4.png" alt="EY" />
-        <img src="image/logo5.png" alt="Karofi" />
+        <img src="image/logo1.jpg" alt="ABC Corp" />
+        <img src="image/logo2.jpg" alt="XYZ Ltd" />
+        <img src="image/logo3.jpg" alt="Tech Solutions" />
+        <img src="image/logo4.jpg" alt="NextGen Co" />
+        <img src="image/logo5.jpg" alt="Creative Minds" />
       </div>
     </div>
   </section>
@@ -482,16 +592,17 @@
 
       <h3>Why should you look for jobs at JobHive?</h3>
       <ul>
+        <li><strong>Việc làm Chất lượng</strong><br />Hàng ngàn tin tuyển dụng chất lượng... CV của bạn.</li>
+        <li><strong>Công cụ viết CV đẹp Miễn phí</strong><br />Nhiều mẫu CV đẹp... trong vòng 5 phút.</li>
+        <!-- <li><strong>Hỗ trợ Người tìm việc</strong><br />Nhà tuyển dụng... xem CV và gửi lời mời.</li>
         <li><strong>Quality Jobs</strong><br />
           Thousands of high-quality job postings... to your CV.</li>
         <li><strong>Free Beautiful CV Builder</strong><br />
           Many beautiful CV templates... in just 5 minutes.</li>
         <li><strong>Job Seeker Support</strong><br />
-          Employers... view your CV and send invitations.</li>
+          Employers... view your CV and send invitations.</li> -->
       </ul>
-
       <p>At JobHive, you can find... the best salary!</p>
     </div>
   </section>
-
 </div>
