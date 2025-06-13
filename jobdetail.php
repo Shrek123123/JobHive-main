@@ -201,7 +201,7 @@ require_once 'config.php';
                             <button class="btn btn-secondary" type="button" id="save-job-btn"
                                 data-job-id="<?= $job_detail_id ?>" <?php if (!$is_logged_in): ?>
                                     onclick="window.location.href='<?= $login_url ?>'; return false;" <?php endif; ?>>
-                                <span id="save-job-icon">&#9734;</span> Save job
+                                <span id="save-job-icon">&#9734;</span> Like job
                             </button>
 
                         </div>
@@ -275,7 +275,7 @@ require_once 'config.php';
                             <img src="<?= htmlspecialchars($job['company_logo'] ?? 'image/logo1.png') ?>" alt="Company Logo"
                                 class="me-3 rounded" style="width: 80px; height: 80px;">
                             <div class="sidebar-title mb-0">
-                                <h4><?= htmlspecialchars($job['company_name'] ?? 'Company Name') ?></h4>
+                                <h4 style="color: #000 !important;"><?= htmlspecialchars($job['company_name'] ?? 'Company Name') ?></h4>
                                 <p><strong>Company size:</strong> <?= htmlspecialchars($job['company_size'] ?? 'Unknown') ?>
                                 </p>
                                 <p><strong>Industry:</strong> <?= htmlspecialchars($job['job_category'] ?? 'Unknown') ?></p>
@@ -364,13 +364,13 @@ require_once 'config.php';
                     icon.innerHTML = '☆';
                     this.classList.remove('btn-danger');
                     this.classList.add('btn-secondary');
-                    showToast('Job unsaved successfully!');
+                    showToast('Job unliked successfully!');
                 } else {
                     savedJobs.push(jobId);
                     icon.innerHTML = '★';
                     this.classList.add('btn-danger');
                     this.classList.remove('btn-secondary');
-                    showToast('Job saved successfully!');
+                    showToast('Job liked successfully!');
                 }
                 localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
             });

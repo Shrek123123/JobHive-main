@@ -1,5 +1,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-<?php require_once('config.php'); // Bây giờ bạn có thể truy cập các cột như $row['ten_cot'] ?>
+<?php
+// Đặt ở ĐẦU file jobs.php (hoặc index.php)
+require_once('config.php'); // Đảm bảo file này chứa kết nối $conn
+
+$isLoggedIn = isset($_SESSION['jobseeker_id']) && $_SESSION['jobseeker_id'] > 0;
+$userId = $isLoggedIn ? (int) $_SESSION['jobseeker_id'] : 0;
+
+// Lấy danh sách job_id mà người dùng hiện tại đã lưu từ database
+$savedJobIds = [];
+if ($isLoggedIn) {
+  $stmt = $conn->prepare("SELECT job_id FROM saved_jobs WHERE user_id = ?");
+  if ($stmt) {
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result_saved_jobs = $stmt->get_result();
+    while ($row = $result_saved_jobs->fetch_assoc()) {
+      $savedJobIds[] = (string) $row['job_id']; // Đảm bảo chuyển về string để khớp với data-job-id của HTML
+    }
+    $stmt->close();
+  } else {
+    error_log("Error preparing query to fetch saved_jobs: " . $conn->error);
+  }
+}
+$savedJobIdsJson = json_encode($savedJobIds);
+
+?>
 <style>
   body {
     margin: 0;
@@ -325,7 +350,8 @@
 <section class="section-1">
   <div class="container">
     <div class="title">Find jobs fast 24/7, the latest jobs nationwide.</div>
-    <div class="subtitle">Access 40,000+ new job postings every day from thousands of reputable companies in Vietnam.</div>
+    <div class="subtitle">Access 40,000+ new job postings every day from thousands of reputable companies in Vietnam.
+    </div>
 
     <!--     
       <a href="index.php?action=search"><button>🔍 Tìm kiếm việc làm</button></a>
@@ -359,13 +385,32 @@
 
     <div class="main-content">
       <div class="left-menu">
-      <ul>
-        <li id="filter-fulltime" class="job-type-filter">Fulltime</li>
-        <li id="filter-parttime" class="job-type-filter">Partime</li>
-        <li id="filter-contract" class="job-type-filter">Contract</li>
-        <li id="filter-freelance" class="job-type-filter">Freelance</li>
-        <li id="filter-remote" class="job-type-filter">Remote</li>
-      </ul>
+        <ul>
+          <li id="filter-fulltime" class="job-type-filter">Full-time</li>
+          <li id="filter-parttime" class="job-type-filter">Part-time</li>
+          <li id="filter-internship" class="job-type-filter">Internship</li>
+          <li id="filter-freelance" class="job-type-filter">Freelance</li>
+          <li id="filter-remote" class="job-type-filter">Remote</li>
+        </ul>
+        <script>
+          document.querySelectorAll('.job-type-filter').forEach(function (item) {
+            item.addEventListener('click', function () {
+              const type = this.textContent.trim().toLowerCase();
+              // Gọi hàm filterJobByType trong job_filter/job_type_filter.php qua AJAX
+              fetch('job_filter/job_type_filter.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'job_type=' + encodeURIComponent(type)
+              })
+                .then(response => response.text())
+                .then(data => {
+                  // Xử lý kết quả trả về, ví dụ: hiển thị danh sách công việc đã lọc
+                  // Bạn có thể thay đổi selector '.job-grid' nếu muốn hiển thị ở nơi khác
+                  document.querySelector('.job-grid').innerHTML = data;
+                });
+            });
+          });
+        </script>
 
       </div>
       <div class="right-banner">
@@ -398,12 +443,12 @@
         <?php
         // Pagination logic
         $jobs_per_page = 9;
-        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
 
         // Get total jobs count
         $count_sql = "SELECT COUNT(*) as total FROM job";
         $count_result = $conn->query($count_sql);
-        $total_jobs = $count_result ? (int)$count_result->fetch_assoc()['total'] : 0;
+        $total_jobs = $count_result ? (int) $count_result->fetch_assoc()['total'] : 0;
         $total_pages = ceil($total_jobs / $jobs_per_page);
 
         // Fetch jobs for current page
@@ -416,37 +461,173 @@
         // Output jobs (only 9 per page)
         if ($result && $result->num_rows > 0):
           while ($row = $result->fetch_assoc()):
-        $created_at = new DateTime($row['created_at']);
-        $post_duration = (int) $row['post_duration'];
-        $expire_at = clone $created_at;
-        $expire_at->modify("+$post_duration days");
-        $now = new DateTime();
-        $interval = $now->diff($expire_at);
-        $days_left = (int) $interval->format('%r%a');
-        $days_left_text = $days_left > 0 ? $days_left . ' days left' : 'Expired';
-        $job_id = (int)$row['id'];
-        ?>
-        <a href="jobdetail.php?id=<?php echo $job_id; ?>" style="text-decoration:none;color:inherit;">
-          <div class="job-card">
-            <div class="job-header">
-          <h3><?php echo htmlspecialchars($row['job_title']); ?></h3>
-          <button class="save-btn">♥</button>
-            </div>
-            <div class="job-body">
-          <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Company Logo" class="company-logo">
-          <div class="job-info">
-            <div class="company-name"><?php echo htmlspecialchars($row['company_name']); ?></div>
-            <div><span class="icon">💰</span> <?php echo htmlspecialchars($row['salary']); ?></div>
-            <div><span class="icon">📍</span> <?php echo htmlspecialchars($row['job_location']); ?></div>
-          </div>
-            </div>
-            <div class="divider"></div>
-            <div class="job-footer">
-          <div class="deadline"><?php echo $days_left_text; ?></div>
-            </div>
-          </div>
-        </a>
-        <?php
+            $created_at = new DateTime($row['created_at']);
+            $post_duration = (int) $row['post_duration'];
+            $expire_at = clone $created_at;
+            $expire_at->modify("+$post_duration days");
+            $now = new DateTime();
+            $interval = $now->diff($expire_at);
+            $days_left = (int) $interval->format('%r%a');
+            $days_left_text = $days_left > 0 ? $days_left . ' days left' : 'Expired';
+            $job_id = (int) $row['id'];
+            $isJobAlreadySaved = in_array((string) $job_id, $savedJobIds);
+            if ($isJobAlreadySaved) {
+              $savedClass = 'active';
+            } else {
+              $savedClass = '';
+            }
+            ?>
+            <a href="jobdetail.php?id=<?php echo $job_id; ?>" style="text-decoration:none;color:inherit;">
+              <div class="job-card">
+                <div class="job-header">
+                  <h3><?php echo htmlspecialchars($row['job_title']); ?></h3>
+                  <?php
+                  $isLoggedIn = isset($_SESSION['jobseeker_id']);
+                  $userId = $isLoggedIn ? (int) $_SESSION['jobseeker_id'] : 0;
+                  ?>
+                  <button class="save-btn" aria-pressed="<?php echo $isJobAlreadySaved ? 'true' : 'false'; ?>"
+                    title="Save job" data-job-id="<?php echo $job_id; ?>">
+                    <svg class="heart-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e74c3c"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path
+                        d="M12 21s-6.5-5.5-8.5-8.5C1.5 9.5 3.5 6 7 6c1.7 0 3.4 1.1 4.1 2.7C11.6 7.1 13.3 6 15 6c3.5 0 5.5 3.5 3.5 6.5C18.5 15.5 12 21 12 21z"
+                        fill="<?php echo $isJobAlreadySaved ? '#e74c3c' : '#fff'; ?>" />
+                    </svg>
+                  </button>
+                  <script>
+                    // Các biến PHP truyền sang JavaScript
+                    window.isLoggedIn = <?php echo $isLoggedIn ? 'true' : 'false'; ?>;
+                    window.currentUserId = <?php echo $userId; ?>;
+                    // Danh sách Job ID đã lưu của người dùng hiện tại, lấy từ database
+                    window.initialSavedJobIds = <?php echo $savedJobIdsJson; ?>;
+
+                    document.addEventListener('DOMContentLoaded', function () {
+                      // Khởi tạo trạng thái cho localStorage nếu chưa có hoặc không khớp
+                      // Điều này đảm bảo trạng thái localStorage luôn phản ánh dữ liệu từ DB khi tải trang
+                      localStorage.setItem('savedJobs', JSON.stringify(window.initialSavedJobIds));
+
+                      document.querySelectorAll('.save-btn').forEach(function (btn) {
+                        const jobId = btn.getAttribute('data-job-id');
+                        const heartPath = btn.querySelector('.heart-icon path');
+                        // Lấy trạng thái hiện tại từ localStorage (đã được đồng bộ với DB ở trên)
+                        let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+
+                        // Cập nhật trạng thái ban đầu của nút dựa trên dữ liệu PHP (và localStorage)
+                        if (savedJobs.includes(jobId)) {
+                          heartPath.setAttribute('fill', '#e74c3c');
+                          btn.setAttribute('aria-pressed', 'true');
+                        } else {
+                          heartPath.setAttribute('fill', '#fff');
+                          btn.setAttribute('aria-pressed', 'false');
+                        }
+
+                        btn.addEventListener('click', function (e) {
+                          e.preventDefault(); // Ngăn chặn hành vi mặc định của button
+
+                          // Kiểm tra đăng nhập
+                          if (!window.isLoggedIn) {
+                            showPopup('Please login to save jobs to your account.');
+                            return;
+                          }
+
+                          let currentSavedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+                          const isCurrentlySaved = btn.getAttribute('aria-pressed') === 'true';
+                          let action;
+
+                          if (!isCurrentlySaved) { // Chưa lưu -> Lưu
+                            heartPath.setAttribute('fill', '#e74c3c');
+                            btn.setAttribute('aria-pressed', 'true');
+                            currentSavedJobs.push(jobId);
+                            showPopup('Job saved successfully!');
+                            action = 'save';
+                          } else { // Đã lưu -> Hủy lưu
+                            heartPath.setAttribute('fill', '#fff');
+                            btn.setAttribute('aria-pressed', 'false');
+                            currentSavedJobs = currentSavedJobs.filter(id => id !== jobId);
+                            showPopup('Job unsaved successfully.');
+                            action = 'unsave';
+                          }
+                          localStorage.setItem('savedJobs', JSON.stringify(currentSavedJobs));
+                          saveJobAjax(jobId, action); // Gửi yêu cầu AJAX
+                        });
+                      });
+
+                      // Hàm gửi yêu cầu AJAX đến save_job_action.php
+                      function saveJobAjax(jobId, action) {
+                        fetch('save_job_action.php', { // Tên file xử lý AJAX mới
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                          },
+                          body: 'action=' + encodeURIComponent(action) + '&job_id=' + encodeURIComponent(jobId)
+                        })
+                          .then(response => {
+                            if (!response.ok) {
+                              throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json(); // Chờ phản hồi JSON từ server
+                          })
+                          .then(data => {
+                            if (data.status === 'success') {
+                              console.log('Database update successful:', data.message);
+                            } else {
+                              console.error('Database update failed:', data.message);
+                              // Optionally handle error here, e.g., revert UI changes
+                              showPopup('Error: ' + data.message); // Show error from server
+                            }
+                          })
+                          .catch(error => {
+                            console.error('AJAX request error:', error);
+                            showPopup('Connection or processing error. Please try again.');
+                          });
+                      }
+
+                      // Hàm hiển thị Popup (giữ nguyên từ code của bạn)
+                      function showPopup(message) {
+                        let existing = document.getElementById('job-popup-message');
+                        if (existing) {
+                          existing.remove();
+                        }
+                        let popup = document.createElement('div');
+                        popup.id = 'job-popup-message';
+                        popup.textContent = message;
+                        popup.style.position = 'fixed';
+                        popup.style.top = '30px';
+                        popup.style.left = '50%';
+                        popup.style.transform = 'translateX(-50%)';
+                        popup.style.background = '#fff';
+                        popup.style.color = '#e74c3c';
+                        popup.style.padding = '12px 28px';
+                        popup.style.borderRadius = '8px';
+                        popup.style.boxShadow = '0 2px 12px rgba(0,0,0,0.15)';
+                        popup.style.zIndex = 9999;
+                        popup.style.opacity = 1;
+                        document.body.appendChild(popup);
+                        setTimeout(() => {
+                          popup.style.transition = 'opacity 0.4s';
+                          popup.style.opacity = 0;
+                          setTimeout(() => popup.remove(), 400);
+                        }, 1200);
+                      }
+                    });
+                  </script>
+
+                </div>
+                <div class="job-body">
+                  <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Company Logo" class="company-logo">
+                  <div class="job-info">
+                    <div class="company-name"><?php echo htmlspecialchars($row['company_name']); ?></div>
+                    <div><span class="icon">💰</span> <?php echo htmlspecialchars($row['salary']); ?></div>
+                    <div><span class="icon">📍</span> <?php echo htmlspecialchars($row['job_location']); ?></div>
+                  </div>
+                </div>
+                <div class="divider"></div>
+                <div class="job-footer">
+                  <div class="deadline"><?php echo $days_left_text; ?></div>
+                </div>
+              </div>
+            </a>
+            <?php
           endwhile;
         else:
           ?>
@@ -455,19 +636,20 @@
       </div>
 
       <div class="pagination">
-        <a href="<?php echo $page > 1 ? '?page=' . ($page - 1) : 'javascript:void(0);'; ?>" 
-           class="arrow<?php if ($page <= 1) echo ' disabled'; ?>" 
-           <?php if ($page <= 1) echo 'tabindex="-1" aria-disabled="true"'; ?>>
+        <a href="<?php echo $page > 1 ? '?page=' . ($page - 1) : 'javascript:void(0);'; ?>" class="arrow<?php if ($page <= 1)
+                       echo ' disabled'; ?>" <?php if ($page <= 1)
+                           echo 'tabindex="-1" aria-disabled="true"'; ?>>
           &larr;
         </a>
         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-          <a href="?page=<?php echo $i; ?>" class="page-number<?php if ($i == $page) echo ' active'; ?>">
-        <?php echo $i; ?>
+          <a href="?page=<?php echo $i; ?>" class="page-number<?php if ($i == $page)
+               echo ' active'; ?>">
+            <?php echo $i; ?>
           </a>
         <?php endfor; ?>
-        <a href="<?php echo $page < $total_pages ? '?page=' . ($page + 1) : 'javascript:void(0);'; ?>" 
-           class="arrow<?php if ($page >= $total_pages) echo ' disabled'; ?>" 
-           <?php if ($page >= $total_pages) echo 'tabindex="-1" aria-disabled="true"'; ?>>
+        <a href="<?php echo $page < $total_pages ? '?page=' . ($page + 1) : 'javascript:void(0);'; ?>" class="arrow<?php if ($page >= $total_pages)
+                       echo ' disabled'; ?>" <?php if ($page >= $total_pages)
+                           echo 'tabindex="-1" aria-disabled="true"'; ?>>
           &rarr;
         </a>
       </div>
@@ -485,11 +667,13 @@
           text-decoration: none;
           transition: background 0.2s, color 0.2s;
         }
+
         .pagination .page-number.active {
           background: #d70018;
           color: #fff;
           pointer-events: none;
         }
+
         .pagination .arrow {
           display: inline-block;
           min-width: 24px;
@@ -504,12 +688,14 @@
           text-decoration: none;
           transition: background 0.2s, color 0.2s;
         }
+
         .pagination .arrow.disabled {
           background: #f3f3f3;
           color: #bbb;
           cursor: not-allowed;
           pointer-events: none;
         }
+
         .pagination a {
           text-decoration: none;
         }
