@@ -359,13 +359,13 @@
 
     <div class="main-content">
       <div class="left-menu">
-        <ul>
-          <li>IT & Software</li>
-          <li>Marketing</li>
-          <li>Finance</li>
-          <li>Healthcare</li>
-          <li>Government & Public Sector</li>
-        </ul>
+      <ul>
+        <li id="filter-fulltime" class="job-type-filter">Fulltime</li>
+        <li id="filter-parttime" class="job-type-filter">Partime</li>
+        <li id="filter-contract" class="job-type-filter">Contract</li>
+        <li id="filter-freelance" class="job-type-filter">Freelance</li>
+        <li id="filter-remote" class="job-type-filter">Remote</li>
+      </ul>
 
       </div>
       <div class="right-banner">
@@ -395,69 +395,128 @@
       </div>
 
       <div class="job-grid">
-        <!-- 1 -->
         <?php
-        // Lấy 9 job mới nhất
+        // Pagination logic
+        $jobs_per_page = 9;
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+
+        // Get total jobs count
+        $count_sql = "SELECT COUNT(*) as total FROM job";
+        $count_result = $conn->query($count_sql);
+        $total_jobs = $count_result ? (int)$count_result->fetch_assoc()['total'] : 0;
+        $total_pages = ceil($total_jobs / $jobs_per_page);
+
+        // Fetch jobs for current page
+        $offset = ($page - 1) * $jobs_per_page;
         $sql = "SELECT id, job_title, company_logo, company_name, salary, job_location, created_at, post_duration 
           FROM job 
-          LIMIT 9";
+          LIMIT $jobs_per_page OFFSET $offset";
         $result = $conn->query($sql);
 
+        // Output jobs (only 9 per page)
         if ($result && $result->num_rows > 0):
           while ($row = $result->fetch_assoc()):
-            // Tính days_left
-            $created_at = new DateTime($row['created_at']);
-            $post_duration = (int) $row['post_duration'];
-            $expire_at = clone $created_at;
-            $expire_at->modify("+$post_duration days");
-            $now = new DateTime();
-            $interval = $now->diff($expire_at);
-            $days_left = (int) $interval->format('%r%a');
-            $days_left_text = $days_left > 0 ? $days_left . ' days left' : 'Expired';
-            $job_id = (int)$row['id'];
-            ?>
-            <a href="jobdetail.php?id=<?php echo $job_id; ?>" style="text-decoration:none;color:inherit;">
-              <div class="job-card">
-                <div class="job-header">
-                  <h3><?php echo htmlspecialchars($row['job_title']); ?></h3>
-                  <button class="save-btn">♥</button>
-                </div>
-                <div class="job-body">
-                  <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Company Logo" class="company-logo">
-                  <div class="job-info">
-                    <div class="company-name"><?php echo htmlspecialchars($row['company_name']); ?></div>
-                    <div><span class="icon">💰</span> <?php echo htmlspecialchars($row['salary']); ?></div>
-                    <div><span class="icon">📍</span> <?php echo htmlspecialchars($row['job_location']); ?></div>
-                  </div>
-                </div>
-                <div class="divider"></div>
-                <div class="job-footer">
-                  <div class="deadline"><?php echo $days_left_text; ?></div>
-                </div>
-              </div>
-            </a>
-            <?php
+        $created_at = new DateTime($row['created_at']);
+        $post_duration = (int) $row['post_duration'];
+        $expire_at = clone $created_at;
+        $expire_at->modify("+$post_duration days");
+        $now = new DateTime();
+        $interval = $now->diff($expire_at);
+        $days_left = (int) $interval->format('%r%a');
+        $days_left_text = $days_left > 0 ? $days_left . ' days left' : 'Expired';
+        $job_id = (int)$row['id'];
+        ?>
+        <a href="jobdetail.php?id=<?php echo $job_id; ?>" style="text-decoration:none;color:inherit;">
+          <div class="job-card">
+            <div class="job-header">
+          <h3><?php echo htmlspecialchars($row['job_title']); ?></h3>
+          <button class="save-btn">♥</button>
+            </div>
+            <div class="job-body">
+          <img src="<?php echo htmlspecialchars($row['company_logo']); ?>" alt="Company Logo" class="company-logo">
+          <div class="job-info">
+            <div class="company-name"><?php echo htmlspecialchars($row['company_name']); ?></div>
+            <div><span class="icon">💰</span> <?php echo htmlspecialchars($row['salary']); ?></div>
+            <div><span class="icon">📍</span> <?php echo htmlspecialchars($row['job_location']); ?></div>
+          </div>
+            </div>
+            <div class="divider"></div>
+            <div class="job-footer">
+          <div class="deadline"><?php echo $days_left_text; ?></div>
+            </div>
+          </div>
+        </a>
+        <?php
           endwhile;
         else:
           ?>
           <div>No jobs found.</div>
         <?php endif; ?>
-
-        <!-- 2 -->
-
-
-        <!-- 3 -->
-
-        <!-- Lặp lại 8 lần nữa cho đủ 9 thẻ -->
       </div>
 
       <div class="pagination">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
+        <a href="<?php echo $page > 1 ? '?page=' . ($page - 1) : 'javascript:void(0);'; ?>" 
+           class="arrow<?php if ($page <= 1) echo ' disabled'; ?>" 
+           <?php if ($page <= 1) echo 'tabindex="-1" aria-disabled="true"'; ?>>
+          &larr;
+        </a>
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+          <a href="?page=<?php echo $i; ?>" class="page-number<?php if ($i == $page) echo ' active'; ?>">
+        <?php echo $i; ?>
+          </a>
+        <?php endfor; ?>
+        <a href="<?php echo $page < $total_pages ? '?page=' . ($page + 1) : 'javascript:void(0);'; ?>" 
+           class="arrow<?php if ($page >= $total_pages) echo ' disabled'; ?>" 
+           <?php if ($page >= $total_pages) echo 'tabindex="-1" aria-disabled="true"'; ?>>
+          &rarr;
+        </a>
       </div>
+      <style>
+        .pagination .page-number {
+          display: inline-block;
+          min-width: 24px;
+          padding: 4px 8px;
+          margin: 0 2px;
+          border-radius: 6px;
+          background: #ccc;
+          color: #333;
+          font-weight: bold;
+          text-align: center;
+          text-decoration: none;
+          transition: background 0.2s, color 0.2s;
+        }
+        .pagination .page-number.active {
+          background: #d70018;
+          color: #fff;
+          pointer-events: none;
+        }
+        .pagination .arrow {
+          display: inline-block;
+          min-width: 24px;
+          padding: 4px 8px;
+          margin: 0 2px;
+          border-radius: 6px;
+          background: #eee;
+          color: #333;
+          font-weight: bold;
+          text-align: center;
+          cursor: pointer;
+          text-decoration: none;
+          transition: background 0.2s, color 0.2s;
+        }
+        .pagination .arrow.disabled {
+          background: #f3f3f3;
+          color: #bbb;
+          cursor: not-allowed;
+          pointer-events: none;
+        }
+        .pagination a {
+          text-decoration: none;
+        }
+      </style>
   </section>
+
+
   <section class="section-3">
     <div class="container">
       <div class="header">

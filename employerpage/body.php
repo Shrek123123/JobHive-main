@@ -355,7 +355,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               <option value="part-time">Part-time</option>
               <option value="internship">Internship</option>
               <option value="freelance">Freelance</option>
-              <option value="contract">Contract</option>
+              <option value="remote">Remote</option>
             </select>
           </td>
         </tr>
