@@ -2,7 +2,7 @@
 require_once 'config.php';
 ?>
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -40,6 +40,25 @@ require_once 'config.php';
         .sidebar-title {
             font-weight: bold;
             margin-bottom: 10px;
+        }
+
+        .footer-column h4,
+        h4 {
+            font-size: 16px !important;
+            font-family: Arial, sans-serif !important;
+            color: #fff !important;
+            font-weight: bold !important;
+            margin-top: 21.28px !important;
+            margin-bottom: 30px !important;
+            line-height: 1.15 !important;
+        }
+
+        h3 {
+            font-size: 18.72px !important;
+            font-family: Arial, sans-serif !important;
+            color: #D91616 !important;
+            font-weight: bold !important;
+            margin: 18.72px 0px 20px 0px !important;
         }
     </style>
     <!-- Bootstrap Bundle JS -->
@@ -435,47 +454,47 @@ require_once 'config.php';
 
 
 <footer>
-    <?php require_once 'homepage/footer.php' ?>`
+    <?php require_once 'homepage/footer.php' ?>
 </footer>
 
 </html>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Delegate because the form is loaded dynamically
-    document.body.addEventListener('submit', function (e) {
-        if (e.target && e.target.id === 'apply-form') {
-            e.preventDefault();
+    document.addEventListener('DOMContentLoaded', function () {
+        // Delegate because the form is loaded dynamically
+        document.body.addEventListener('submit', function (e) {
+            if (e.target && e.target.id === 'apply-form') {
+                e.preventDefault();
 
-            const form = e.target;
-            const formData = new FormData(form);
+                const form = e.target;
+                const formData = new FormData(form);
 
-            fetch('applyform.php?id=' + encodeURIComponent(formData.get('job_id') || ''), {
-                method: 'POST',
-                body: formData
-            })
-            .then(res => res.text())
-            .then(data => {
-                // Show success message
-                document.getElementById('applyFormContent').innerHTML = `
+                fetch('applyform.php?id=' + encodeURIComponent(formData.get('job_id') || ''), {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(res => res.text())
+                    .then(data => {
+                        // Show success message
+                        document.getElementById('applyFormContent').innerHTML = `
                     <div class="modal-body text-center p-5">
                         <div class="alert alert-success">Applied successfully!</div>
                     </div>
                 `;
-                // Optionally close modal after a delay:
-                setTimeout(() => {
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('applyModal'));
-                    modal.hide();
-                }, 1500);
-            })
-            .catch(() => {
-                document.getElementById('applyFormContent').innerHTML = `
+                        // Optionally close modal after a delay:
+                        setTimeout(() => {
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('applyModal'));
+                            modal.hide();
+                        }, 1500);
+                    })
+                    .catch(() => {
+                        document.getElementById('applyFormContent').innerHTML = `
                     <div class="modal-body text-center p-5">
                         <div class="alert alert-danger">There was an error. Please try again.</div>
                     </div>
                 `;
-            });
-        }
+                    });
+            }
+        });
     });
-});
 </script>
