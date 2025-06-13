@@ -460,7 +460,6 @@ $result = $conn->query($sql);
     </div>
   <?php endwhile; ?>
 </div>
-
       <?php if ($totalPages > 1): ?>
   <nav aria-label="Trang" class="mt-4">
     <ul class="pagination justify-content-center">
@@ -516,6 +515,7 @@ $result = $conn->query($sql);
       LIMIT 9";
     $result = $conn->query($sql);
 
+    //
     if ($result && $result->num_rows > 0):
       while ($row = $result->fetch_assoc()):
         // Tính days_left
@@ -568,11 +568,11 @@ $result = $conn->query($sql);
         <a href="#" class="view-all">Xem tất cả →</a>
       </div>
       <div class="logos">
-        <img src="image/logo1.png" alt="Tabtab.me" />
-        <img src="image/logo2.png" alt="DIC" />
-        <img src="image/logo3.png" alt="NhanHoa" />
-        <img src="image/logo4.png" alt="EY" />
-        <img src="image/logo5.png" alt="Karofi" />
+        <img src="image/logo1.jpg" alt="ABC Corp" />
+        <img src="image/logo2.jpg" alt="XYZ Ltd" />
+        <img src="image/logo3.jpg" alt="Tech Solutions" />
+        <img src="image/logo4.jpg" alt="NextGen Co" />
+        <img src="image/logo5.jpg" alt="Creative Minds" />
       </div>
     </div>
   </section>
