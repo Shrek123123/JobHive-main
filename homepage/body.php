@@ -28,8 +28,10 @@ if (CURRENT_CATEGORY !== '') {
     $countSql .= " WHERE category = '$safeCat'";
 }
 $countRes = $conn->query($countSql);
+if (!$countRes) {
+    die("Lỗi truy vấn đếm job: " . $conn->error);
+}
 $totalItems = $countRes->fetch_assoc()['count'];
-
 // Tính tổng số trang
 $totalPages = (int) ceil($totalItems / $itemsPerPage);
 
@@ -43,6 +45,9 @@ if (CURRENT_CATEGORY !== '') {
 $sql .= " ORDER BY created_at DESC"
      . " LIMIT $offset, $itemsPerPage";
 $result = $conn->query($sql);
+if (!$result) {
+    die("Lỗi truy vấn danh sách job: " . $conn->error);
+}
 ?>
 <head>
   <meta charset="UTF-8">
@@ -514,6 +519,9 @@ $result = $conn->query($sql);
       FROM job 
       LIMIT 9";
     $result = $conn->query($sql);
+    if (!$result) {
+        die("Lỗi truy vấn danh sách job: " . $conn->error);
+    }
 
     //
     if ($result && $result->num_rows > 0):
