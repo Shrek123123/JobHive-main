@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jobseeker Register - JobHive</title>
+  <job_title>Jobseeker Register - JobHive</job_title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -222,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Sử dụng JavaScript để hiển thị thông báo và chuyển hướng
     echo "<script>
         alert('Registration successful!');
-        window.location.href = 'jobseekerlogin.php';
+        window.job_location.href = 'jobseekerlogin.php';
     </script>";
     exit;
   } else {
@@ -237,19 +237,19 @@ $conn->close();
 
 ?>
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('form');
     const termsCheckbox = document.querySelector('input[name="terms"]');
     const termsError = document.getElementById('terms-error');
 
-    form.addEventListener('submit', function (event) {
+    form.addEventListener('submit', function(event) {
       if (!termsCheckbox.checked) {
         event.preventDefault(); // Ngăn chặn form submit
         termsError.textContent = 'Please read the terms and check the box';
         termsError.style.display = 'block'; // Hiển thị thông báo lỗi
 
         // Thiết lập thời gian chờ 3 giây (3000 milliseconds) để ẩn thông báo
-        setTimeout(function () {
+        setTimeout(function() {
           termsError.style.display = 'none';
           termsError.textContent = ''; // Xóa nội dung thông báo (tùy chọn)
         }, 3000);

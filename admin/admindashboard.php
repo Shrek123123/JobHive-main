@@ -5,11 +5,11 @@ require_once __DIR__ . '/../config.php';
 if (!isset($_SESSION['usernameadmin'])) {
   if (isset($_SERVER['HTTP_REFERER'])) {
     echo "Bạn đến từ: " . $_SERVER['HTTP_REFERER'];
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    header('job_location: ' . $_SERVER['HTTP_REFERER']);
     exit();
   } else {
     echo "Không xác định trang trước đó.";
-    header('Location: index.php');
+    header('job_location: index.php');
   }
 }
 
@@ -36,7 +36,7 @@ $total_feedbacks = getCount($conn, "SELECT COUNT(*) AS c FROM jobseekerfeedback"
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard</title>
+  <job_title>Admin Dashboard</job_title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <style>
     body {
@@ -193,8 +193,8 @@ $total_feedbacks = getCount($conn, "SELECT COUNT(*) AS c FROM jobseekerfeedback"
           <tr>
             <th>Id</th>
             <th>Company Name</th>
-            <th>Job Title</th>
-            <th>Job Location</th>
+            <th>Job job_title</th>
+            <th>Job job_location</th>
             <th>Salary</th>
             <th>Job Type</th>
             <th>Email</th>
@@ -212,8 +212,8 @@ $total_feedbacks = getCount($conn, "SELECT COUNT(*) AS c FROM jobseekerfeedback"
               echo "<tr>
                       <td>{$row['id']}</td>
                       <td>{$row['company_name']}</td>
-                      <td>{$row['job_title']}</td>
-                      <td>{$row['job_location']}</td>
+                      <td>{$row['job_job_title']}</td>
+                      <td>{$row['job_job_location']}</td>
                       <td>{$row['salary']}</td>
                       <td>{$row['job_type']}</td>
                       <td>{$row['contact_email']}</td>

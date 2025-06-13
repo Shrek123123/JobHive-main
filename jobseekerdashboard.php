@@ -1,8 +1,8 @@
 <?php
- if(!isset($_SESSION['username'])){
-    header("Location: index.php");
+if (!isset($_SESSION['username'])) {
+    header("job_location: index.php");
     exit();
- }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobHive</title>
+    <job_title>JobHive</job_title>
 </head>
 
 <body>

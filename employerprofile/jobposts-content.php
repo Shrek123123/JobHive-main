@@ -31,8 +31,8 @@ require_once '../config.php';
                 $days_left = $now < $expire_at ? $now->diff($expire_at)->days : 0;
                 $salary = htmlspecialchars($row['salary']);
                 $company_name = htmlspecialchars($row['company_name']);
-                $job_title = htmlspecialchars($row['job_title']);
-                $job_location = htmlspecialchars($row['job_location']);
+                $job_job_title = htmlspecialchars($row['job_job_title']);
+                $job_job_location = htmlspecialchars($row['job_job_location']);
                 $updated = $created_at->diff($now);
                 if ($updated->days > 0) {
                     $updated_str = "Updated {$updated->days} days ago";
@@ -42,35 +42,35 @@ require_once '../config.php';
                     $updated_str = "Just updated";
                 }
         ?>
-        <div
-            style="background: #f3f3f3; border-radius: 10px; padding: 18px 18px 18px 0; display: flex; align-items: flex-start; box-shadow: 0 2px 8px #0001;">
-            <img src="<?php echo $logo; ?>"
-                alt="job"
-                style="width: 120px; height: 70px; border-radius: 8px; object-fit: cover; margin-right: 18px;">
-            <div style="flex: 1;">
-                <div style="font-weight: bold; font-size: 18px;"><?php echo $job_title; ?></div>
-                <div style="color: #888; font-size: 13px; margin-bottom: 6px;"><?php echo $company_name; ?></div>
-                <div style="display: flex; gap: 10px; margin-bottom: 8px;">
-                    <span
-                        style="background: #fff; color: #b23b3b; border-radius: 6px; padding: 2px 10px; font-size: 12px;"><?php echo htmlspecialchars($job_location); ?></span>
-                    <span
-                        style="background: #fff; color: #b23b3b; border-radius: 6px; padding: 2px 10px; font-size: 12px;">
-                        <?php echo $days_left > 0 ? "$days_left days left to apply" : "Application closed"; ?>
-                    </span>
-                    <span
-                        style="background: #fff; color: #888; border-radius: 6px; padding: 2px 10px; font-size: 12px;"><?php echo $updated_str; ?></span>
+                <div
+                    style="background: #f3f3f3; border-radius: 10px; padding: 18px 18px 18px 0; display: flex; align-items: flex-start; box-shadow: 0 2px 8px #0001;">
+                    <img src="<?php echo $logo; ?>"
+                        alt="job"
+                        style="width: 120px; height: 70px; border-radius: 8px; object-fit: cover; margin-right: 18px;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold; font-size: 18px;"><?php echo $job_job_title; ?></div>
+                        <div style="color: #888; font-size: 13px; margin-bottom: 6px;"><?php echo $company_name; ?></div>
+                        <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+                            <span
+                                style="background: #fff; color: #b23b3b; border-radius: 6px; padding: 2px 10px; font-size: 12px;"><?php echo htmlspecialchars($job_job_location); ?></span>
+                            <span
+                                style="background: #fff; color: #b23b3b; border-radius: 6px; padding: 2px 10px; font-size: 12px;">
+                                <?php echo $days_left > 0 ? "$days_left days left to apply" : "Application closed"; ?>
+                            </span>
+                            <span
+                                style="background: #fff; color: #888; border-radius: 6px; padding: 2px 10px; font-size: 12px;"><?php echo $updated_str; ?></span>
+                        </div>
+                        <div style="color: #b23b3b; font-weight: bold; font-size: 15px;"><?php echo $salary; ?></div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-left: 18px; align-items: flex-end;">
+                        <button
+                            style="background: #d90000; color: #fff; border: none; border-radius: 6px; padding: 6px 18px; font-size: 13px; cursor: pointer;">Edit</button>
+                        <button
+                            style="background: #fff; color: #d90000; border: 1px solid #d90000; border-radius: 6px; padding: 6px 18px; font-size: 13px; cursor: pointer;">Delete</button>
+                        <button
+                            style="background: #b23b3b; color: #fff; border: none; border-radius: 6px; padding: 6px 18px; font-size: 13px; cursor: pointer;">Check submitted applications</button>
+                    </div>
                 </div>
-                <div style="color: #b23b3b; font-weight: bold; font-size: 15px;"><?php echo $salary; ?></div>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 8px; margin-left: 18px; align-items: flex-end;">
-                <button
-                    style="background: #d90000; color: #fff; border: none; border-radius: 6px; padding: 6px 18px; font-size: 13px; cursor: pointer;">Edit</button>
-                <button
-                    style="background: #fff; color: #d90000; border: 1px solid #d90000; border-radius: 6px; padding: 6px 18px; font-size: 13px; cursor: pointer;">Delete</button>
-                <button
-                    style="background: #b23b3b; color: #fff; border: none; border-radius: 6px; padding: 6px 18px; font-size: 13px; cursor: pointer;">Check submitted applications</button>
-            </div>
-        </div>
         <?php endwhile;
         } else {
             echo '<div style="color: #888;">No employer selected.</div>';

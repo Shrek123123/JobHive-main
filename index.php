@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 
 $action = $_GET['action'] ?? 'home';
 
-if (in_array($action, ['search','results','quickSearch','quickResults','advancedSearch'])) {
+if (in_array($action, ['search', 'results', 'quickSearch', 'quickResults', 'advancedSearch'])) {
     include_once __DIR__ . '/app/controllers/JobController.php';
     $controller = new JobController();
 
@@ -22,7 +22,7 @@ if (in_array($action, ['search','results','quickSearch','quickResults','advanced
         case 'quickResults':
             $controller->quickResults();
             break;
-        case 'filterCategory':
+        case 'filterjob_category':
             include 'body.php';
             break;
     }
@@ -32,18 +32,20 @@ if (in_array($action, ['search','results','quickSearch','quickResults','advanced
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <?php include_once __DIR__ . '/homepage/head.php'; ?>
 </head>
+
 <body>
-  <?php
+    <?php
     include_once __DIR__ . '/homepage/header.php';
     include_once __DIR__ . '/homepage/body.php';
-  ?>
+    ?>
 </body>
 <footer>
-  <?php include_once __DIR__ . '/homepage/footer.php'; ?>
+    <?php include_once __DIR__ . '/homepage/footer.php'; ?>
 
 </footer>
-</html>
 
+</html>

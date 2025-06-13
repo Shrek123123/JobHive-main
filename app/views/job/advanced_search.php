@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
-  <title>Tìm kiếm nâng cao</title>
+  <job_title>Tìm kiếm nâng cao</job_title>
   <style>
     .adv-search {
       max-width: 800px;
@@ -11,20 +12,24 @@
       grid-template-columns: 1fr 1fr;
       grid-gap: 12px;
     }
+
     .adv-search label {
       font-weight: bold;
       margin-bottom: 4px;
       display: block;
     }
+
     .adv-search input,
     .adv-search select {
       width: 100%;
       padding: 8px;
       box-sizing: border-box;
     }
+
     .adv-search .full-width {
       grid-column: 1 / span 2;
     }
+
     .adv-search button {
       padding: 10px;
       font-size: 16px;
@@ -33,6 +38,7 @@
     }
   </style>
 </head>
+
 <body>
   <?php include_once __DIR__ . '/../../../homepage/header.php'; ?>
 
@@ -51,8 +57,8 @@
       <input type="number" id="job_id" name="job_id" placeholder="Số ID">
     </div>
     <div>
-      <label for="location">Địa điểm</label>
-      <input type="text" id="location" name="location" placeholder="Ví dụ: Hanoi">
+      <label for="job_location">Địa điểm</label>
+      <input type="text" id="job_location" name="job_location" placeholder="Ví dụ: Hanoi">
     </div>
     <div>
       <label for="minSalary">Lương từ</label>
@@ -71,8 +77,8 @@
       </select>
     </div>
     <div>
-      <label for="category">Danh mục nghề</label>
-      <select id="category" name="category">
+      <label for="job_category">Danh mục nghề</label>
+      <select id="job_category" name="job_category">
         <option value="">-- Chọn --</option>
         <option value="IT">IT</option>
         <option value="Marketing">Marketing</option>
@@ -120,22 +126,23 @@
 
   <!-- Bắt URL thủ công, đợi sau khi trang load hết -->
   <script>
-document.addEventListener('DOMContentLoaded', function(){
-  // Chọn đúng form Advanced Search
-  const advForm = document.querySelector('form.adv-search');
-  if (!advForm) return;
+    document.addEventListener('DOMContentLoaded', function() {
+      // Chọn đúng form Advanced Search
+      const advForm = document.querySelector('form.adv-search');
+      if (!advForm) return;
 
-  advForm.addEventListener('submit', function(e){
-    e.preventDefault();   // Ngăn trình duyệt gửi form theo cách mặc định bằng hàm prevenDefautl
+      advForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Ngăn trình duyệt gửi form theo cách mặc định bằng hàm prevenDefautl
 
-    // Lấy tất cả field và chuyển thành chuỗi query
-    const params = new URLSearchParams(new FormData(advForm)).toString();// với các tham số vẫn được giữ nguyên
-    // giống khi đẩy GET lên URL
+        // Lấy tất cả field và chuyển thành chuỗi query
+        const params = new URLSearchParams(new FormData(advForm)).toString(); // với các tham số vẫn được giữ nguyên
+        // giống khi đẩy GET lên URL
 
-    // Chuyển hướng thủ công về results với action=results
-    window.location.href = `/JobHive-main/index.php?action=results&${params}`;
-  });
-});
-</script>
+        // Chuyển hướng thủ công về results với action=results
+        window.job_location.href = `/JobHive-main/index.php?action=results&${params}`;
+      });
+    });
+  </script>
 </body>
+
 </html>

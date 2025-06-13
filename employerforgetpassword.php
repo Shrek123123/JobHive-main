@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobSeeker Login - JobHive</title>
+    <job_title>JobSeeker Login - JobHive</job_title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -99,7 +99,7 @@
                     <label>Email</label><br>
                     <input type="email" placeholder="Email" required>
                 </div>
-                
+
                 <button class="btn-login">Submit</button>
             </form>
             <div class="signup">
@@ -111,7 +111,7 @@
         </div>
         <div class="right">
             <a href="index.php">
-            <img src="image/logo.png" alt="JobHive Logo" style="height: 70px; margin-bottom: 20px;">
+                <img src="image/logo.png" alt="JobHive Logo" style="height: 70px; margin-bottom: 20px;">
             </a>
             <h2>Your Job<br>Is our Hive</h2>
             <p>JobHive - The pionnering job portal destination for foreigners in Vietnam</p>
@@ -122,7 +122,7 @@
                 <p>Email us at: <a href="mailto:support@jobhive.com">support@jobhive.com</a></p>
             </div>
         </div>
-        
+
     </div>
 </body>
 

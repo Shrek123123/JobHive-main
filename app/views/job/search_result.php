@@ -4,49 +4,55 @@
 // $totalItems (tổng số job),
 // $page (trang hiện tại),
 // $totalPages (tổng số trang),
-// $keyword, $location, $category, $job_type (filter)
+// $keyword, $job_location, $job_category, $job_type (filter)
 
 ?>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Kết quả tìm kiếm việc làm</title>
-    <!-- 1. Thêm Bootstrap CSS và Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-      /* 2. Tinh chỉnh card */
-      .job-card {
-        border: none;
-        border-radius: .75rem;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      }
-      .job-logo {
-        max-height: 60px;
-        object-fit: contain;
-      }
-      .pagination .active span {
-        background-color: #007bff;
-        color: #fff;
-        border-color: #007bff;
-      }
-      .pagination .disabled span {
-        color: #999;
-        border-color: #ddd;
-      }
-      .job-tabs a.active {
-        background-color: #007bff;
-        color: #fff !important;
-        border-color: #007bff;
-      }
-    </style>
+  <meta charset="UTF-8">
+  <job_title>Kết quả tìm kiếm việc làm</job_title>
+  <!-- 1. Thêm Bootstrap CSS và Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    /* 2. Tinh chỉnh card */
+    .job-card {
+      border: none;
+      border-radius: .75rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .job-logo {
+      max-height: 60px;
+      object-fit: contain;
+    }
+
+    .pagination .active span {
+      background-color: #007bff;
+      color: #fff;
+      border-color: #007bff;
+    }
+
+    .pagination .disabled span {
+      color: #999;
+      border-color: #ddd;
+    }
+
+    .job-tabs a.active {
+      background-color: #007bff;
+      color: #fff !important;
+      border-color: #007bff;
+    }
+  </style>
 </head>
+
 <body>
   <div class="container py-4">
     <h1 class="mb-4">Kết quả tìm kiếm</h1>
 
-    <!-- 3. Tabs chọn category -->
+    <!-- 3. Tabs chọn job_category -->
     <?php
     $tabs = [
       'Tất cả'                    => '',
@@ -54,26 +60,27 @@
       'Marketing'                 => 'Marketing',
       'Finance'                   => 'Finance',
       'Healthcare'                => 'Healthcare',
-      'Government & Public Sector'=> 'Government & Public Sector'
+      'Government & Public Sector' => 'Government & Public Sector'
     ];
-    $currentCat = $_GET['category'] ?? '';
+    $currentCat = $_GET['job_category'] ?? '';
 
     $baseParams = [
       'action'   => $_GET['action']   ?? 'searchResults',
       'keyword'  => $_GET['keyword']  ?? '',
-      'location' => $_GET['location'] ?? '',
-      'category' => $currentCat,
+      'job_location' => $_GET['job_location'] ?? '',
+      'job_category' => $currentCat,
       'job_type' => $_GET['job_type'] ?? ''
     ];
-    function buildUrl(array $params): string {
+    function buildUrl(array $params): string
+    {
       return '?' . http_build_query($params);
     }
     ?>
     <nav class="mb-4">
       <div class="nav nav-pills">
-        <?php foreach($tabs as $label => $val):
+        <?php foreach ($tabs as $label => $val):
           $params = $baseParams;
-          $params['category'] = $val;
+          $params['job_category'] = $val;
           $params['page'] = 1;
           $url = buildUrl($params);
           $active = ($val === $currentCat) ? 'active' : '';
@@ -87,18 +94,18 @@
 
       <!-- 4. Grid cards hiển thị job -->
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-4">
-        <?php foreach($jobs as $job): ?>
+        <?php foreach ($jobs as $job): ?>
           <div class="col">
             <div class="card job-card h-100">
               <!-- Logo (Nếu muốn bỏ, xóa block này) -->
               <?php if (!empty($job['company_logo'])): ?>
                 <img src="/uploads/logos/<?= htmlspecialchars($job['company_logo']) ?>"
-                     class="card-img-top job-logo p-3"
-                     alt="Logo <?= htmlspecialchars($job['company_name']) ?>">
+                  class="card-img-top job-logo p-3"
+                  alt="Logo <?= htmlspecialchars($job['company_name']) ?>">
               <?php endif; ?>
 
               <div class="card-body d-flex flex-column">
-                <h5 class="card-title"><?= htmlspecialchars($job['title'], ENT_QUOTES, 'UTF-8') ?></h5>
+                <h5 class="card-job_title"><?= htmlspecialchars($job['job_title'], ENT_QUOTES, 'UTF-8') ?></h5>
                 <p class="mb-1">
                   <a href="#" class="text-decoration-none">
                     <?= htmlspecialchars($job['company_name'], ENT_QUOTES, 'UTF-8') ?>
@@ -110,7 +117,7 @@
                 </p>
                 <p class="mb-1 text-muted">
                   <i class="bi bi-geo-alt me-1"></i>
-                  <?= htmlspecialchars($job['location'], ENT_QUOTES, 'UTF-8') ?>
+                  <?= htmlspecialchars($job['job_location'], ENT_QUOTES, 'UTF-8') ?>
                 </p>
                 <p class="mb-3 text-muted small">
                   <i class="bi bi-calendar-event me-1"></i>
@@ -120,7 +127,7 @@
                 <!-- Nút Chi tiết công việc -->
                 <div class="mt-auto">
                   <a href="jobdetailpage.php?id=<?= (int)$job['id'] ?>"
-                     class="btn btn-outline-primary btn-sm w-100">
+                    class="btn btn-outline-primary btn-sm w-100">
                     Chi tiết công việc
                   </a>
                 </div>
@@ -160,7 +167,7 @@
                 <li class="page-item">
                   <a class="page-link" href="<?= buildUrl($p) ?>"><?= $i ?></a>
                 </li>
-              <?php endif;
+            <?php endif;
             endfor;
             ?>
 
@@ -191,4 +198,5 @@
   <!-- 6. Thêm JS của Bootstrap -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

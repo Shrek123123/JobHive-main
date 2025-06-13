@@ -85,27 +85,27 @@ foreach ($oldTables as $stmt) {
 }
 echo "<p>✔ Existing tables created/ready</p>";
 
-// 3. Tạo bảng job với tên cột khớp DB cũ (title, description, location, category)
+// 3. Tạo bảng job với tên cột khớp DB cũ (job_title, description, job_location, job_category)
 $stmt = $conn->query("CREATE TABLE IF NOT EXISTS job (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     posted_by_employer_id INT UNSIGNED NOT NULL,
-    title VARCHAR(100) NOT NULL,
+    job_title VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
     company_name VARCHAR(100) NOT NULL,
-    location VARCHAR(100) NOT NULL,
+    job_location VARCHAR(100) NOT NULL,
     salary DECIMAL(10,2) NOT NULL,
     company_size VARCHAR(50),
-    job_title VARCHAR(100) NOT NULL,
+    job_job_title VARCHAR(100) NOT NULL,
     job_description TEXT NOT NULL,
     job_benefit TEXT,
     job_requirement TEXT,
-    job_location VARCHAR(100) NOT NULL,
+    job_job_location VARCHAR(100) NOT NULL,
     no_employee_needed INT UNSIGNED NOT NULL,
     post_duration INT UNSIGNED NOT NULL,
     contact_email VARCHAR(100) NOT NULL,
     contact_phone VARCHAR(20),
     job_type VARCHAR(50) NOT NULL,
-    category VARCHAR(100) NOT NULL,
+    job_category VARCHAR(100) NOT NULL,
     required_certification VARCHAR(255),
     job_experience VARCHAR(100),
     company_logo VARCHAR(255),
@@ -154,7 +154,7 @@ $conn->query("CREATE TABLE IF NOT EXISTS job_skill (
 echo "<p>✔ skill & job_skill tables ready</p>";
 
 // 6. (Tuỳ chọn) Chèn sample data
-$skills = ['HTML','PHP','JavaScript','MySQL','Linux'];
+$skills = ['HTML', 'PHP', 'JavaScript', 'MySQL', 'Linux'];
 foreach ($skills as $s) {
     $conn->query("INSERT IGNORE INTO skill (name) VALUES ('" . $conn->real_escape_string($s) . "')");
     $conn->query("INSERT IGNORE INTO job_skill (job_id,skill_id) SELECT 1, id FROM skill WHERE name='" . $conn->real_escape_string($s) . "'");
@@ -163,9 +163,9 @@ foreach ($skills as $s) {
 // <<<SQL gọi là heredoc trong PHP là 1 cách để đỡ phải xuống dòng or truy vấn nhiều lần khi thực thi add thêm or insert
 $insertJobs = <<<SQL
 INSERT INTO job (
-    title, description, company_name, location, salary,
+    job_job_title, description, company_name, job_location, salary,
     salary_min, salary_max, industry, experience_level,
-    job_type, remote, category, posted_date, created_at,
+    job_type, remote, job_category, posted_date, created_at,
     required_certification, application_deadline
 ) VALUES
   ('Junior JAva Developer', 'Looking for an entry-level PHP dev.', 'TechCorp', 'Hanoi', 800.00,
@@ -178,7 +178,7 @@ INSERT INTO job (
    1000.00, 1200.00, 'Technology', 'Junior Level', 'Full-time', 'Remote', 'IT', '2025-05-13', '2025-05-13 12:26:13',
    'Master of Engineering', '2025-06-20')
 ON DUPLICATE KEY UPDATE
-  title=VALUES(title), salary=VALUES(salary);
+  job_title=VALUES(job_title), salary=VALUES(salary);
 SQL;
 $conn->query($insertJobs);
 echo "<h3>🎉 Sample job data inserted</h3>";
@@ -297,7 +297,7 @@ if ($stmt === TRUE) {
 // }
 
 // Chèn dữ liệu mẫu vào bảng job
-$stmt = $conn->query("INSERT INTO job (posted_by_employer_id, company_name, job_title, job_description, job_location, salary, contact_email, contact_phone, job_type, job_category, required_certification, job_experience, company_logo) VALUES 
+$stmt = $conn->query("INSERT INTO job (posted_by_employer_id, company_name, job_job_title, job_description, job_job_location, salary, contact_email, contact_phone, job_type, job_job_category, required_certification, job_experience, company_logo) VALUES 
     (1, 'ABC Corp', 'Web Developer', 'Develop and maintain web applications.', 'Hanoi', 1500.00, 'hr@abccorp.com', '0123456789', 'Full-time', 'IT', 'Bachelor of IT', '2 years', 'logo1.jpg'),
     (1, 'XYZ Ltd', 'Graphic Designer', 'Design marketing materials and branding.', 'Ho Chi Minh City', 1200.00, 'jobs@xyzltd.com', '0987654321', 'Part-time', 'Design', 'Bachelor of Design', '1 year', 'logo2.jpg'),
     (2, 'Tech Solutions', 'System Analyst', 'Analyze and improve IT systems.', 'Da Nang', 2000.00, 'careers@techsolutions.com', '0112233445', 'Full-time', 'IT', 'Bachelor of Computer Science', '3 years', 'logo3.jpg'),
