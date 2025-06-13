@@ -7,19 +7,17 @@ require_once 'config.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job detail</title>
+    <!-- <job_title>Job detail</job_title> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         body {
             background-color: #f8f9fa;
         }
-
-        .job-title {
+        .job-job_title {
             font-size: 24px;
             font-weight: bold;
         }
-
         .tag {
             padding: 5px 10px;
             border-radius: 5px;
@@ -37,7 +35,7 @@ require_once 'config.php';
             font-size: 13px;
         }
 
-        .sidebar-title {
+        .sidebar-job_title {
             font-weight: bold;
             margin-bottom: 10px;
         }
@@ -69,17 +67,17 @@ require_once 'config.php';
 </head>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const applyBtn = document.querySelector('.apply-btn');
         if (!applyBtn) return;
 
-        applyBtn.addEventListener('click', function () {
+        applyBtn.addEventListener('click', function() {
             const isLoggedIn = this.getAttribute('data-logged-in') === '1';
             const loginUrl = this.getAttribute('data-login-url');
             const jobId = this.getAttribute('data-job-id');
 
             if (!isLoggedIn) {
-                window.location.href = loginUrl;
+                window.job_location.href = loginUrl;
                 return;
             }
 
@@ -154,7 +152,7 @@ require_once 'config.php';
                     }
                     ?>
                     <div class="bg-white p-3 mb-4 shadow rounded ">
-                        <h5 class="fw-bold"><?= htmlspecialchars($job['job_title'] ?? 'Không có mô tả') ?></h5>
+                        <h5 class="fw-bold"><?= htmlspecialchars($job['job_job_title'] ?? 'Không có mô tả') ?></h5>
                         <small class="text-muted">There have been <?= $interest_count ?> people interested in this job,
                             apply now to not miss it!</small>
                         <hr>
@@ -168,9 +166,9 @@ require_once 'config.php';
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-4 d-flex align-items-center">
-                                <i class="bi bi-geo-alt me-2"></i> <strong>Location:</strong>
+                                <i class="bi bi-geo-alt me-2"></i> <strong>job_location:</strong>
                             </div>
-                            <div class="col-md-8"><?= htmlspecialchars($job['job_location'] ?? 'No data') ?></div>
+                            <div class="col-md-8"><?= htmlspecialchars($job['job_job_location'] ?? 'No data') ?></div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-4 d-flex align-items-center">
@@ -200,7 +198,7 @@ require_once 'config.php';
 
                             <button class="btn btn-secondary" type="button" id="save-job-btn"
                                 data-job-id="<?= $job_detail_id ?>" <?php if (!$is_logged_in): ?>
-                                    onclick="window.location.href='<?= $login_url ?>'; return false;" <?php endif; ?>>
+                                onclick="window.job_location.href='<?= $login_url ?>'; return false;" <?php endif; ?>>
                                 <span id="save-job-icon">&#9734;</span> Save job
                             </button>
 
@@ -237,11 +235,11 @@ require_once 'config.php';
 
                 <!-- Việc làm liên quan -->
                 <?php
-                // Lấy các việc làm liên quan cùng job_category (trừ chính job hiện tại)
+                // Lấy các việc làm liên quan cùng job_job_category (trừ chính job hiện tại)
                 $related_jobs = [];
-                if ($job && !empty($job['job_category'])) {
-                    $stmt_related = $conn->prepare("SELECT id, job_title, salary FROM job WHERE job_category = ? AND id != ? LIMIT 5");
-                    $stmt_related->bind_param("si", $job['job_category'], $job_id);
+                if ($job && !empty($job['job_job_category'])) {
+                    $stmt_related = $conn->prepare("SELECT id, job_job_title, salary FROM job WHERE job_job_category = ? AND id != ? LIMIT 5");
+                    $stmt_related->bind_param("si", $job['job_job_category'], $job_id);
                     $stmt_related->execute();
                     $result_related = $stmt_related->get_result();
                     while ($row = $result_related->fetch_assoc()) {
@@ -258,7 +256,7 @@ require_once 'config.php';
                             <?php foreach ($related_jobs as $rjob): ?>
                                 <a href="jobdetail.php?id=<?= htmlspecialchars($rjob['id']) ?>"
                                     class="list-group-item list-group-item-action">
-                                    <?= htmlspecialchars($rjob['job_title']) ?>: <?= htmlspecialchars($rjob['salary']) ?>
+                                    <?= htmlspecialchars($rjob['job_job_title']) ?>: <?= htmlspecialchars($rjob['salary']) ?>
                                 </a>
                             <?php endforeach; ?>
                         </div>
@@ -274,13 +272,13 @@ require_once 'config.php';
                         <div class="d-flex align-items-center mb-3">
                             <img src="<?= htmlspecialchars($job['company_logo'] ?? 'image/logo1.png') ?>" alt="Company Logo"
                                 class="me-3 rounded" style="width: 80px; height: 80px;">
-                            <div class="sidebar-title mb-0">
+                            <div class="sidebar-job_title mb-0">
                                 <h4><?= htmlspecialchars($job['company_name'] ?? 'Company Name') ?></h4>
                                 <p><strong>Company size:</strong> <?= htmlspecialchars($job['company_size'] ?? 'Unknown') ?>
                                 </p>
-                                <p><strong>Industry:</strong> <?= htmlspecialchars($job['job_category'] ?? 'Unknown') ?></p>
+                                <p><strong>Industry:</strong> <?= htmlspecialchars($job['job_job_category'] ?? 'Unknown') ?></p>
                                 <p><strong>Address:</strong>
-                                    <?= htmlspecialchars($job['job_detailed_location'] ?? 'Unknown') ?></p>
+                                    <?= htmlspecialchars($job['job_detailed_job_location'] ?? 'Unknown') ?></p>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -288,7 +286,7 @@ require_once 'config.php';
                 </div>
 
                 <div class="bg-white p-3 mb-4 shadow rounded">
-                    <div class="sidebar-title">General Information</div>
+                    <div class="sidebar-job_title">General Information</div>
                     <p><strong>Position level:</strong> <?= htmlspecialchars($job['job_position'] ?? 'N/A') ?></p>
                     <p><strong>Education:</strong> <?= htmlspecialchars($job['required_certification'] ?? 'N/A') ?></p>
                     <p><strong>Quantity:</strong> <?= htmlspecialchars($job['no_employee_needed'] ?? 'N/A') ?> person(s)
@@ -297,19 +295,19 @@ require_once 'config.php';
                 </div>
 
                 <div class="bg-white p-3 mb-4 shadow rounded">
-                    <div class="sidebar-title">Contact Information</div>
+                    <div class="sidebar-job_title">Contact Information</div>
                     <p><strong>Email:</strong> <?= htmlspecialchars($job['contact_email'] ?? 'N/A') ?></p>
                     <p><strong>Phone:</strong> <?= htmlspecialchars($job['contact_phone'] ?? 'N/A') ?></p>
                 </div>
 
                 <div class="bg-white p-3 shadow rounded">
-                    <div class="sidebar-title">Location</div>
+                    <div class="sidebar-job_title">job_location</div>
                     <?php if ($job): ?>
-                        <?php if (!empty($job['job_location'])): ?>
-                            <span class="skill-tag"><?= htmlspecialchars($job['job_location']) ?></span>
+                        <?php if (!empty($job['job_job_location'])): ?>
+                            <span class="skill-tag"><?= htmlspecialchars($job['job_job_location']) ?></span>
                         <?php endif; ?>
-                        <?php if (!empty($job['job_location_district'])): ?>
-                            <span class="skill-tag"><?= htmlspecialchars($job['job_location_district']) ?></span>
+                        <?php if (!empty($job['job_job_location_district'])): ?>
+                            <span class="skill-tag"><?= htmlspecialchars($job['job_job_location_district']) ?></span>
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>
@@ -320,7 +318,7 @@ require_once 'config.php';
     <script>
         //Đổi màu nút Save job
         // Lấy jobId từ thuộc tính data-job-id của nút Save job
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const saveBtn = document.getElementById('save-job-btn');
             if (!saveBtn) return;
             const jobId = saveBtn.getAttribute('data-job-id');
@@ -351,7 +349,7 @@ require_once 'config.php';
                 }, 1500);
             }
 
-            saveBtn.addEventListener('click', function (e) {
+            saveBtn.addEventListener('click', function(e) {
                 // Nếu nút có thuộc tính onclick (tức là chưa đăng nhập), không xử lý lưu job
                 if (saveBtn.hasAttribute('onclick')) {
                     return;
@@ -427,22 +425,24 @@ require_once 'config.php';
 
     <script>
         //Ngăn ko đổi màu nút Save job khi chưa đăng nhập
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const saveBtn = document.getElementById('save-job-btn');
             if (!saveBtn) return;
             const jobId = saveBtn.getAttribute('data-job-id');
             // Đã có xử lý localStorage ở trên, chỉ cần thêm AJAX gọi PHP khi đã đăng nhập
-            saveBtn.addEventListener('click', function (e) {
+            saveBtn.addEventListener('click', function(e) {
                 if (saveBtn.hasAttribute('onclick')) return; // chưa đăng nhập
                 // Xác định action
                 let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
                 let action = savedJobs.includes(jobId) ? 'unsave' : 'save';
                 // Gửi AJAX tới PHP
-                fetch(window.location.pathname, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'action=' + encodeURIComponent(action) + '&job_id=' + encodeURIComponent(jobId)
-                })
+                fetch(window.job_location.pathname, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'action=' + encodeURIComponent(action) + '&job_id=' + encodeURIComponent(jobId)
+                    })
                     .then(res => res.text())
                     .then(data => {
                         // Không cần xử lý gì thêm, localStorage và giao diện đã xử lý ở trên
@@ -460,9 +460,9 @@ require_once 'config.php';
 </html>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         // Delegate because the form is loaded dynamically
-        document.body.addEventListener('submit', function (e) {
+        document.body.addEventListener('submit', function(e) {
             if (e.target && e.target.id === 'apply-form') {
                 e.preventDefault();
 
@@ -470,9 +470,9 @@ require_once 'config.php';
                 const formData = new FormData(form);
 
                 fetch('applyform.php?id=' + encodeURIComponent(formData.get('job_id') || ''), {
-                    method: 'POST',
-                    body: formData
-                })
+                        method: 'POST',
+                        body: formData
+                    })
                     .then(res => res.text())
                     .then(data => {
                         // Show success message

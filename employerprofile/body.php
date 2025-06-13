@@ -6,7 +6,7 @@ require_once 'config.php';
 
 <head>
     <meta charset="UTF-8">
-    <title>Employer Dashboard</title>
+    <job_title>Employer Dashboard</job_title>
     <style>
         body {
             margin: 0;
@@ -23,7 +23,7 @@ require_once 'config.php';
             padding: 10px 20px;
         }
 
-        .top-bar .title {
+        .top-bar .job_title {
             font-weight: bold;
             font-size: 15px;
         }
@@ -138,7 +138,7 @@ require_once 'config.php';
 
     <!-- Top bar -->
     <div class="top-bar">
-        <div class="title">Employer profile</div>
+        <div class="job_title">Employer profile</div>
         <div class="company">
             <img src="https://via.placeholder.com/34" alt="company logo">
             <?php
@@ -229,7 +229,7 @@ require_once 'config.php';
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $('#btn-jobposts').on('click', function () {
+        $('#btn-jobposts').on('click', function() {
             // Remove active class from all buttons
             $('.sidebar button').removeClass('active');
             // Add active class to the clicked button
@@ -238,7 +238,9 @@ require_once 'config.php';
             $('.content-area').html('<div style="padding:30px;text-align:center;">Loading...</div>');
             // Lấy employer_id từ URL PHP và truyền vào Ajax
             var employer_id = <?php echo isset($_GET['id']) ? intval($_GET['id']) : 0; ?>;
-            $.get('employerprofile/jobposts-content.php', { id: employer_id }, function (data) {
+            $.get('employerprofile/jobposts-content.php', {
+                id: employer_id
+            }, function(data) {
                 $('.content-area').html(data);
             });
         });

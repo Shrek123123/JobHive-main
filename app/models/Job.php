@@ -1,18 +1,19 @@
 <!-- Xử lý tương tác với cơ sở dữ liệu -->
 
 <?php
-class Job {
+class Job
+{
     /**
      * Tìm kiếm công việc với filter và phân trang
      *
-     * @param string $keyword       Từ khóa tìm kiếm (title hoặc description)
+     * @param string $keyword       Từ khóa tìm kiếm (job_title hoặc description)
      * @param int    $job_id        ID công việc
-     * @param string $location      Địa điểm
+     * @param string $job_location      Địa điểm
      * @param string $company_name  Tên công ty
      * @param float  $minSalary     Mức lương tối thiểu
      * @param float  $maxSalary     Mức lương tối đa
      * @param string $sort_by       Sắp xếp (date|salary)
-     * @param string $category      Chuyên mục
+     * @param string $job_category      Chuyên mục
      * @param string $experience    Kinh nghiệm
      * @param string $job_type      Loại công việc
      * @param string $remote        Remote hay không
@@ -22,23 +23,33 @@ class Job {
      * @return array                Mảng kết quả công việc
      */
 
-     // dưới đây tạo 1 method tĩnh cho hàm searchJobs, không cần dùng hướng đối tượng, thì sẽ tiện hơn trong quá trình gọi
+    // dưới đây tạo 1 method tĩnh cho hàm searchJobs, không cần dùng hướng đối tượng, thì sẽ tiện hơn trong quá trình gọi
     public static function searchJobs(
-        $keyword, $job_id, $location, $company_name,
-        $minSalary, $maxSalary, $sort_by, $category,
-        $experience, $job_type, $remote, $industry,
-        $limit = null, $offset = null
+        $keyword,
+        $job_id,
+        $job_location,
+        $company_name,
+        $minSalary,
+        $maxSalary,
+        $sort_by,
+        $job_category,
+        $experience,
+        $job_type,
+        $remote,
+        $industry,
+        $limit = null,
+        $offset = null
     ) {
         global $conn;
         // 1) Xây dựng query đảm nhiệm tìm kiếm
         $sql = "SELECT * FROM job WHERE 1";
-        if ($keyword)        $sql .= " AND (title LIKE '%$keyword%' OR description LIKE '%$keyword%')";
+        if ($keyword)        $sql .= " AND (job_title LIKE '%$keyword%' OR description LIKE '%$keyword%')";
         if ($job_id)         $sql .= " AND id = " . intval($job_id);
-        if ($location)       $sql .= " AND location LIKE '%$location%'";
+        if ($job_location)       $sql .= " AND job_location LIKE '%$job_location%'";
         if ($company_name)   $sql .= " AND company_name LIKE '%$company_name%'";
         if ($minSalary)      $sql .= " AND salary >= " . floatval($minSalary);
         if ($maxSalary)      $sql .= " AND salary <= " . floatval($maxSalary);
-        if ($category)       $sql .= " AND category = '$category'";
+        if ($job_category)       $sql .= " AND job_category = '$job_category'";
         if ($experience)     $sql .= " AND experience_level = '$experience'";
         if ($job_type)       $sql .= " AND job_type = '$job_type'";
         if ($remote)         $sql .= " AND remote = '$remote'";
@@ -61,7 +72,7 @@ class Job {
 
         // 4) Chạy và trả về kết quả
         $result = $conn->query($sql)
-            or die("<pre>MySQL Error: " . $conn->error ."</pre>");
+            or die("<pre>MySQL Error: " . $conn->error . "</pre>");
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
@@ -70,12 +81,12 @@ class Job {
      *
      * @param string $keyword
      * @param int    $job_id
-     * @param string $location
+     * @param string $job_location
      * @param string $company_name
      * @param float  $minSalary
      * @param float  $maxSalary
      * @param string $sort_by    (không dùng trong COUNT)
-     * @param string $category
+     * @param string $job_category
      * @param string $experience
      * @param string $job_type
      * @param string $remote
@@ -83,20 +94,29 @@ class Job {
      * @return int               Tổng số bản ghi
      */
     public static function countJobs(
-        $keyword, $job_id, $location, $company_name,
-        $minSalary, $maxSalary, $sort_by, $category,
-        $experience, $job_type, $remote, $industry
+        $keyword,
+        $job_id,
+        $job_location,
+        $company_name,
+        $minSalary,
+        $maxSalary,
+        $sort_by,
+        $job_category,
+        $experience,
+        $job_type,
+        $remote,
+        $industry
     ) {
         global $conn;
         // 1) Câu COUNT(*) giống y phần WHERE ở trên
         $sql = "SELECT COUNT(*) AS total FROM job WHERE 1";
-        if ($keyword)        $sql .= " AND (title LIKE '%$keyword%' OR description LIKE '%$keyword%')";
+        if ($keyword)        $sql .= " AND (job_title LIKE '%$keyword%' OR description LIKE '%$keyword%')";
         if ($job_id)         $sql .= " AND id = " . intval($job_id);
-        if ($location)       $sql .= " AND location LIKE '%$location%'";
+        if ($job_location)       $sql .= " AND job_location LIKE '%$job_location%'";
         if ($company_name)   $sql .= " AND company_name LIKE '%$company_name%'";
         if ($minSalary)      $sql .= " AND salary >= " . floatval($minSalary);
         if ($maxSalary)      $sql .= " AND salary <= " . floatval($maxSalary);
-        if ($category)       $sql .= " AND category = '$category'";
+        if ($job_category)       $sql .= " AND job_category = '$job_category'";
         if ($experience)     $sql .= " AND experience_level = '$experience'";
         if ($job_type)       $sql .= " AND job_type = '$job_type'";
         if ($remote)         $sql .= " AND remote = '$remote'";
@@ -104,12 +124,13 @@ class Job {
 
         // 2) Chạy query và lấy tổng
         $res = $conn->query($sql)
-            or die("<pre>MySQL Error: " . $conn->error ."</pre>");
+            or die("<pre>MySQL Error: " . $conn->error . "</pre>");
         $row = $res->fetch_assoc();
         return (int)$row['total'];
     }
 
-public static function findById($id, $conn) {
+    public static function findById($id, $conn)
+    {
         $stmt = $conn->prepare("SELECT * FROM job WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -117,7 +138,8 @@ public static function findById($id, $conn) {
     }
 
     // 2. Lấy skills của job
-    public static function getSkills($id, $conn) {
+    public static function getSkills($id, $conn)
+    {
         $stmt = $conn->prepare("
           SELECT s.name
           FROM skill s

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chi tiết tuyển dụng</title>
+    <job_title>Chi tiết tuyển dụng</job_title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
@@ -12,7 +12,7 @@
             background-color: #f8f9fa;
         }
 
-        .job-title {
+        .job-job_title {
             font-size: 24px;
             font-weight: bold;
         }
@@ -34,7 +34,7 @@
             font-size: 13px;
         }
 
-        .sidebar-title {
+        .sidebar-job_title {
             font-weight: bold;
             margin-bottom: 10px;
         }
@@ -169,7 +169,7 @@
                 <div class="bg-white p-3 mb-4 shadow rounded">
                     <div class="d-flex align-items-center mb-3">
                         <img src="image/logo1.png" alt="Logo công ty" class="me-3 rounded" style="width: 80px; height: 80px;">
-                        <div class="sidebar-title mb-0">
+                        <div class="sidebar-job_title mb-0">
                             <h4>Crossian</h4>
                             <p><strong>Quy mô:</strong> 100–499 nhân viên</p>
                             <p><strong>Lĩnh vực:</strong> Thương mại điện tử</p>
@@ -181,7 +181,7 @@
                 </div>
 
                 <div class="bg-white p-3 mb-4 shadow rounded">
-                    <div class="sidebar-title">Thông tin chung</div>
+                    <div class="sidebar-job_title">Thông tin chung</div>
                     <p><strong>Cấp bậc:</strong> Nhân viên</p>
                     <p><strong>Học vấn:</strong> Đại học trở lên</p>
                     <p><strong>Số lượng:</strong> 1 người</p>
@@ -189,7 +189,7 @@
                 </div>
 
                 <div class="bg-white p-3 mb-4 shadow rounded">
-                    <div class="sidebar-title">Kỹ năng cần có</div>
+                    <div class="sidebar-job_title">Kỹ năng cần có</div>
                     <span class="skill-tag">HTML5</span>
                     <span class="skill-tag">CSS3</span>
                     <span class="skill-tag">React</span>
@@ -198,7 +198,7 @@
                 </div>
 
                 <div class="bg-white p-3 shadow rounded">
-                    <div class="sidebar-title">Địa điểm</div>
+                    <div class="sidebar-job_title">Địa điểm</div>
                     <span class="skill-tag">Hà Nội</span>
                     <span class="skill-tag">Hai Bà Trưng</span>
                 </div>

@@ -3,7 +3,7 @@ session_start();
 
 if (!isset($_POST['admin_logout'])) {
     // Redirect back to the previous page
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    header('job_location: ' . $_SERVER['HTTP_REFERER']);
     exit();
 }
 
@@ -12,7 +12,5 @@ session_unset();
 session_destroy();
 
 // Redirect to login page or homepage after logout
-header('Location: adminlogin.php');
+header('job_location: adminlogin.php');
 exit();
-
-?>

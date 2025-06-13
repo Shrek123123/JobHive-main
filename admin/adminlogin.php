@@ -11,8 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    
-    
+
+
     echo "Đã cập nhật mật khẩu với password_hash().";
 
     if ($result->num_rows > 0) {
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (password_verify($password, $row['password'])) {
             // Password is correct
             $_SESSION['usernameadmin'] = $row['username'];
-            header("Location: admindashboard.php");
+            header("job_location: admindashboard.php");
             exit();
         } else {
             // Invalid password
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobSeeker Login - JobHive</title>
+    <job_title>JobSeeker Login - JobHive</job_title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {

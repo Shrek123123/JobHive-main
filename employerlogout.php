@@ -1,6 +1,5 @@
 <?php
 session_start();
 session_destroy();
-header("Location: employerpage.php");
+header("job_location: employerpage.php");
 exit();
-?>

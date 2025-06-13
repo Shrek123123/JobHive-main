@@ -16,13 +16,13 @@
     padding: 40px 20px;
   }
 
-  .title {
+  .job_title {
     font-size: 24px;
     font-weight: bold;
     text-align: center;
   }
 
-  .subtitle {
+  .subjob_title {
     text-align: center;
     margin-top: 5px;
     font-size: 14px;
@@ -241,13 +241,13 @@
   .section-4 {
     background-color: #f9f5f5;
 
-  } */
-
-  .info {
-    background-color: #f9f5f5;
-    
   }
-  
+
+  */ .info {
+    background-color: #f9f5f5;
+
+  }
+
   .section-4 h3 {
     font-size: 20px;
     font-weight: bold;
@@ -303,18 +303,16 @@
   }
 </style>
 <script>
-document.addEventListener('DOMContentLoaded', function(){
-  const form = document.querySelector('form.search-box');
-  if (!form) return;
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form.search-box');
+    if (!form) return;
 
-  form.addEventListener('submit', function(e){
-    e.preventDefault();  // Ngăn trình duyệt submit mặc định
-    // Lấy tất cả field của form
-    const params = new URLSearchParams(new FormData(form)).toString();
-    // Chuyển hướng thủ công
-    window.location.href = `/JobHive-main/index.php?action=quickResults&${params}`;
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // Ngăn trình duyệt submit mặc định
+      // Lấy tất cả field của form
+      const params = new URLSearchParams(new FormData(form)).toString();
+      // Chuyển hướng thủ công
+      window.job_location.href = `/JobHive-main/index.php?action=quickResults&${params}`;
+    });
   });
-});
 </script>
-
-

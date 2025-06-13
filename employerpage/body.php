@@ -6,7 +6,7 @@ if (!isset($_SESSION['usernameemployer'])) {
       var openBtn = document.getElementById('openModalBtn');
       if (openBtn) {
         openBtn.onclick = function() {
-          window.location.href = 'employerlogin.php';
+          window.job_location.href = 'employerlogin.php';
         }
       }
     });
@@ -21,22 +21,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   }
   $jobRequirementText = $_POST['jobRequirementText'];
   $jobBenefit = $_POST['jobBenefit'];
-  $jobTitle = $_POST['jobTitle'];
+  $jobjob_title = $_POST['jobjob_title'];
   $jobDescription = $_POST['jobDescription'];
-  $jobLocation = $_POST['jobLocation'];
+  $jobjob_location = $_POST['jobjob_location'];
   $salary = $_POST['salary'];
   $post_duration = $_POST['post_duration'];
   $contactEmail = $_POST['contactEmail'];
   $contactPhone = $_POST['contactPhone'];
   $jobType = $_POST['jobType'];
-  $jobCategory = $_POST['jobCategory'];
+  $jobjob_category = $_POST['jobjob_category'];
   $requiredcertification = $_POST['requiredcertification'];
   $jobExperience = $_POST['jobExperience'];
   $jobPosition = $_POST['jobPosition'] ?? '';
   $noEmplpoyeeNeeeded = $_POST['noEmplpoyeeNeeded'] ?? 0;
 
-  $jobDetailedLocation = $_POST['jobDetailedLocation'] ?? '';
-  $jobLocationDistrict = $_POST['jobLocationDistrict'] ?? '';
+  $jobDetailedjob_location = $_POST['jobDetailedjob_location'] ?? '';
+  $jobjob_locationDistrict = $_POST['jobjob_locationDistrict'] ?? '';
   if (!isset($_SESSION['employerid'])) {
     echo "<script>alert('You must be logged in as an employer to post a job.');</script>";
     exit;
@@ -86,14 +86,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // Validate required fields
   // $requiredFields = [
   //   'companyName' => $companyName,
-  //   'jobTitle' => $jobTitle,
+  //   'jobjob_title' => $jobjob_title,
   //   'jobDescription' => $jobDescription,
-  //   'jobLocation' => $jobLocation,
+  //   'jobjob_location' => $jobjob_location,
   //   'salary' => $salary,
   //   'contactEmail' => $contactEmail,
   //   'contactPhone' => $contactPhone,
   //   'jobType' => $jobType,
-  //   'jobCategory' => $jobCategory,
+  //   'jobjob_category' => $jobjob_category,
   //   'requiredcertification' => $requiredcertification,
   //   'jobExperience' => $jobExperience,
   //   'post_duration' => $post_duration,
@@ -102,8 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   //   'companySize' => $companySize,
   //   'jobPosition' => $jobPosition,
   //   'noEmplpoyeeNeeded' => $noEmplpoyeeNeeeded,
-  //   'jobDetailedLocation' => $jobDetailedLocation,
-  //   'jobLocationDistrict' => $jobLocationDistrict
+  //   'jobDetailedjob_location' => $jobDetailedjob_location,
+  //   'jobjob_locationDistrict' => $jobjob_locationDistrict
   // ];
 
   // foreach ($requiredFields as $field => $value) {
@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   // Database connection and insertion logic here
   $stmt = $conn->prepare("INSERT INTO job (
-    posted_by_employer_id, company_name, job_title, job_description, job_location, salary, post_duration, contact_email, contact_phone, job_type, job_category, required_certification, job_experience, company_logo, job_requirement, job_benefit, company_size, no_employee_needed, job_position
+    posted_by_employer_id, company_name, job_job_title, job_description, job_job_location, salary, post_duration, contact_email, contact_phone, job_type, job_job_category, required_certification, job_experience, company_logo, job_requirement, job_benefit, company_size, no_employee_needed, job_position
   ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
   if (!$stmt) {
@@ -126,15 +126,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     "isssssissssssssssis",
     $employerid,
     $companyName,
-    $jobTitle,
+    $jobjob_title,
     $jobDescription,
-    $jobLocation,
+    $jobjob_location,
     $salary,
     $post_duration,
     $contactEmail,
     $contactPhone,
     $jobType,
-    $jobCategory,
+    $jobjob_category,
     $requiredcertification,
     $jobExperience,
     $targetFile,
@@ -289,13 +289,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="hidden" name="company_size" id="company_size">
             <div id="custom_input_wrapper" style="display: none; margin-top: 8px;">
               <input type="text" id="custom_company_size" name="custom_company_size" placeholder="e.g. 10-150 or 5000+"
-                title="Enter like 10-150 or 5000+">
+                job_title="Enter like 10-150 or 5000+">
             </div>
           </td>
         </tr>
         <tr>
-          <td><label for="jobTitle">Job Title:</label></td>
-          <td><input type="text" id="jobTitle" name="jobTitle" placeholder="Job Title" required></td>
+          <td><label for="jobjob_title">Job job_title:</label></td>
+          <td><input type="text" id="jobjob_title" name="jobjob_title" placeholder="Job job_title" required></td>
         </tr>
         <tr>
           <td><label for="jobDescription">Job Description:</label></td>
@@ -303,8 +303,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </td>
         </tr>
         <tr>
-          <td><label for="jobLocation">Job Location:</label></td>
-          <td><input type="text" id="jobLocation" name="jobLocation" placeholder="Job Location" required></td>
+          <td><label for="jobjob_location">Job job_location:</label></td>
+          <td><input type="text" id="jobjob_location" name="jobjob_location" placeholder="Job job_location" required></td>
         </tr>
         <tr>
           <td><label for="salary">Salary:</label></td>
@@ -332,13 +332,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </td>
         </tr>
         <tr>
-          <td><label for="jobDetailedLocation">Job Detailed Location:</label></td>
-          <td><input type="text" id="jobDetailedLocation" name="jobDetailedLocation"
+          <td><label for="jobDetailedjob_location">Job Detailed job_location:</label></td>
+          <td><input type="text" id="jobDetailedjob_location" name="jobDetailedjob_location"
               placeholder="Eg: 123 Main St, City, Country"></td>
         </tr>
         <tr>
-          <td><label for="jobLocationDistrict">District:</label></td>
-          <td><input type="text" id="jobLocationDistrict" name="jobLocationDistrict" placeholder="Eg: District 1"></td>
+          <td><label for="jobjob_locationDistrict">District:</label></td>
+          <td><input type="text" id="jobjob_locationDistrict" name="jobjob_locationDistrict" placeholder="Eg: District 1"></td>
         </tr>
         <tr>
           <td><label for="jobPosition">Job Position:</label></td>
@@ -358,9 +358,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </td>
         </tr>
         <tr>
-          <td><label for="jobCategory">Job Category:</label></td>
+          <td><label for="jobjob_category">Job job_category:</label></td>
           <td>
-            <select id="jobCategory" name="jobCategory" required>
+            <select id="jobjob_category" name="jobjob_category" required>
               <option value="IT & Software">IT & Software</option>
               <option value="Marketing">Marketing</option>
               <option value="Finance">Finance</option>
@@ -455,9 +455,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 <script>
-const modal = document.getElementById("myModal");
-const openBtn = document.getElementById("openModalBtn");
-const closeBtn = document.querySelector(".closeBtn");
+  const modal = document.getElementById("myModal");
+  const openBtn = document.getElementById("openModalBtn");
+  const closeBtn = document.querySelector(".closeBtn");
   openBtn.onclick = () => {
     modal.style.display = "block";
   }

@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Password is correct
             $_SESSION['usernameemployer'] = $row['username'];
             $_SESSION['employerid'] = $row['id'];
-            header("Location: employerdashboard.php");
+            header("job_location: employerdashboard.php");
             exit();
         } else {
             // Invalid password
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobSeeker Login - JobHive</title>
+    <job_title>JobSeeker Login - JobHive</job_title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
