@@ -106,9 +106,9 @@ session_start();
         </a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: 50px;">
-        <a href="#" style="text-decoration: none; color: #333;">Tạo CV</a>
-        <a href="#" style="text-decoration: none; color: #333;">Công cụ</a>
-        <a href="#" style="text-decoration: none; color: #333;">Cẩm nang nghề nghiệp</a>
+        <a href="#" style="text-decoration: none; color: #333;">Create CV</a>
+        <a href="#" style="text-decoration: none; color: #333;">Tools</a>
+        <a href="#" style="text-decoration: none; color: #333;">Career Handbook</a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: auto">
         <?php if (isset($_SESSION['username'])): ?>

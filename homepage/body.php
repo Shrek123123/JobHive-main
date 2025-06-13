@@ -324,9 +324,8 @@
 
 <section class="section-1">
   <div class="container">
-    <div class="title">Tìm việc làm nhanh 24h, việc làm mới nhất trên toàn quốc.</div>
-    <div class="subtitle">Tiếp cận 40,000+ tin tuyển dụng việc làm mới mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại
-      Việt Nam</div>
+    <div class="title">Find jobs fast 24/7, the latest jobs nationwide.</div>
+    <div class="subtitle">Access 40,000+ new job postings every day from thousands of reputable companies in Vietnam.</div>
 
     <!--     
       <a href="index.php?action=search"><button>🔍 Tìm kiếm việc làm</button></a>
@@ -346,16 +345,16 @@
 
     <div class="search-box">
       <select>
-        <option>Danh mục nghề</option>
+        <option>Job Category</option>
         <option>IT & Software</option>
         <option>Marketing</option>
         <option>Finance</option>
         <option>Healthcare</option>
         <option>Government & Public Sector</option>
       </select>
-      <input type="text" placeholder="Vị trí tuyển dụng, tên công ty">
-      <input type="text" placeholder="Địa điểm">
-      <button>Tìm kiếm</button>
+      <input type="text" placeholder="Job title, company name">
+      <input type="text" placeholder="Location">
+      <button>Search</button>
     </div>
 
     <div class="main-content">
@@ -462,8 +461,8 @@
   <section class="section-3">
     <div class="container">
       <div class="header">
-        <h2>🌟 Công Ty Nổi Bật</h2>
-        <a href="#" class="view-all">Xem tất cả →</a>
+        <h2>🌟 Featured Companies</h2>
+        <a href="#" class="view-all">View all →</a>
       </div>
       <div class="logos">
         <img src="image/logo1.png" alt="Tabtab.me" />
