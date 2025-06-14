@@ -123,10 +123,10 @@ require_once 'config.php';
 
         .content-area {
             flex-grow: 1;
-            background-color: #fff;
+            background-color: #f3f3f3;
         }
 
-        #btn-jobposts.active {
+        #btn-savedjobs.active {
             background: #b23b3b;
             color: #fff;
             font-weight: bold;
@@ -167,8 +167,8 @@ require_once 'config.php';
     <div class="main">
         <!-- Sidebar -->
         <div class="sidebar">
-            <button>Saved jobs</button>
-            <button id="btn-jobposts">My applications</button>
+            <button>My applications</button>
+            <button id="btn-savedjobs">Saved jobs</button>
             <button>My profile</button>
             <button>Change person information</button>
 
@@ -229,7 +229,7 @@ require_once 'config.php';
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $('#btn-jobposts').on('click', function () {
+        $('#btn-savedjobs').on('click', function () {
             // Remove active class from all buttons
             $('.sidebar button').removeClass('active');
             // Add active class to the clicked button
