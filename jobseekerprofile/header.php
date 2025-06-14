@@ -1,5 +1,8 @@
 <?php
-session_start();
+// Đảm bảo đã start session trước khi sử dụng $_SESSION
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 <style>
     .user-info {
@@ -31,7 +34,6 @@ session_start();
         display: none;
         position: absolute;
         top: 100%;
-        /* nằm ngay dưới .user-info */
         left: 0;
         background-color: white;
         border: 1px solid #ccc;
@@ -57,7 +59,6 @@ session_start();
     .user-dropdown:hover .dropdown-menu {
         display: flex;
     }
-
 
     body {
         margin: 0;
@@ -106,34 +107,19 @@ session_start();
         </a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: 50px;">
-        <a href="#" style="text-decoration: none; color: #333;">Create CV</a>
-        <a href="#" style="text-decoration: none; color: #333;">Tools</a>
-        <a href="#" style="text-decoration: none; color: #333;">Career Handbook</a>
+        <a href="createcv.php" style="text-decoration: none; color: #333;">Tạo CV</a>
+        <a href="tools.php" style="text-decoration: none; color: #333;">Công cụ</a>
+        <a href="career-guide.php" style="text-decoration: none; color: #333;">Cẩm nang nghề nghiệp</a>
     </div>
-    <div style="display: flex; gap: 15px; margin-left: auto">
-        <?php if (isset($_SESSION['username'])): ?>
-            <div class="user-dropdown">
-                <div class="user-info">
-                    <img src="image/defaultavatar.jpg" alt="User Avatar">
-                    <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
-                </div>
-                <div class="dropdown-menu">
-                    <?php
-                        $jobseekerId = isset($_SESSION['jobseeker_id']) ? intval($_SESSION['jobseeker_id']) : 0;
-                    ?>
-                    <a href="jobseekerprofile.php?id=<?php echo $jobseekerId; ?>">Profile</a>
-                    <a href="jobseekerlogout.php">Logout</a>
-                </div>
+    <div style="display: flex; gap: 15px; margin-left: auto;">
+        <div class="user-dropdown">
+            <div class="user-info">
+                <img src="<?php echo isset($_SESSION['avatar']) ? htmlspecialchars($_SESSION['avatar']) : 'image/defaultavatar.jpg'; ?>" alt="User Avatar">
+                <span><?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guess'; ?></span>
             </div>
-
-
-        <?php else: ?>
-            <div class="guest-options">
-                <a href="jobseekerlogin.php" class="btn-login">Login/Register for Job Seekers</a>
-                <a href="employerpage.php" class="btn-register">Are you an employer? <br><span>Click here to redirect</span></a>
-                <a href="admin/adminlogin.php" class="btn-register">Admin login</a>
+            <div class="dropdown-menu">
+                <a href="jobseekerlogout.php">Logout</a>
             </div>
-        <?php endif; ?>
+        </div>
     </div>
-
 </div>

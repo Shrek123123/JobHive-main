@@ -118,10 +118,7 @@ session_start();
                     <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
                 </div>
                 <div class="dropdown-menu">
-                    <?php
-                        $jobseekerId = isset($_SESSION['jobseeker_id']) ? intval($_SESSION['jobseeker_id']) : 0;
-                    ?>
-                    <a href="jobseekerprofile.php?id=<?php echo $jobseekerId; ?>">Profile</a>
+                    <a href="jobseekerprofile.php">Profile</a>
                     <a href="jobseekerlogout.php">Logout</a>
                 </div>
             </div>

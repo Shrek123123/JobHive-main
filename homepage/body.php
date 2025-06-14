@@ -370,17 +370,19 @@ $savedJobIdsJson = json_encode($savedJobIds);
         <button>Tìm kiếm</button> -->
 
     <div class="search-box">
-      <select>
-        <option>Job Category</option>
-        <option>IT & Software</option>
-        <option>Marketing</option>
-        <option>Finance</option>
-        <option>Healthcare</option>
-        <option>Government & Public Sector</option>
-      </select>
-      <input type="text" placeholder="Job title, company name">
-      <input type="text" placeholder="Location">
-      <button>Search</button>
+      <form action="searchpage.php" method="get" style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <select name="category">
+          <option value="">Job Category</option>
+          <option value="IT & Software">IT & Software</option>
+          <option value="Marketing">Marketing</option>
+          <option value="Finance">Finance</option>
+          <option value="Healthcare">Healthcare</option>
+          <option value="Government & Public Sector">Government & Public Sector</option>
+        </select>
+        <input type="text" name="q" placeholder="Job title, company name">
+        <input type="text" name="location" placeholder="Location">
+        <button type="submit">Search</button>
+      </form>
     </div>
 
     <div class="main-content">
@@ -392,7 +394,27 @@ $savedJobIdsJson = json_encode($savedJobIds);
           <li id="filter-freelance" class="job-type-filter">Freelance</li>
           <li id="filter-remote" class="job-type-filter">Remote</li>
         </ul>
+        
+        <style>
+          .job-type-filter.active {
+            background: rgba(0,0,0,0.15);
+            color: #000;
+            border-radius: 10px;
+            transition: background 0.2s, color 0.2s;
+          }
+        </style>
         <script>
+          // Toggle active class for job-type-filter with soft black background and rounded corners
+          document.querySelectorAll('.job-type-filter').forEach(function (item) {
+            item.addEventListener('click', function () {
+              document.querySelectorAll('.job-type-filter').forEach(function (el) {
+                el.classList.remove('active');
+              });
+              this.classList.add('active');
+            });
+          });
+        </script>
+        <script>//Ajax filter job by type
           document.querySelectorAll('.job-type-filter').forEach(function (item) {
             item.addEventListener('click', function () {
               const type = this.textContent.trim().toLowerCase();
@@ -431,13 +453,35 @@ $savedJobIdsJson = json_encode($savedJobIds);
       </div>
 
       <div class="job-filters">
-        <button class="active">All</button>
-        <button>IT & Software</button>
-        <button>Marketing</button>
-        <button>Finance</button>
-        <button>Healthcare</button>
-        <button>Government & Public Sector</button>
+        <button class="job-category-filter active" data-category="">All</button>
+        <button class="job-category-filter" data-category="IT & Software">IT & Software</button>
+        <button class="job-category-filter" data-category="Marketing">Marketing</button>
+        <button class="job-category-filter" data-category="Finance">Finance</button>
+        <button class="job-category-filter" data-category="Healthcare">Healthcare</button>
+        <button class="job-category-filter" data-category="Government & Public Sector">Government & Public Sector</button>
       </div>
+      <script>
+        document.querySelectorAll('.job-category-filter').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+        // Remove active class from all buttons
+        document.querySelectorAll('.job-category-filter').forEach(function (b) {
+          b.classList.remove('active');
+        });
+        // Add active class to clicked button
+        btn.classList.add('active');
+        const category = btn.getAttribute('data-category');
+        fetch('job_filter/job_category_filter.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: 'category=' + encodeURIComponent(category)
+        })
+          .then(response => response.text())
+          .then(data => {
+            document.querySelector('.job-grid').innerHTML = data;
+          });
+          });
+        });
+      </script>
 
       <div class="job-grid">
         <?php
@@ -700,6 +744,7 @@ $savedJobIdsJson = json_encode($savedJobIds);
           text-decoration: none;
         }
       </style>
+    </div>
   </section>
 
 
