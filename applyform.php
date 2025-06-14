@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 <div class="modal-header">
-    <h4>Application Form</h4>
+    <h5 class="w-100 text-center">Application Form</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <form id="apply-form" method="post" enctype="multipart/form-data">

@@ -1,4 +1,8 @@
 <?php
+// Đảm bảo đã start session trước khi sử dụng $_SESSION
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 <style>
     .user-info {
@@ -30,7 +34,6 @@
         display: none;
         position: absolute;
         top: 100%;
-        /* nằm ngay dưới .user-info */
         left: 0;
         background-color: white;
         border: 1px solid #ccc;
@@ -56,7 +59,6 @@
     .user-dropdown:hover .dropdown-menu {
         display: flex;
     }
-
 
     body {
         margin: 0;
@@ -85,56 +87,39 @@
         align-items: center;
     }
 
-
-
     .guest-options {
-    display: flex;
-    gap: 15px;
-    margin-left: auto;
-    margin-right: 50px;
-}
+        display: flex;
+        gap: 15px;
+        margin-left: auto;
+        margin-right: 50px;
+    }
 
-.btn-login,
-.btn-register {
-text-decoration: none;
-}
+    .btn-login,
+    .btn-register {
+        text-decoration: none;
+    }
 </style>
 
 <div class="header">
     <div style="display: flex; align-items: center;">
-        <a href="employerpage.php">
+        <a href="index.php">
             <img src="image/logo.png" alt="JobHive Logo" style="height: 50px; margin-right: 10px;">
         </a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: 50px;">
-        <a href="#" style="text-decoration: none; color: #333;">Create CV</a>
-        <a href="#" style="text-decoration: none; color: #333;">Tools</a>
-        <a href="#" style="text-decoration: none; color: #333;">Career Guide</a>
+        <a href="createcv.php" style="text-decoration: none; color: #333;">Tạo CV</a>
+        <a href="tools.php" style="text-decoration: none; color: #333;">Công cụ</a>
+        <a href="career-guide.php" style="text-decoration: none; color: #333;">Cẩm nang nghề nghiệp</a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: auto;">
-        <?php if (isset($_SESSION['usernameemployer'])): ?>
-            <div class="user-dropdown">
-                <div class="user-info">
-                    <img src="image/defaultavatar.jpg" alt="User Avatar">
-                    <span><?php echo htmlspecialchars($_SESSION['usernameemployer']); ?></span>
-                </div>
-                <div class="dropdown-menu">
-                    <?php
-                        $employerId = isset($_SESSION['employerid']) ? intval($_SESSION['employerid']) : 0;
-                    ?>
-                    <a href="employerprofile.php?id=<?php echo $employerId; ?>">Profile</a>
-                    <a href="employerlogout.php">Logout</a>
-                </div>
+        <div class="user-dropdown">
+            <div class="user-info">
+                <img src="<?php echo isset($_SESSION['avatar']) ? htmlspecialchars($_SESSION['avatar']) : 'image/defaultavatar.jpg'; ?>" alt="User Avatar">
+                <span><?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guess'; ?></span>
             </div>
-
-
-        <?php else: ?>
-            <div class="guest-options">
-                <a href="employerlogin.php" class="btn-login">Login/Register for Employers</a>
-                <a href="index.php" class="btn-register">Are you a jobseeker? <br><span>Click here to redirect</span></a>
-                <a href="admin/adminlogin.php" class="btn-register">Admin login</a>
+            <div class="dropdown-menu">
+                <a href="jobseekerlogout.php">Logout</a>
             </div>
-        <?php endif; ?>
+        </div>
     </div>
-
 </div>

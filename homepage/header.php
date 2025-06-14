@@ -105,9 +105,9 @@
         </a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: 50px;">
-        <a href="#" style="text-decoration: none; color: #333;">Tạo CV</a>
-        <a href="#" style="text-decoration: none; color: #333;">Công cụ</a>
-        <a href="#" style="text-decoration: none; color: #333;">Cẩm nang nghề nghiệp</a>
+        <a href="#" style="text-decoration: none; color: #333;">Create CV</a>
+        <a href="#" style="text-decoration: none; color: #333;">Tools</a>
+        <a href="#" style="text-decoration: none; color: #333;">Career Handbook</a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: auto">
         <?php if (isset($_SESSION['username'])): ?>
@@ -117,7 +117,10 @@
                     <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
                 </div>
                 <div class="dropdown-menu">
-                    <a href="jobseekerprofile.php">Profile</a>
+                    <?php
+                        $jobseekerId = isset($_SESSION['jobseeker_id']) ? intval($_SESSION['jobseeker_id']) : 0;
+                    ?>
+                    <a href="jobseekerprofile.php?id=<?php echo $jobseekerId; ?>">Profile</a>
                     <a href="jobseekerlogout.php">Logout</a>
                 </div>
             </div>

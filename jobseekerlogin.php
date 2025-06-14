@@ -18,15 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['username'] = $row['username'];
             $_SESSION['role'] = 'jobseeker';
             $_SESSION['jobseeker_id'] = $row['id'];
-
-            if (isset($_GET['redirect'])) {
-                $redirect_url = urldecode($_GET['redirect']);
-                header("Location: $redirect_url");
-                exit();
-            } else {
-                header("Location: jobseekerdashboard.php");
-                exit();
+            // Clear any previous output before redirecting
+            if (ob_get_level()) {
+                ob_end_clean();
             }
+            header("Location: jobseekerdashboard.php");
+            exit();
+
         } else {
             // Invalid password
             echo "<script>
