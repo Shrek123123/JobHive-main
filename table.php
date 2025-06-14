@@ -196,16 +196,100 @@ if ($stmt === TRUE) {
     echo "Error creating table: " . $sql->error;
 }
 
-// Chèn dữ liệu mẫu vào bảng job
-// $stmt1 = $sql->query("INSERT INTO job (posted_by_employer_id, company_name, job_title, job_description, job_location, salary, contact_email, contact_phone, job_type, job_category, required_certification, job_experience, company_logo) VALUES 
-//     (1, 'ABC Corp', 'Web Developer', 'Develop and maintain web applications.', 'Hanoi', 1500.00, 'hr@abccorp.com', '0123456789', 'Full-time', 'IT', 'Bachelor of IT', '2 years', 'logo1.png'),
-//     (1, 'XYZ Ltd', 'Graphic Designer', 'Design marketing materials and branding.', 'Ho Chi Minh City', 1200.00, 'jobs@xyzltd.com', '0987654321', 'Part-time', 'Design', 'Bachelor of Design', '1 year', 'logo2.png'),
-//     (2, 'Tech Solutions', 'System Analyst', 'Analyze and improve IT systems.', 'Da Nang', 2000.00, 'careers@techsolutions.com', '0112233445', 'Full-time', 'IT', 'Bachelor of Computer Science', '3 years', 'logo3.png')
-// ");
-if ($stmt1 === TRUE) {
-    echo "Sample data inserted into job table successfully <br>";
-} else {
-    echo "Error inserting sample data: " . $sql->error;
+$seedUsers = "
+INSERT INTO user (username, user_type, email, password) VALUES
+  ('employer1', 'employer', 'employer1@example.com', 'pass1'),
+  ('employer2', 'employer', 'employer2@example.com', 'pass2'),
+  ('employer3', 'employer', 'employer3@example.com', 'pass3'),
+  ('employer4', 'employer', 'employer4@example.com', 'pass4'),
+  ('employer5', 'employer', 'employer5@example.com', 'pass5')
+";
+if ($sql->query($seedUsers) !== TRUE) {
+    die("Lỗi khi chèn user mẫu: " . $sql->error);
 }
 
+$insertJobs = "
+INSERT INTO job (
+    posted_by_employer_id, company_name, company_size, job_title,
+    job_description, job_benefit, job_requirement, job_location,
+    no_employee_needed, salary, post_duration, contact_email,
+    contact_phone, job_type, job_category, required_certification,
+    job_experience, company_logo
+) VALUES
+    (1, 'ABC Corp',       '100-200', 'Software Engineer',
+     'Phát triển và bảo trì ứng dụng web.', 
+     'Health insurance, PTO', 'Java, SQL, Git', 'Hanoi',
+     3, '1500-2000 USD', 30, 'hr@abccorp.com',
+     '0123456789', 'Full-time', 'IT',
+     'Bachelor of Computer Science', '2 years', 'logo1.png'),
+    
+    (1, 'Tech Innovators','50-100',  'DevOps Engineer',
+     'Thiết lập CI/CD, giám sát hệ thống.', 
+     'Remote, Bonus', 'Docker, Kubernetes', 'Ho Chi Minh City',
+     2, '1800-2200 USD', 45, 'careers@techinnovators.com',
+     '0987654321', 'Full-time', 'IT',
+     'Cert. Docker/Kubernetes', '3 years', 'logo2.png'),
+    
+    (2, 'Global Ventures','500+',    'Product Manager',
+     'Xây dựng roadmap sản phẩm.', 
+     'Stock options, Travel allowance', 'PM tools, Agile', 'Da Nang',
+     1, '2000-2500 USD', 60, 'pm@globalventures.com',
+     '0112233445', 'Full-time', 'Management',
+     'MBA or equivalent', '5 years', 'logo3.png'),
+    
+    (2, 'Design Hub',     '20-50',   'UX/UI Designer',
+     'Thiết kế giao diện người dùng.', 
+     'Flexible hours', 'Figma, Photoshop', 'Hai Phong',
+     1, '1200-1600 USD', 30, 'jobs@designhub.com',
+     '0225367890', 'Full-time', 'Design',
+     'Portfolio required', '2 years', 'logo4.png'),
+    
+    (3, 'HealthTech',     '200-300', 'Data Analyst',
+     'Phân tích dữ liệu y tế.', 
+     'Health insurance', 'SQL, Python', 'Can Tho',
+     2, '1700-2000 USD', 40, 'analytics@healthtech.com',
+     '0290372819', 'Full-time', 'Analytics',
+     'Bachelor in Statistics', '3 years', 'logo5.png'),
+    
+    (3, 'FinSecure',      '100-150', 'Security Engineer',
+     'Đảm bảo an ninh mạng.', 
+     'Cert bonus', 'Pen testing, Firewall', 'Nha Trang',
+     1, '1900-2300 USD', 30, 'security@finsecure.com',
+     '0258374629', 'Full-time', 'Security',
+     'CISSP or CEH', '4 years', 'logo6.png'),
+    
+    (4, 'EduWorld',       '300-400', 'Curriculum Developer',
+     'Xây dựng chương trình học.', 
+     'Remote, PTO', 'Research, Writing', 'Hue',
+     1, '1300-1600 USD', 45, 'hr@eduworld.com',
+     '0234738291', 'Part-time', 'Education',
+     'Master in Education', '2 years', 'logo7.png'),
+    
+    (4, 'MarketGurus',    '50-80',   'Marketing Manager',
+     'Lên kế hoạch chiến dịch.', 
+     'Commission', 'SEO, AdWords', 'Vung Tau',
+     2, '1600-2000 USD', 30, 'marketing@marketgurus.com',
+     '0283765432', 'Full-time', 'Marketing',
+     'Cert. Google Ads', '3 years', 'logo8.png'),
+    
+    (5, 'EcoSolutions',   '10-20',   'Environmental Consultant',
+     'Tư vấn dự án xanh.', 
+     'Field trips', 'Env. assessment', 'Buon Ma Thuot',
+     1, '1400-1800 USD', 30, 'consult@ecosolutions.com',
+     '0262233445', 'Contract', 'Environmental',
+     'Bachelor in Env. Science', '2 years', 'logo9.png'),
+    
+    (5, 'TravelExperts',  '150-200', 'Sales Representative',
+     'Bán tour du lịch.', 
+     'Travel perks', 'Communication, Sales', 'Pleiku',
+     3, '1100-1400 USD', 30, 'sales@travelexperts.com',
+     '0273456123', 'Full-time', 'Sales',
+     'Experience in sales', '1 year', 'logo10.png'
+);
+";
 
+if ($sql->query($insertJobs) === TRUE) {
+    echo "Đã chèn 10 bản ghi mẫu vào bảng job thành công.<br>";
+} else {
+    echo "Lỗi khi chèn dữ liệu: " . $sql->error;
+}

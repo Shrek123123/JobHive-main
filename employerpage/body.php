@@ -114,8 +114,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   // Database connection and insertion logic here
   $stmt = $conn->prepare("INSERT INTO job (
-    posted_by_employer_id, company_name, job_title, job_description, job_location, salary, post_duration, contact_email, contact_phone, job_type, job_category, required_certification, job_experience, company_logo, job_requirement, job_benefit, company_size, no_employee_needed, job_position, job_detailed_location, job_location_district
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    posted_by_employer_id, company_name, job_title, job_description, job_location, salary, post_duration, contact_email, contact_phone, job_type, job_category, required_certification, job_experience, company_logo, job_requirement, job_benefit, company_size, no_employee_needed, job_position
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
   if (!$stmt) {
     echo "<script>alert('Error preparing statement: {$conn->error}');</script>";
@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   }
 
   $stmt->bind_param(
-    "isssssissssssssssisss",
+    "isssssissssssssssis",
     $employerid,
     $companyName,
     $jobTitle,
@@ -142,9 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $jobBenefit,
     $companySize,
     $noEmplpoyeeNeeeded,
-    $jobPosition,
-    $jobDetailedLocation,
-    $jobLocationDistrict
+    $jobPosition
   );
 
   if ($stmt->execute()) {
@@ -457,24 +455,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 <script>
-  const modal = document.getElementById("myModal");
-  const openBtn = document.getElementById("openModalBtn");
-  const closeBtn = document.querySelector(".closeBtn");
-
+const modal = document.getElementById("myModal");
+const openBtn = document.getElementById("openModalBtn");
+const closeBtn = document.querySelector(".closeBtn");
   openBtn.onclick = () => {
     modal.style.display = "block";
   }
-
   closeBtn.onclick = () => {
     modal.style.display = "none";
   }
-
   window.onclick = (event) => {
     if (event.target == modal) {
       modal.style.display = "none";
     }
   }
-
 </script>
 
 <script>
