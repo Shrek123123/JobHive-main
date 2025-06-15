@@ -353,22 +353,6 @@ $savedJobIdsJson = json_encode($savedJobIds);
     <div class="subtitle">Access 40,000+ new job postings every day from thousands of reputable companies in Vietnam.
     </div>
 
-    <!--     
-      <a href="index.php?action=search"><button>🔍 Tìm kiếm việc làm</button></a>
-
-      <div class="search-box">
-        <select>
-          <option>Danh mục nghề</option>
-          <option>IT & Software</option>
-          <option>Marketing</option>
-          <option>Finance</option>
-          <option>Healthcare</option>
-          <option>Government</option>
-        </select>
-        <input type="text" placeholder="Vị trí tuyển dụng, tên công ty">
-        <input type="text" placeholder="Địa điểm">
-        <button>Tìm kiếm</button> -->
-
     <div class="search-box">
       <form action="searchpage.php" method="get" style="display: flex; gap: 10px; flex-wrap: wrap;">
         <select name="category">
@@ -394,33 +378,35 @@ $savedJobIdsJson = json_encode($savedJobIds);
           <li id="filter-freelance" class="job-type-filter">Freelance</li>
           <li id="filter-remote" class="job-type-filter">Remote</li>
         </ul>
-        
+
         <style>
           .job-type-filter.active {
-        background: #d70018;
-        color: #fff;
-        border-radius: 10px;
-        transition: background 0.2s, color 0.2s;
+            background: #d70018;
+            color: #fff;
+            border-radius: 10px;
+            transition: background 0.2s, color 0.2s;
           }
+
           .left-menu .job-type-filter {
-        display: block;
-        width: 100%;
-        box-sizing: border-box;
-        padding-left: 12px;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding-left: 12px;
           }
         </style>
         <script>
           // Toggle active class for job-type-filter with full width highlight
           document.querySelectorAll('.job-type-filter').forEach(function (item) {
-        item.addEventListener('click', function () {
-          document.querySelectorAll('.job-type-filter').forEach(function (el) {
-            el.classList.remove('active');
-          });
-          this.classList.add('active');
-        });
+            item.addEventListener('click', function () {
+              document.querySelectorAll('.job-type-filter').forEach(function (el) {
+                el.classList.remove('active');
+              });
+              this.classList.add('active');
+            });
           });
         </script>
-        <script>//Ajax filter job by type
+        <script>
+          //Ajax filter job by type
           document.querySelectorAll('.job-type-filter').forEach(function (item) {
             item.addEventListener('click', function () {
               const type = this.textContent.trim().toLowerCase();
@@ -454,7 +440,6 @@ $savedJobIdsJson = json_encode($savedJobIds);
       <div class="job-header">
         <h2>🔥 Urgent Job Openings</h2>
         <div class="sort-dropdown">
-          <button>Sort by ▾</button>
         </div>
       </div>
 
@@ -464,27 +449,28 @@ $savedJobIdsJson = json_encode($savedJobIds);
         <button class="job-category-filter" data-category="Marketing">Marketing</button>
         <button class="job-category-filter" data-category="Finance">Finance</button>
         <button class="job-category-filter" data-category="Healthcare">Healthcare</button>
-        <button class="job-category-filter" data-category="Government & Public Sector">Government & Public Sector</button>
+        <button class="job-category-filter" data-category="Government & Public Sector">Government & Public
+          Sector</button>
       </div>
       <script>
         document.querySelectorAll('.job-category-filter').forEach(function (btn) {
           btn.addEventListener('click', function () {
-        // Remove active class from all buttons
-        document.querySelectorAll('.job-category-filter').forEach(function (b) {
-          b.classList.remove('active');
-        });
-        // Add active class to clicked button
-        btn.classList.add('active');
-        const category = btn.getAttribute('data-category');
-        fetch('job_filter/job_category_filter.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: 'category=' + encodeURIComponent(category)
-        })
-          .then(response => response.text())
-          .then(data => {
-            document.querySelector('.job-grid').innerHTML = data;
-          });
+            // Remove active class from all buttons
+            document.querySelectorAll('.job-category-filter').forEach(function (b) {
+              b.classList.remove('active');
+            });
+            // Add active class to clicked button
+            btn.classList.add('active');
+            const category = btn.getAttribute('data-category');
+            fetch('job_filter/job_category_filter.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: 'category=' + encodeURIComponent(category)
+            })
+              .then(response => response.text())
+              .then(data => {
+                document.querySelector('.job-grid').innerHTML = data;
+              });
           });
         });
       </script>
@@ -495,19 +481,23 @@ $savedJobIdsJson = json_encode($savedJobIds);
         $jobs_per_page = 9;
         $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
 
-        // Get total jobs count
-        $count_sql = "SELECT COUNT(*) as total FROM job";
+        // --- START SỬA ĐỔI SQL Ở ĐÂY ---
+        // Get total APPROVED jobs count
+        $count_sql = "SELECT COUNT(*) as total FROM job WHERE status = 'approved'";
         $count_result = $conn->query($count_sql);
         $total_jobs = $count_result ? (int) $count_result->fetch_assoc()['total'] : 0;
         $total_pages = ceil($total_jobs / $jobs_per_page);
 
-        // Fetch jobs for current page
+        // Fetch APPROVED jobs for current page
         $offset = ($page - 1) * $jobs_per_page;
+        // Thêm điều kiện `WHERE status = 'approved'` vào câu lệnh SELECT
         $sql = "SELECT id, job_title, company_logo, company_name, salary, job_location, created_at, post_duration 
-          FROM job 
-          LIMIT $jobs_per_page OFFSET $offset";
+                        FROM job 
+                        WHERE status = 'approved' 
+                        LIMIT $jobs_per_page OFFSET $offset";
         $result = $conn->query($sql);
-
+        // --- KẾT THÚC SỬA ĐỔI SQL ---
+        
         // Output jobs (only 9 per page)
         if ($result && $result->num_rows > 0):
           while ($row = $result->fetch_assoc()):
@@ -687,41 +677,43 @@ $savedJobIdsJson = json_encode($savedJobIds);
 
       <div class="pagination" id="job-pagination">
         <a href="<?php echo $page > 1 ? '?page=' . ($page - 1) : 'javascript:void(0);'; ?>" class="arrow<?php if ($page <= 1)
-               echo ' disabled'; ?>" <?php if ($page <= 1)
-               echo 'tabindex="-1" aria-disabled="true"'; ?> data-scroll="1">
+                       echo ' disabled'; ?>" <?php if ($page <= 1)
+                           echo 'tabindex="-1" aria-disabled="true"'; ?>
+          data-scroll="1">
           &larr;
         </a>
         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
           <a href="?page=<?php echo $i; ?>" class="page-number<?php if ($i == $page)
-           echo ' active'; ?>" data-scroll="1">
-        <?php echo $i; ?>
+               echo ' active'; ?>" data-scroll="1">
+            <?php echo $i; ?>
           </a>
         <?php endfor; ?>
         <a href="<?php echo $page < $total_pages ? '?page=' . ($page + 1) : 'javascript:void(0);'; ?>" class="arrow<?php if ($page >= $total_pages)
-               echo ' disabled'; ?>" <?php if ($page >= $total_pages)
-               echo 'tabindex="-1" aria-disabled="true"'; ?> data-scroll="1">
+                       echo ' disabled'; ?>" <?php if ($page >= $total_pages)
+                           echo 'tabindex="-1" aria-disabled="true"'; ?>
+          data-scroll="1">
           &rarr;
         </a>
       </div>
       <script>
         // Khi click vào pagination, thêm hash để biết cần scroll sau khi reload
-        document.querySelectorAll('#job-pagination a[data-scroll="1"]').forEach(function(a) {
-          a.addEventListener('click', function(e) {
-        if (this.getAttribute('href').startsWith('?page=')) {
-          // Thêm hash để sau reload biết cần scroll
-          window.location.href = this.getAttribute('href') + '#job-grid';
-          e.preventDefault();
-        }
+        document.querySelectorAll('#job-pagination a[data-scroll="1"]').forEach(function (a) {
+          a.addEventListener('click', function (e) {
+            if (this.getAttribute('href').startsWith('?page=')) {
+              // Thêm hash để sau reload biết cần scroll
+              window.location.href = this.getAttribute('href') + '#job-grid';
+              e.preventDefault();
+            }
           });
         });
 
         // Khi trang tải lại, nếu có hash #job-grid thì scroll tới .job-grid
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
           if (window.location.hash === '#job-grid') {
-        var el = document.querySelector('.job-grid');
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+            var el = document.querySelector('.job-grid');
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
           }
         });
       </script>

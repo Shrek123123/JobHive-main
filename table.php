@@ -80,24 +80,11 @@ $stmt = $sql->query("CREATE TABLE IF NOT EXISTS job (
     job_experience VARCHAR(100),
     company_logo VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('pending_review', 'approved', 'rejected') DEFAULT 'pending_review',
     FOREIGN KEY (posted_by_employer_id) REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE
 )");
 if ($stmt === TRUE) {
     echo "Table job created successfully <br>";
-} else {
-    echo "Error creating table: " . $sql->error;
-}
-
-// Tạo bảng resume
-$stmt = $sql->query("CREATE TABLE IF NOT EXISTS resume (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    jobseeker_id INT UNSIGNED NOT NULL,
-    resume_file VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (jobseeker_id) REFERENCES user(id) ON DELETE CASCADE
-)");
-if ($stmt === TRUE) {
-    echo "Table resume created successfully <br>";
 } else {
     echo "Error creating table: " . $sql->error;
 }
@@ -124,30 +111,18 @@ if ($stmt === TRUE) {
     echo "Error creating table: " . $sql->error;
 }
 
-// Tạo bảng jobseekerfeedback
-$stmt = $sql->query("CREATE TABLE IF NOT EXISTS jobseekerfeedback (
+// Tạo bảng feedback
+$stmt = $sql->query("CREATE TABLE IF NOT EXISTS feedback (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    jobseeker_id INT UNSIGNED NOT NULL,
-    feedback TEXT NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    user_type ENUM('jobseeker', 'recruiter', 'admin') NOT NULL,
+    content TEXT NOT NULL,
+    star_rating TINYINT UNSIGNED NOT NULL CHECK (star_rating BETWEEN 1 AND 5),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (jobseeker_id) REFERENCES user(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 )");
 if ($stmt === TRUE) {
-    echo "Table jobseekerfeedback created successfully <br>";
-} else {
-    echo "Error creating table: " . $sql->error;
-}
-
-// Tạo bảng employerfeedback
-$stmt = $sql->query("CREATE TABLE IF NOT EXISTS employerfeedback (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    employer_id INT UNSIGNED NOT NULL,
-    feedback TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (employer_id) REFERENCES user(id) ON DELETE CASCADE
-)");
-if ($stmt === TRUE) {
-    echo "Table employerfeedback created successfully <br>";
+    echo "Table feedback created successfully <br>";
 } else {
     echo "Error creating table: " . $sql->error;
 }

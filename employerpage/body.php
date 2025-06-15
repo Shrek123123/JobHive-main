@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   }
 
   $stmt->bind_param(
-    "isssssissssssssssisss",
+    "isssssissssssssssissss",
     $employerid,
     $companyName,
     $jobTitle,

@@ -89,16 +89,16 @@
 
 
     .guest-options {
-    display: flex;
-    gap: 15px;
-    margin-left: auto;
-    margin-right: 50px;
-}
+        display: flex;
+        gap: 15px;
+        margin-left: auto;
+        margin-right: 50px;
+    }
 
-.btn-login,
-.btn-register {
-text-decoration: none;
-}
+    .btn-login,
+    .btn-register {
+        text-decoration: none;
+    }
 </style>
 
 <div class="header">
@@ -108,18 +108,18 @@ text-decoration: none;
         </a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: 50px;">
-        <a href="#" style="text-decoration: none; color: #333;">Tools</a>
-        <a href="#" style="text-decoration: none; color: #333;">Career Guide</a>
+        <a href="contactus.php" style="text-decoration: none; color: #333;">Contact Us</a>
+        <a href="feedback.php" style="text-decoration: none; color: #333;">Feedback</a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: auto;">
-            <div class="user-dropdown">
-                <div class="user-info">
-                    <img src="image/defaultavatar.jpg" alt="User Avatar">
-                    <span><?php echo htmlspecialchars($_SESSION['usernameemployer']); ?></span>
-                </div>
-                <div class="dropdown-menu">
-                    <a href="employerlogout.php">Logout</a>
-                </div>
+        <div class="user-dropdown">
+            <div class="user-info">
+                <img src="image/defaultavatar.jpg" alt="User Avatar">
+                <span><?php echo htmlspecialchars($_SESSION['usernameemployer']); ?></span>
             </div>
+            <div class="dropdown-menu">
+                <a href="employerlogout.php">Logout</a>
+            </div>
+        </div>
     </div>
 </div>

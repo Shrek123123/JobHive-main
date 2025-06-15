@@ -1,4 +1,5 @@
 <?php
+session_start();
 ?>
 <style>
     .user-info {
@@ -88,16 +89,16 @@
 
 
     .guest-options {
-    display: flex;
-    gap: 15px;
-    margin-left: auto;
-    margin-right: 50px;
-}
+        display: flex;
+        gap: 15px;
+        margin-left: auto;
+        margin-right: 50px;
+    }
 
-.btn-login,
-.btn-register {
-text-decoration: none;
-}
+    .btn-login,
+    .btn-register {
+        text-decoration: none;
+    }
 </style>
 
 <div class="header">
@@ -108,7 +109,8 @@ text-decoration: none;
     </div>
     <div style="display: flex; gap: 15px; margin-left: 50px;">
         <a href="#" style="text-decoration: none; color: #333;">Tools</a>
-        <a href="#" style="text-decoration: none; color: #333;">Career Guide</a>
+        <a href="contactus_employer.php" style="text-decoration: none; color: #333;">Contact Us</a>
+        <a href="feedback_employer.php" style="text-decoration: none; color: #333;">Feedback</a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: auto;">
         <?php if (isset($_SESSION['usernameemployer'])): ?>
@@ -119,7 +121,7 @@ text-decoration: none;
                 </div>
                 <div class="dropdown-menu">
                     <?php
-                        $employerId = isset($_SESSION['employerid']) ? intval($_SESSION['employerid']) : 0;
+                    $employerId = isset($_SESSION['employerid']) ? intval($_SESSION['employerid']) : 0;
                     ?>
                     <a href="employerprofile.php?id=<?php echo $employerId; ?>">Profile</a>
                     <a href="employerlogout.php">Logout</a>
