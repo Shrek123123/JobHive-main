@@ -167,7 +167,7 @@ require_once 'config.php';
     <div class="main">
         <!-- Sidebar -->
         <div class="sidebar">
-            <button>My applications</button>
+            <button id="btn-myapplications">My applications</button>
             <button id="btn-savedjobs">Saved jobs</button>
             <button>My profile</button>
             <button>Change person information</button>
@@ -238,16 +238,28 @@ require_once 'config.php';
             $('.content-area').html('<div style="padding:30px;text-align:center;">Loading...</div>');
             // Lấy jobseeker_id từ URL PHP và truyền vào Ajax
             var jobseeker_id = <?php echo isset($_GET['id']) ? intval($_GET['id']) : 0; ?>;
-            $.get('jobseekerprofile/appliedjobs.php', { id: jobseeker_id }, function (data) {
+            $.get('jobseekerprofile/savedjobs-modal.php', { id: jobseeker_id }, function (data) {
                 $('.content-area').html(data);
             });
         });
 
-        // Tự động load jobposts khi vào trang (nếu muốn)
-        // $(document).ready(function() {
-        //     $('#btn-jobposts').trigger('click');
-        // });
+      
+
+        // Khi click vào nút "My applications"
+        $('#btn-myapplications').on('click', function () {
+            $('.sidebar button').removeClass('active');
+            $(this).addClass('active');
+            $('.content-area').html('<div style="padding:30px;text-align:center;">Loading applications...</div>');
+
+            var jobseeker_id = <?php echo isset($_GET['id']) ? intval($_GET['id']) : 0; ?>;
+            $.get('jobseekerprofile/myapplications-modal.php', { id: jobseeker_id }, function (data) {
+                $('.content-area').html(data); F
+            });
+        });
+
     </script>
+    <script src="jobseekerprofile/removejob.js"></script>
+
 </body>
 
 </html>

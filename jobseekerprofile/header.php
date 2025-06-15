@@ -1,5 +1,4 @@
 <?php
-// Đảm bảo đã start session trước khi sử dụng $_SESSION
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -34,6 +33,7 @@ if (session_status() === PHP_SESSION_NONE) {
         display: none;
         position: absolute;
         top: 100%;
+        /* nằm ngay dưới .user-info */
         left: 0;
         background-color: white;
         border: 1px solid #ccc;
@@ -59,6 +59,7 @@ if (session_status() === PHP_SESSION_NONE) {
     .user-dropdown:hover .dropdown-menu {
         display: flex;
     }
+
 
     body {
         margin: 0;
@@ -107,19 +108,30 @@ if (session_status() === PHP_SESSION_NONE) {
         </a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: 50px;">
-        <a href="createcv.php" style="text-decoration: none; color: #333;">Tạo CV</a>
-        <a href="tools.php" style="text-decoration: none; color: #333;">Công cụ</a>
-        <a href="career-guide.php" style="text-decoration: none; color: #333;">Cẩm nang nghề nghiệp</a>
+        <a href="#" style="text-decoration: none; color: #333;">Create CV</a>
+        <a href="contactus.php" style="text-decoration: none; color: #333;">Contact Us</a>
+        <a href="feedback.php" style="text-decoration: none; color: #333;">Feedback</a>
     </div>
-    <div style="display: flex; gap: 15px; margin-left: auto;">
-        <div class="user-dropdown">
-            <div class="user-info">
-                <img src="<?php echo isset($_SESSION['avatar']) ? htmlspecialchars($_SESSION['avatar']) : 'image/defaultavatar.jpg'; ?>" alt="User Avatar">
-                <span><?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guess'; ?></span>
+    <div style="display: flex; gap: 15px; margin-left: auto">
+        <?php if (isset($_SESSION['username'])): ?>
+            <div class="user-dropdown">
+                <div class="user-info">
+                    <img src="image/defaultavatar.jpg" alt="User Avatar">
+                    <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="jobseekerlogout.php">Logout</a>
+                </div>
             </div>
-            <div class="dropdown-menu">
-                <a href="jobseekerlogout.php">Logout</a>
+
+
+        <?php else: ?>
+            <div class="guest-options">
+                <a href="jobseekerlogin.php" class="btn-login">Login/Register for Job Seekers</a>
+                <a href="employerpage.php" class="btn-register">Are you an employer? <br><span>Click here to redirect</span></a>
+                <a href="admin/adminlogin.php" class="btn-register">Admin login</a>
             </div>
-        </div>
+        <?php endif; ?>
     </div>
+
 </div>

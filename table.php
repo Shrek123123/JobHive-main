@@ -107,7 +107,7 @@ $stmt = $sql->query("CREATE TABLE IF NOT EXISTS application (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     job_id INT UNSIGNED NOT NULL,
     jobseeker_id INT UNSIGNED NOT NULL,
-    status ENUM('applied', 'interviewed', 'hired', 'rejected') DEFAULT 'applied',
+    status ENUM('pending', 'viewed', 'interviewed', 'hired', 'rejected') DEFAULT 'pending',
     fullname VARCHAR(100) NOT NULL,
     phonenumber VARCHAR(20) NOT NULL,
     email VARCHAR(100) NOT NULL,

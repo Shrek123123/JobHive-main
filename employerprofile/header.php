@@ -108,9 +108,8 @@ text-decoration: none;
         </a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: 50px;">
-        <a href="#" style="text-decoration: none; color: #333;">Tạo CV</a>
-        <a href="#" style="text-decoration: none; color: #333;">Công cụ</a>
-        <a href="#" style="text-decoration: none; color: #333;">Cẩm nang nghề nghiệp</a>
+        <a href="#" style="text-decoration: none; color: #333;">Tools</a>
+        <a href="#" style="text-decoration: none; color: #333;">Career Guide</a>
     </div>
     <div style="display: flex; gap: 15px; margin-left: auto;">
             <div class="user-dropdown">
@@ -122,9 +121,5 @@ text-decoration: none;
                     <a href="employerlogout.php">Logout</a>
                 </div>
             </div>
-
-
-
     </div>
-
 </div>

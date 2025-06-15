@@ -397,21 +397,27 @@ $savedJobIdsJson = json_encode($savedJobIds);
         
         <style>
           .job-type-filter.active {
-            background: rgba(0,0,0,0.15);
-            color: #000;
-            border-radius: 10px;
-            transition: background 0.2s, color 0.2s;
+        background: #d70018;
+        color: #fff;
+        border-radius: 10px;
+        transition: background 0.2s, color 0.2s;
+          }
+          .left-menu .job-type-filter {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding-left: 12px;
           }
         </style>
         <script>
-          // Toggle active class for job-type-filter with soft black background and rounded corners
+          // Toggle active class for job-type-filter with full width highlight
           document.querySelectorAll('.job-type-filter').forEach(function (item) {
-            item.addEventListener('click', function () {
-              document.querySelectorAll('.job-type-filter').forEach(function (el) {
-                el.classList.remove('active');
-              });
-              this.classList.add('active');
-            });
+        item.addEventListener('click', function () {
+          document.querySelectorAll('.job-type-filter').forEach(function (el) {
+            el.classList.remove('active');
+          });
+          this.classList.add('active');
+        });
           });
         </script>
         <script>//Ajax filter job by type
@@ -679,24 +685,46 @@ $savedJobIdsJson = json_encode($savedJobIds);
         <?php endif; ?>
       </div>
 
-      <div class="pagination">
+      <div class="pagination" id="job-pagination">
         <a href="<?php echo $page > 1 ? '?page=' . ($page - 1) : 'javascript:void(0);'; ?>" class="arrow<?php if ($page <= 1)
-                       echo ' disabled'; ?>" <?php if ($page <= 1)
-                           echo 'tabindex="-1" aria-disabled="true"'; ?>>
+               echo ' disabled'; ?>" <?php if ($page <= 1)
+               echo 'tabindex="-1" aria-disabled="true"'; ?> data-scroll="1">
           &larr;
         </a>
         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
           <a href="?page=<?php echo $i; ?>" class="page-number<?php if ($i == $page)
-               echo ' active'; ?>">
-            <?php echo $i; ?>
+           echo ' active'; ?>" data-scroll="1">
+        <?php echo $i; ?>
           </a>
         <?php endfor; ?>
         <a href="<?php echo $page < $total_pages ? '?page=' . ($page + 1) : 'javascript:void(0);'; ?>" class="arrow<?php if ($page >= $total_pages)
-                       echo ' disabled'; ?>" <?php if ($page >= $total_pages)
-                           echo 'tabindex="-1" aria-disabled="true"'; ?>>
+               echo ' disabled'; ?>" <?php if ($page >= $total_pages)
+               echo 'tabindex="-1" aria-disabled="true"'; ?> data-scroll="1">
           &rarr;
         </a>
       </div>
+      <script>
+        // Khi click vào pagination, thêm hash để biết cần scroll sau khi reload
+        document.querySelectorAll('#job-pagination a[data-scroll="1"]').forEach(function(a) {
+          a.addEventListener('click', function(e) {
+        if (this.getAttribute('href').startsWith('?page=')) {
+          // Thêm hash để sau reload biết cần scroll
+          window.location.href = this.getAttribute('href') + '#job-grid';
+          e.preventDefault();
+        }
+          });
+        });
+
+        // Khi trang tải lại, nếu có hash #job-grid thì scroll tới .job-grid
+        document.addEventListener('DOMContentLoaded', function() {
+          if (window.location.hash === '#job-grid') {
+        var el = document.querySelector('.job-grid');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+          }
+        });
+      </script>
       <style>
         .pagination .page-number {
           display: inline-block;

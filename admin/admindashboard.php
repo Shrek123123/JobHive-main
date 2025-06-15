@@ -131,14 +131,11 @@ if (!isset($_SESSION['usernameadmin'])) {
       <span>Online</span>
     </div>
     <ul>
-      <li>Dashboard</li>
+      <li>Change homepage picture</li>
       <li>Users</li>
-      <li>Job Posts</li>
-      <li>Service Packages</li>
-      <li>Settings</li>
-      <li>Feedback</li>
-      <li>Reports</li>
-      <li>Add Job</li>
+      <li>Review Job Posts</li>
+      <li>Review Users</li>
+      <li>Feedbacks</li>
     </ul>
   </div>
   <div class="main">

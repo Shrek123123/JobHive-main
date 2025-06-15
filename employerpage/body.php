@@ -111,11 +111,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   //     echo "<script>alert('Please fill out all required information.');</script>";
   //   }
   // }
+  $jobStatus = 'pending_review'; // Mặc định là chờ duyệt
 
   // Database connection and insertion logic here
   $stmt = $conn->prepare("INSERT INTO job (
-    posted_by_employer_id, company_name, job_title, job_description, job_location, salary, post_duration, contact_email, contact_phone, job_type, job_category, required_certification, job_experience, company_logo, job_requirement, job_benefit, company_size, no_employee_needed, job_position, job_detailed_location, job_location_district
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    posted_by_employer_id, company_name, job_title, job_description, job_location, salary, post_duration, contact_email, contact_phone, job_type, job_category, required_certification, job_experience, company_logo, job_requirement, job_benefit, company_size, no_employee_needed, job_position, job_detailed_location, job_location_district, status
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
   if (!$stmt) {
     echo "<script>alert('Error preparing statement: {$conn->error}');</script>";
@@ -144,15 +145,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $noEmplpoyeeNeeeded,
     $jobPosition,
     $jobDetailedLocation,
-    $jobLocationDistrict
+    $jobLocationDistrict,
+    $jobStatus
   );
 
+  //   if ($stmt->execute()) {
+//     echo "<script>alert('Job posted successfully!');</script>";
+//   } else {
+//     echo "<script>alert('Error posting job: {$stmt->error}');</script>";
+//   }
+//   $stmt->close();
+// }
   if ($stmt->execute()) {
-    echo "<script>alert('Job posted successfully!');</script>";
+    // Thay đổi thông báo và cách thoát ra
+    echo "<script>alert('Your job post is now saved for review. Please wait for further notice!'); window.location.href = window.location.href;</script>";
+    // window.location.href = window.location.href; sẽ tải lại trang hiện tại (body.php)
+    // và đóng modal, làm mới trạng thái
   } else {
     echo "<script>alert('Error posting job: {$stmt->error}');</script>";
   }
   $stmt->close();
+  // Đảm bảo kết nối được đóng sau khi xử lý POST
+  $conn->close(); // Nếu bạn không đóng ở config.php
+  exit; // Quan trọng: dừng script sau khi xử lý POST
 }
 ?>
 <style>
